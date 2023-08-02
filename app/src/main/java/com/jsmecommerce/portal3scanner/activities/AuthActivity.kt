@@ -24,10 +24,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.jsmecommerce.portal3scanner.R;
-import com.jsmecommerce.portal3scanner.ui.components.Description
-import com.jsmecommerce.portal3scanner.ui.components.Title
+import com.jsmecommerce.portal3scanner.ui.components.general.Description
+import com.jsmecommerce.portal3scanner.ui.components.general.Title
 import com.jsmecommerce.portal3scanner.ui.components.auth.AuthButton
 import com.jsmecommerce.portal3scanner.ui.components.auth.AuthInput
+import com.jsmecommerce.portal3scanner.ui.components.general.Jdenticon
 import com.jsmecommerce.portal3scanner.ui.theme.Portal3ScannerTheme
 import com.jsmecommerce.portal3scanner.utils.Api
 import com.jsmecommerce.portal3scanner.utils.Database
@@ -41,7 +42,7 @@ class AuthActivity : ComponentActivity() {
         setContent {
             val focusManager = LocalFocusManager.current
             var emailError by remember { mutableStateOf(false) }
-            var email by remember { mutableStateOf("s.eekhof@porstal3.nl") }
+            var email by remember { mutableStateOf("s.eekhof@portal3.nl") }
             var password by remember { mutableStateOf("Aardbeien1:") }
             var loading by remember { mutableStateOf(false) }
 

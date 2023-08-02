@@ -1,4 +1,4 @@
-package com.jsmecommerce.portal3scanner.ui.components
+package com.jsmecommerce.portal3scanner.ui.components.general
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

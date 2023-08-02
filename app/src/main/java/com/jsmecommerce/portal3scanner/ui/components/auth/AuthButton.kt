@@ -10,10 +10,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
-import com.jsmecommerce.portal3scanner.ui.components.SimpleText
+import com.jsmecommerce.portal3scanner.ui.components.general.SimpleText
 import com.jsmecommerce.portal3scanner.ui.theme.Color
 
 @Composable

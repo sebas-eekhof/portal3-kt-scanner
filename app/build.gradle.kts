@@ -65,4 +65,8 @@ dependencies {
 //    Custom
 
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.31.0-alpha")
+    implementation("com.github.WycliffeAssociates:jdenticon-kotlin:1.1")
+    implementation("com.github.bumptech.glide:compose:1.0.0-alpha.1")
+    implementation("com.caverock:androidsvg-aar:1.4")
+//    implementation("com.symbol:emdk:9.1.1")
 }
