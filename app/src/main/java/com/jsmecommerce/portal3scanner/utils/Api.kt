@@ -69,20 +69,30 @@ class Api {
                 }
                 println("\nSent '${method}' request to URL : $url; Response Code : $responseCode")
                 println(headerFields.toString())
-                if(responseCode < 200 || responseCode >= 300)
-                    return Response(
-                        success = false,
-                        error = Error("REQUEST_ERROR_$responseCode", responseMessage),
-                        ms = 0,
-                        mms = 0,
-                        data = null
-                    )
-                inputStream.bufferedReader().use { output ->
+                (if (responseCode < 200 || responseCode >= 300) errorStream else inputStream).bufferedReader().use { output ->
                     val rawRes = output.lines().toArray().joinToString()
+                    println(rawRes)
                     output.close()
                     return try {
-                        val res = JSONObject(rawRes)
-                        val success = res.optBoolean("success", false)
+                        var res = JSONObject(rawRes)
+
+                        if(namespace == Namespace.REST) {
+                            res = if(res.has("err") && res.has("code"))
+                                JSONObject()
+                                    .put("success", false)
+                                    .put("err", res.optString("code", "UNKNOWN_ERROR"))
+                                    .put("message", res.optJSONObject("message")?.optString("nl") ?: "Unknown error occurred")
+                                    .put("data", null)
+                            else
+                                JSONObject()
+                                    .put("success", true)
+                                    .put("data", res)
+                                    .put("err", null)
+                                    .put("message", null)
+                        }
+
+                        val success: Boolean = res.optBoolean("success", false)
+
                         Response(
                             success,
                             error = (if (!success) Error(

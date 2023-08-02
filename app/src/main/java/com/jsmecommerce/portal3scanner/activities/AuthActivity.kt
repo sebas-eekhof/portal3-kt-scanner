@@ -1,7 +1,7 @@
 package com.jsmecommerce.portal3scanner.activities
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.Gravity
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -18,7 +18,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -31,6 +30,7 @@ import com.jsmecommerce.portal3scanner.ui.components.auth.AuthButton
 import com.jsmecommerce.portal3scanner.ui.components.auth.AuthInput
 import com.jsmecommerce.portal3scanner.ui.theme.Portal3ScannerTheme
 import com.jsmecommerce.portal3scanner.utils.Api
+import com.jsmecommerce.portal3scanner.utils.Database
 import com.jsmecommerce.portal3scanner.utils.Validator
 import org.json.JSONObject
 import kotlin.concurrent.thread
@@ -41,9 +41,11 @@ class AuthActivity : ComponentActivity() {
         setContent {
             val focusManager = LocalFocusManager.current
             var emailError by remember { mutableStateOf(false) }
-            var email by remember { mutableStateOf("sebastiaan@eekhof.dev") }
-            var password by remember { mutableStateOf("test") }
+            var email by remember { mutableStateOf("s.eekhof@porstal3.nl") }
+            var password by remember { mutableStateOf("Aardbeien1:") }
             var loading by remember { mutableStateOf(false) }
+
+            val db = Database(applicationContext)
 
             fun login() {
                 if(!Validator(email).isValidEmail()) {
@@ -63,12 +65,23 @@ class AuthActivity : ComponentActivity() {
                         )
                         .exec()
                     loading = false
-                    println(res)
                     if(res.hasError) {
                         runOnUiThread { Toast.makeText(applicationContext, res.error?.message, Toast.LENGTH_LONG).show() }
                         return@thread
                     } else {
-                        println(res.getJsonObject())
+                        val data = res.getJsonObject()
+                        if(data != null && data.getString("type") == "jwt") {
+                            db.put("jwt", data.getString("jwt"))
+                            runOnUiThread {
+                                startActivity(
+                                    Intent(
+                                        this,
+                                        MainActivity::class.java
+                                    )
+                                )
+                                finish()
+                            }
+                        }
                     }
                 }
             }
