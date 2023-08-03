@@ -28,15 +28,21 @@ import com.jsmecommerce.portal3scanner.ui.components.general.Description
 import com.jsmecommerce.portal3scanner.ui.components.general.Title
 import com.jsmecommerce.portal3scanner.ui.components.auth.AuthButton
 import com.jsmecommerce.portal3scanner.ui.components.auth.AuthInput
-import com.jsmecommerce.portal3scanner.ui.components.general.Jdenticon
 import com.jsmecommerce.portal3scanner.ui.theme.Portal3ScannerTheme
 import com.jsmecommerce.portal3scanner.utils.Api
+import com.jsmecommerce.portal3scanner.utils.Auth
 import com.jsmecommerce.portal3scanner.utils.Database
 import com.jsmecommerce.portal3scanner.utils.Validator
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import kotlin.concurrent.thread
 
 class AuthActivity : ComponentActivity() {
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -46,15 +52,15 @@ class AuthActivity : ComponentActivity() {
             var password by remember { mutableStateOf("Aardbeien1:") }
             var loading by remember { mutableStateOf(false) }
 
-            val db = Database(applicationContext)
+            val auth = Auth(applicationContext)
 
             fun login() {
                 if(!Validator(email).isValidEmail()) {
                     emailError = true
-                    Toast.makeText(applicationContext, "Ongeldig e-mail adres", Toast.LENGTH_LONG).show()
+                    Toast.makeText(applicationContext, "Ongeldig e-mail adres", Toast.LENGTH_SHORT).show()
                     return
                 }
-                thread {
+                GlobalScope.launch(Dispatchers.IO) {
                     loading = true
                     val res = Api.Request("/legacy/auth/login")
                         .setNamespace(Api.Namespace.REST)
@@ -65,22 +71,43 @@ class AuthActivity : ComponentActivity() {
                                 .put("password", password)
                         )
                         .exec()
-                    loading = false
                     if(res.hasError) {
-                        runOnUiThread { Toast.makeText(applicationContext, res.error?.message, Toast.LENGTH_LONG).show() }
-                        return@thread
+                        loading = false
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(applicationContext, res.error?.message, Toast.LENGTH_SHORT).show()
+                        }
                     } else {
                         val data = res.getJsonObject()
-                        if(data != null && data.getString("type") == "jwt") {
-                            db.put("jwt", data.getString("jwt"))
-                            runOnUiThread {
-                                startActivity(
-                                    Intent(
-                                        this,
-                                        MainActivity::class.java
+                        if((data != null) && (data.getString("type") == "jwt")) {
+                            val valid = auth.login(data.getString("jwt"))
+                            loading = false
+                            if(valid) {
+                                withContext(Dispatchers.Main) {
+                                    startActivity(
+                                        Intent(
+                                            applicationContext,
+                                            MainActivity::class.java
+                                        )
                                     )
-                                )
-                                finish()
+                                    finish()
+                                }
+                            } else {
+                                withContext(Dispatchers.Main) {
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "Ongeldige login",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                        } else {
+                            loading = false
+                            withContext(Dispatchers.Main) {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Ongeldige login",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
                     }

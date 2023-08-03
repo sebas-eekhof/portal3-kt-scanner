@@ -13,8 +13,23 @@ class Auth(val context: Context) {
         return getUser() != null
     }
 
-    fun getUser(): User? {
-        val jwt = db.get("jwt") ?: return null
+    fun logout() {
+        db.del("jwt")
+    }
+
+    fun login(jwt: String): Boolean {
+        if(getUser(jwt) == null)
+            return false;
+        db.put("jwt", jwt)
+        return true
+    }
+
+    fun getUser(overrideJwt: String? = null): User? {
+        var jwt: String? = overrideJwt
+        if(jwt == null)
+            jwt = db.get("jwt")
+        if(jwt == null)
+            return null
         val split = jwt.split(".")
         if(split.size != 3) return null
         try {
