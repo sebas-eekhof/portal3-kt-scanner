@@ -1,4 +1,4 @@
-package com.jsmecommerce.portal3scanner.activities.tabs
+package com.jsmecommerce.portal3scanner.activities.tabs.SettingsTab
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -13,7 +13,7 @@ import com.jsmecommerce.portal3scanner.R
 import com.jsmecommerce.portal3scanner.ui.components.settings.SettingsDivider
 
 @Composable
-fun SettingsTab(onLogout: () -> Unit) {
+fun SettingsOverview(onLogout: () -> Unit) {
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())

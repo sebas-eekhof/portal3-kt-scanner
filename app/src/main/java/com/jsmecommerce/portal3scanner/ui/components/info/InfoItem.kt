@@ -1,6 +1,5 @@
-package com.jsmecommerce.portal3scanner.ui.components.settings
+package com.jsmecommerce.portal3scanner.ui.components.info
 
-import android.app.Activity
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,22 +25,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.jsmecommerce.portal3scanner.ui.components.general.SimpleText
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsClickableItem(name: String, @DrawableRes icon: Int, onClick: ((activity: Activity) -> Unit)? = null) {
-    val activity = LocalContext.current as Activity
+fun InfoItem(name: String, value: String) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
             .height(48.dp)
             .padding(0.dp)
             .defaultMinSize(0.dp),
-        onClick = { if (onClick != null) onClick(activity) },
         color = Color.Transparent
     ) {
         Row(
@@ -49,8 +44,6 @@ fun SettingsClickableItem(name: String, @DrawableRes icon: Int, onClick: ((activ
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(16.dp)
         ) {
-            Icon(painter = painterResource(id = icon), contentDescription = name, modifier = Modifier.size(20.dp))
-            Spacer(modifier = Modifier.width(16.dp))
             SimpleText(name)
             Spacer(modifier = Modifier.weight(1f))
             Icon(imageVector = Icons.Default.KeyboardArrowRight, contentDescription = name)
