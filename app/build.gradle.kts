@@ -12,7 +12,7 @@ android {
         minSdk = 28
         targetSdk = 33
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -38,6 +38,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
@@ -70,5 +71,5 @@ dependencies {
     implementation("com.caverock:androidsvg-aar:1.4")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
     implementation("androidx.navigation:navigation-compose:2.6.0")
-//    implementation("com.symbol:emdk:9.1.1")
+    implementation("com.symbol:emdk:9.1.1")
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Portal3Scanner" parent="android:Theme.Material.NoActionBar">
+    <style name="Theme.Portal3Scanner" parent="android:Theme.Material.NoActionBar.Fullscreen">
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowBackground">@color/background</item>

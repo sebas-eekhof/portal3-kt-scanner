@@ -11,9 +11,11 @@ import com.jsmecommerce.portal3scanner.ui.components.settings.SettingsClickableI
 import com.jsmecommerce.portal3scanner.ui.components.settings.SettingsGroup
 import com.jsmecommerce.portal3scanner.R
 import com.jsmecommerce.portal3scanner.ui.components.settings.SettingsDivider
+import com.jsmecommerce.portal3scanner.utils.AppController
 
 @Composable
-fun SettingsOverview(onLogout: () -> Unit) {
+fun SettingsOverview(appController: AppController) {
+    appController.setPage("Instellingen")
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
@@ -28,8 +30,7 @@ fun SettingsOverview(onLogout: () -> Unit) {
             SettingsDivider()
             SettingsClickableItem(
                 name = "Uitloggen",
-                icon = R.drawable.ic_logout,
-                onClick = { onLogout() }
+                icon = R.drawable.ic_logout
             )
         }
         SettingsGroup(name = "App") {
@@ -40,7 +41,8 @@ fun SettingsOverview(onLogout: () -> Unit) {
             SettingsDivider()
             SettingsClickableItem(
                 name = "Informatie",
-                icon = R.drawable.ic_info
+                icon = R.drawable.ic_info,
+                onClick = { appController.navController.navigate("information") }
             )
         }
     }

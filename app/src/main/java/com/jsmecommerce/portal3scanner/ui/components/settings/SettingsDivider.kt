@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
+import com.jsmecommerce.portal3scanner.ui.theme.Color
 
 @Composable
 fun SettingsDivider() {
@@ -14,6 +16,6 @@ fun SettingsDivider() {
         Modifier
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp)) {
-        Divider()
+        Divider(color = Color.TextSecondary, modifier = Modifier.alpha(0.2f))
     }
 }
