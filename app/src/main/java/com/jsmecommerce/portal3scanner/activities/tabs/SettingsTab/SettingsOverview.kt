@@ -10,12 +10,12 @@ import androidx.compose.ui.unit.dp
 import com.jsmecommerce.portal3scanner.ui.components.settings.SettingsClickableItem
 import com.jsmecommerce.portal3scanner.ui.components.settings.SettingsGroup
 import com.jsmecommerce.portal3scanner.R
+import com.jsmecommerce.portal3scanner.stores.NavigationStore
 import com.jsmecommerce.portal3scanner.ui.components.settings.SettingsDivider
-import com.jsmecommerce.portal3scanner.utils.AppController
 
 @Composable
-fun SettingsOverview(appController: AppController) {
-    appController.setPage("Instellingen")
+fun SettingsOverview() {
+    val navigationStore = NavigationStore()
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
@@ -42,7 +42,7 @@ fun SettingsOverview(appController: AppController) {
             SettingsClickableItem(
                 name = "Informatie",
                 icon = R.drawable.ic_info,
-                onClick = { appController.navController.navigate("information") }
+                onClick = { navigationStore.navigate("information") }
             )
         }
     }

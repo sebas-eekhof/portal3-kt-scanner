@@ -12,13 +12,10 @@ import com.jsmecommerce.portal3scanner.BuildConfig
 import com.jsmecommerce.portal3scanner.ui.components.info.InfoGroup
 import com.jsmecommerce.portal3scanner.ui.components.info.InfoItem
 import com.jsmecommerce.portal3scanner.ui.components.settings.SettingsDivider
-import com.jsmecommerce.portal3scanner.utils.AppController
 import com.jsmecommerce.portal3scanner.utils.Device
 
 @Composable
-fun SettingsInformation(appController: AppController) {
-    appController.setPage("Informatie", backRoute = "overview")
-
+fun SettingsInformation() {
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())

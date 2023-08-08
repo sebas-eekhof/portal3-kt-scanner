@@ -32,6 +32,26 @@ fun TitlePreview() {
 }
 
 @Composable
+fun SmallTitle(text: String, modifier: Modifier = Modifier) {
+    Text(
+        text = text,
+        fontSize = 18.sp,
+        fontFamily = Font.Roboto,
+        fontWeight = FontWeight.Bold,
+        color = Color.TextPrimary,
+        modifier = modifier
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun SmallTitlePreview() {
+    Portal3ScannerTheme {
+        SmallTitle("Portal3 Scanner")
+    }
+}
+
+@Composable
 fun SimpleText(text: String, modifier: Modifier = Modifier) {
     Text(
         text = text,
