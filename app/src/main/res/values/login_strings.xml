@@ -1,0 +1,4 @@
+<resources>
+    <string name="login_title">Login</string>
+    <string name="login_description">Welcome back! You must first log in before you can continue.</string>
+</resources>

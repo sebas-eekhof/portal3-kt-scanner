@@ -52,13 +52,13 @@ fun SmallTitlePreview() {
 }
 
 @Composable
-fun SimpleText(text: String, modifier: Modifier = Modifier) {
+fun SimpleText(text: String, modifier: Modifier = Modifier, color: androidx.compose.ui.graphics.Color = Color.TextPrimary) {
     Text(
         text = text,
         fontSize = 12.sp,
         fontFamily = Font.Roboto,
         fontWeight = FontWeight.Normal,
-        color = Color.TextPrimary,
+        color = color,
         modifier = modifier
     )
 }

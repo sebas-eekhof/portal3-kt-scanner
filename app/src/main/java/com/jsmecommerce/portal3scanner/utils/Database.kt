@@ -19,6 +19,7 @@ class Database(val context: Context) : SQLiteOpenHelper(context, "portal3", null
         contentValues.put("name", key)
         contentValues.put("value", value)
         writableDatabase.insertWithOnConflict("settings", "name", contentValues, SQLiteDatabase.CONFLICT_REPLACE)
+        writableDatabase.close()
     }
 
     fun get(key: String): String? {
@@ -26,6 +27,7 @@ class Database(val context: Context) : SQLiteOpenHelper(context, "portal3", null
         var res: String? = null
         if(result.moveToFirst())
             res = result.getString(result.getColumnIndexOrThrow("value"))
+        readableDatabase.close()
         result.close()
         return res
     }
@@ -36,5 +38,6 @@ class Database(val context: Context) : SQLiteOpenHelper(context, "portal3", null
 
     fun del(key: String) {
         writableDatabase.delete("settings", "name = ?", arrayOf(key))
+        writableDatabase.close()
     }
 }

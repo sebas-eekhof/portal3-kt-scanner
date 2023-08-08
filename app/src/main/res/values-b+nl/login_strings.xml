@@ -1,0 +1,4 @@
+<resources>
+    <string name="login_title">Inloggen</string>
+    <string name="login_description">Welkom terug! U moet eerst even inloggen voordat u verder kan.</string>
+</resources>

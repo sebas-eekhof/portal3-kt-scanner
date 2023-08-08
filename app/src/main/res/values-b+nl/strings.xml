@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Portal3 Scanner</string>
+    <string name="email">E-Mail</string>
+    <string name="password">Wachtwoord</string>
+    <string name="today">Vandaag</string>
+    <string name="yesterday">Gisteren</string>
+    <string name="today_at">Vandaag om %1$s</string>
+    <string name="yesterday_at">Gisteren om %1$s</string>
+</resources>

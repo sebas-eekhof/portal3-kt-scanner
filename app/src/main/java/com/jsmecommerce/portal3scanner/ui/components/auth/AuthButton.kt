@@ -1,5 +1,6 @@
 package com.jsmecommerce.portal3scanner.ui.components.auth
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -10,12 +11,13 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jsmecommerce.portal3scanner.ui.components.general.SimpleText
 import com.jsmecommerce.portal3scanner.ui.theme.Color
 
 @Composable
-fun AuthButton(text: String, onClick: () -> Unit, loading: Boolean = false) {
+fun AuthButton(@StringRes text: Int, onClick: () -> Unit, loading: Boolean = false) {
     Button(
         onClick,
         modifier = Modifier
@@ -37,6 +39,6 @@ fun AuthButton(text: String, onClick: () -> Unit, loading: Boolean = false) {
                 strokeWidth = 2.dp
             )
         else
-            SimpleText(text)
+            SimpleText(stringResource(id = text))
     }
 }

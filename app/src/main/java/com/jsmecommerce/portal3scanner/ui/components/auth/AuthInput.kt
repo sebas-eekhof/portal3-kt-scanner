@@ -1,5 +1,6 @@
 package com.jsmecommerce.portal3scanner.ui.components.auth
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +16,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -27,9 +29,9 @@ import com.jsmecommerce.portal3scanner.ui.theme.Color
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AuthInput(label: String, keyboardType: KeyboardType, error: Boolean = false, value: String, onValueChange: (String) -> Unit, keyboardActions: KeyboardActions? = null, imeAction: ImeAction? = null, disabled: Boolean = false) {
+fun AuthInput(@StringRes label: Int, keyboardType: KeyboardType, error: Boolean = false, value: String, onValueChange: (String) -> Unit, keyboardActions: KeyboardActions? = null, imeAction: ImeAction? = null, disabled: Boolean = false) {
     Column {
-        Description(text = "$label *", color = if (error) Color.Danger.Regular else Color.TextSecondary)
+        Description(text = "${stringResource(id = label)} *", color = if (error) Color.Danger.Regular else Color.TextSecondary)
         Spacer(modifier = Modifier.size(8.dp))
         OutlinedTextField(
             value,

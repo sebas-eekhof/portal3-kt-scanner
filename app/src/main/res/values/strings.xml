@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Portal3 Scanner</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="today_at">Today at %1$s</string>
+    <string name="yesterday_at">Yesterday at %1$s</string>
 </resources>

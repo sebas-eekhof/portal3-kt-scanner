@@ -1,11 +1,11 @@
 package com.jsmecommerce.portal3scanner.models
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import com.jsmecommerce.portal3scanner.R
-import com.jsmecommerce.portal3scanner.stores.NavigationStoreState
 
-sealed class Tab(val title: String, @DrawableRes val icon: Int, val type: NavigationStoreState.TabType) {
-    object DASHBOARD: Tab(title = "Dashboard", icon = R.drawable.ic_home, type = NavigationStoreState.TabType.DASHBOARD)
-    object ORDERS: Tab(title = "Bestellingen", icon = R.drawable.ic_orders, type = NavigationStoreState.TabType.ORDERS)
-    object SETTINGS: Tab(title = "Instellingen", icon = R.drawable.ic_settings, type = NavigationStoreState.TabType.SETTINGS)
+sealed class Tab(@StringRes val title: Int, @DrawableRes val icon: Int, val route: String) {
+    object DASHBOARD: Tab(title = R.string.dashboard_title, icon = R.drawable.ic_home, route = "dashboard")
+    object ORDERS: Tab(title = R.string.orders_title, icon = R.drawable.ic_orders, route = "orders")
+    object SETTINGS: Tab(title = R.string.settings_title, icon = R.drawable.ic_settings, route = "settings")
 }

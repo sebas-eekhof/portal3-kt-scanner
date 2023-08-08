@@ -1,0 +1,5 @@
+<resources>
+    <string name="orders_title">Bestellingen</string>
+    <string name="orders_in_stock">Op voorraad</string>
+    <string name="orders_out_of_stock">Niet op voorraad</string>
+</resources>

@@ -5,8 +5,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.jsmecommerce.portal3scanner.enums.ColorEnum
 import com.jsmecommerce.portal3scanner.models.general.Address
 import com.jsmecommerce.portal3scanner.models.general.Customer
@@ -14,9 +17,18 @@ import com.jsmecommerce.portal3scanner.models.general.OverviewStore
 import com.jsmecommerce.portal3scanner.models.orders.OrderStatus
 import com.jsmecommerce.portal3scanner.models.orders.OverviewOrder
 import com.jsmecommerce.portal3scanner.ui.components.orders.OverviewOrder
+import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
+import com.jsmecommerce.portal3scanner.R
 
 @Composable
-fun OrdersOverview() {
+fun OrdersOverview(nav: NavHostController, mvm: MainViewModel) {
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        mvm.setTitle(context.getString(R.string.orders_title))
+        mvm.disableBack()
+    }
+
     val orders = listOf(
         OverviewOrder(
             id = 1,

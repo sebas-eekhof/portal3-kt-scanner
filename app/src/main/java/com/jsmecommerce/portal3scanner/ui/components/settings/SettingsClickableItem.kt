@@ -1,6 +1,7 @@
 package com.jsmecommerce.portal3scanner.ui.components.settings
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,12 +21,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jsmecommerce.portal3scanner.ui.components.general.SimpleText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsClickableItem(name: String, @DrawableRes icon: Int, onClick: (() -> Unit)? = null) {
+fun SettingsClickableItem(@StringRes name: Int, @DrawableRes icon: Int, onClick: (() -> Unit)? = null) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -40,11 +42,11 @@ fun SettingsClickableItem(name: String, @DrawableRes icon: Int, onClick: (() -> 
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(16.dp)
         ) {
-            Icon(painter = painterResource(id = icon), contentDescription = name, modifier = Modifier.size(20.dp), tint = com.jsmecommerce.portal3scanner.ui.theme.Color.TextSecondary)
+            Icon(painter = painterResource(id = icon), contentDescription = stringResource(id = name), modifier = Modifier.size(20.dp), tint = com.jsmecommerce.portal3scanner.ui.theme.Color.TextSecondary)
             Spacer(modifier = Modifier.width(16.dp))
-            SimpleText(name)
+            SimpleText(stringResource(id = name))
             Spacer(modifier = Modifier.weight(1f))
-            Icon(imageVector = Icons.Default.KeyboardArrowRight, contentDescription = name, tint = com.jsmecommerce.portal3scanner.ui.theme.Color.TextSecondary)
+            Icon(imageVector = Icons.Default.KeyboardArrowRight, contentDescription = stringResource(id = name), tint = com.jsmecommerce.portal3scanner.ui.theme.Color.TextSecondary)
         }
     }
 }

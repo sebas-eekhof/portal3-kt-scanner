@@ -6,6 +6,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -20,6 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -33,6 +36,7 @@ private val ColorScheme = darkColorScheme(
 fun Portal3ScannerTheme(
     centerHorizontal: Boolean = false,
     centerVertical: Boolean = false,
+    padding: Dp = 0.dp,
     content: @Composable () -> Unit
 ) {
 
@@ -56,7 +60,7 @@ fun Portal3ScannerTheme(
             }
 
             Column(
-                modifier = Modifier.systemBarsPadding().fillMaxSize(),
+                modifier = Modifier.systemBarsPadding().fillMaxSize().padding(padding),
                 verticalArrangement = if (centerVertical) Arrangement.Center else Arrangement.Top,
                 horizontalAlignment = if (centerHorizontal) Alignment.CenterHorizontally else Alignment.Start
             ) {

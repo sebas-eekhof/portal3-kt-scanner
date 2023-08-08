@@ -8,9 +8,11 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -114,20 +117,20 @@ class AuthActivity : ComponentActivity() {
                 }
             }
 
-            Portal3ScannerTheme(centerHorizontal = true, centerVertical = true) {
+            Portal3ScannerTheme(centerHorizontal = true, centerVertical = true, padding = 32.dp) {
                 Image(
                     painter = painterResource(id = R.drawable.icon_white),
                     contentDescription = "Portal3 Icon",
                     Modifier.size(72.dp)
                 )
                 Spacer(Modifier.size(24.dp))
-                Title("Inloggen")
+                Title(stringResource(id = R.string.login_title))
                 Spacer(Modifier.size(8.dp))
-                Description("Welkom terug! U moet eerst even inloggen voordat u verder kan.", textAlign = TextAlign.Center)
+                Description(stringResource(id = R.string.login_description), textAlign = TextAlign.Center)
                 Spacer(Modifier.size(64.dp))
-                Column(Modifier.padding(horizontal = 32.dp)) {
+                Column {
                     AuthInput(
-                        label = "E-Mail",
+                        label = R.string.email,
                         keyboardType = KeyboardType.Email,
                         error = emailError,
                         value = email,
@@ -143,7 +146,7 @@ class AuthActivity : ComponentActivity() {
                     )
                     Spacer(Modifier.size(16.dp))
                     AuthInput(
-                        label = "Wachtwoord",
+                        label = R.string.password,
                         keyboardType = KeyboardType.Password,
                         value = password,
                         onValueChange = { password = it },
@@ -157,7 +160,7 @@ class AuthActivity : ComponentActivity() {
                         disabled = loading
                     )
                     Spacer(Modifier.size(32.dp))
-                    AuthButton(text = "Inloggen", onClick = { login() }, loading = loading)
+                    AuthButton(text = R.string.login_title, onClick = { login() }, loading = loading)
                 }
             }
         }

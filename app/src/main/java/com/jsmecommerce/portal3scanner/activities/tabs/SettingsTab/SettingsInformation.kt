@@ -6,16 +6,28 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.jsmecommerce.portal3scanner.BuildConfig
+import com.jsmecommerce.portal3scanner.R
 import com.jsmecommerce.portal3scanner.ui.components.info.InfoGroup
 import com.jsmecommerce.portal3scanner.ui.components.info.InfoItem
 import com.jsmecommerce.portal3scanner.ui.components.settings.SettingsDivider
 import com.jsmecommerce.portal3scanner.utils.Device
+import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
 
 @Composable
-fun SettingsInformation() {
+fun SettingsInformation(nav: NavHostController, mvm: MainViewModel) {
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        mvm.setTitle(context.getString(R.string.settings_information_title))
+        mvm.enableBack()
+    }
+
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
