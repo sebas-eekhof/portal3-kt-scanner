@@ -16,7 +16,7 @@ fun getRoutes(): HashMap<NavigationStoreState.TabType, List<Route>> {
         Route(title = "Bestellingen", component = { OrdersOverview() })
     )
     map[NavigationStoreState.TabType.SETTINGS] = listOf(
-        Route(title = "Instellingen", component = { SettingsOverview() }),
+        Route(title = "Instellingen", component = { SettingsOverview(it) }),
         Route(path = "information", title = "Information", component = { SettingsInformation() })
     )
     return map

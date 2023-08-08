@@ -5,8 +5,10 @@ import org.reduxkotlin.StoreSubscriber
 import org.reduxkotlin.StoreSubscription
 import org.reduxkotlin.createThreadSafeStore
 
+val DEFAULT_TAB = NavigationStoreState.TabType.SETTINGS
+
 class NavigationStoreState(val tab: TabType, val historyMem: HashMap<TabType, ArrayList<String>>) {
-    val history: ArrayList<String> = if (this.historyMem.containsKey(tab)) this.historyMem.get(tab)!! else ArrayList()
+    val history: ArrayList<String> = if (this.historyMem.containsKey(tab)) this.historyMem[tab]!! else ArrayList()
     val currentPage: String? = history.lastOrNull()
 
     data class SET_TAB(val tab: TabType)
@@ -45,7 +47,7 @@ val reducer: Reducer<NavigationStoreState> = { state, action ->
 
 val store = createThreadSafeStore(
     reducer = reducer,
-    preloadedState = NavigationStoreState(NavigationStoreState.TabType.ORDERS, HashMap())
+    preloadedState = NavigationStoreState(DEFAULT_TAB, HashMap())
 )
 
 class NavigationStore {

@@ -2,9 +2,12 @@ package com.jsmecommerce.portal3scanner.activities
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
-import android.view.KeyEvent
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -35,31 +38,28 @@ import com.jsmecommerce.portal3scanner.ui.theme.Color
 import com.jsmecommerce.portal3scanner.utils.Auth
 import com.jsmecommerce.portal3scanner.utils.getRoutes
 import com.jsmecommerce.portal3scanner.R
-import com.symbol.emdk.EMDKBase
-import com.symbol.emdk.EMDKManager
-import com.symbol.emdk.EMDKManager.EMDKListener
-import com.symbol.emdk.EMDKManager.StatusListener
-import com.symbol.emdk.ProfileManager
-import com.symbol.emdk.ProfileManager.DataListener
-import com.symbol.emdk.barcode.BarcodeManager
-import com.symbol.emdk.barcode.Scanner
-import com.symbol.emdk.barcode.ScannerException
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MainActivity : ComponentActivity(), EMDKListener {
-    var emdkManager: EMDKManager? = null
-    var scanner: Scanner? = null
+class MainActivity : ComponentActivity() {
+    var scanReceiver: BroadcastReceiver? = null
 
-    @SuppressLint("StateFlowValueCalledInComposition")
+    class ScanBroadcastReceiver(val callback: ((barcode: String) -> Unit)? = null): BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if(intent != null && intent.hasExtra("com.symbol.datawedge.data_string")) {
+                val barcode: String = intent.getStringExtra("com.symbol.datawedge.data_string")!!
+                callback?.let { it(barcode) }
+            }
+        }
+    }
+
+    @SuppressLint("StateFlowValueCalledInComposition", "UnspecifiedRegisterReceiverFlag")
     @OptIn(DelicateCoroutinesApi::class, ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val test = EMDKManager.getEMDKManager(applicationContext, this)
 
         val auth = Auth(applicationContext)
 
@@ -105,8 +105,15 @@ class MainActivity : ComponentActivity(), EMDKListener {
         setContent {
             val navigationStore = NavigationStore()
             var navigation by remember { mutableStateOf(navigationStore.getState()) }
+            var lastScan by remember { mutableStateOf("") }
             navigationStore.subscribe { navigation = navigationStore.getState() }
             val activeRoute = routes[navigation.tab]?.firstOrNull { it.path == navigation.currentPage }
+
+            val scanIntent = IntentFilter("com.jsmecommerce.portal3scanner.SCAN")
+            scanReceiver = ScanBroadcastReceiver { barcode ->
+                Toast.makeText(applicationContext, barcode, Toast.LENGTH_SHORT).show()
+            }
+            registerReceiver(scanReceiver, scanIntent)
 
             Scaffold(
                 modifier = Modifier
@@ -163,7 +170,7 @@ class MainActivity : ComponentActivity(), EMDKListener {
                         .padding(paddingValues),
                     color = Color.Background
                 ) {
-                    activeRoute?.render()
+                    activeRoute?.render(this)
                 }
             }
         }
@@ -171,76 +178,7 @@ class MainActivity : ComponentActivity(), EMDKListener {
 
     override fun onDestroy() {
         super.onDestroy()
-        releaseEMDK()
-    }
-
-    fun releaseEMDK() {
-        emdkManager?.release()
-        emdkManager = null
-    }
-
-    override fun onOpened(manager: EMDKManager?) {
-        emdkManager = manager
-        val barcodeManager = emdkManager?.getInstance(EMDKManager.FEATURE_TYPE.BARCODE) as BarcodeManager?
-        if(barcodeManager == null) {
-            println("EMDK Barcode scanning not supported")
-            releaseEMDK()
-            return
-        }
-        val scanner = barcodeManager.getDevice(BarcodeManager.DeviceIdentifier.INTERNAL_IMAGER1)
-        if(scanner == null) {
-            println("EMDK Default scanner not found")
-            releaseEMDK()
-            return
-        }
-        scanner.addDataListener {
-            println("EMDK Scanner data: ${it}")
-        }
-        scanner.addStatusListener {
-            println("EMDK Scanner status: ${it.state.name}")
-        }
-        scanner.triggerType = Scanner.TriggerType.HARD
-
-        try {
-            scanner.enable()
-            this.scanner = scanner
-        } catch(e: ScannerException) {
-            e.printStackTrace()
-            releaseEMDK()
-        }
-    }
-
-    override fun onClosed() {
-        releaseEMDK()
-    }
-
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if(scanner !== null && !scanner!!.isReadPending) {
-            if(keyCode == 10036 || keyCode == 103) {
-                try {
-                    scanner!!.read()
-                } catch(e: ScannerException) {
-                    e.printStackTrace()
-                }
-                println("Setting scanner to read")
-                return true
-            }
-        }
-        return super.onKeyDown(keyCode, event)
-    }
-
-    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
-        if(scanner !== null && !scanner!!.isReadPending) {
-            if(keyCode == 10036 || keyCode == 103) {
-                try {
-                    scanner!!.cancelRead()
-                } catch(e: ScannerException) {
-                    e.printStackTrace()
-                }
-                println("Stopping scanner to read")
-                return true
-            }
-        }
-        return super.onKeyUp(keyCode, event)
+        if(scanReceiver != null)
+            unregisterReceiver(scanReceiver)
     }
 }
