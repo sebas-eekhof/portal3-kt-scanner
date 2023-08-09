@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,14 +33,16 @@ import com.jsmecommerce.portal3scanner.utils.humanDate
 import com.jsmecommerce.portal3scanner.R
 import com.jsmecommerce.portal3scanner.ui.components.general.DotText
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OverviewOrder(order: OverviewOrder) {
+fun OverviewOrder(order: OverviewOrder, onClick: () -> Unit) {
     val context = LocalContext.current
 
     Surface(
         color = Color.Element,
         shape = RoundedCornerShape(4.dp),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        onClick = { onClick() }
     ) {
         Row(
             modifier = Modifier.padding(8.dp),

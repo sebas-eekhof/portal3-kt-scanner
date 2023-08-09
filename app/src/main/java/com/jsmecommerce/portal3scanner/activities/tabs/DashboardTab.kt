@@ -9,17 +9,18 @@ import com.jsmecommerce.portal3scanner.R
 import com.jsmecommerce.portal3scanner.ui.components.general.ScannerHost
 import com.jsmecommerce.portal3scanner.ui.components.general.SimpleText
 import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
-
 @Composable
 fun DashboardTab(nav: NavHostController, mvm: MainViewModel) {
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
-        mvm.setTitle(context.getString(R.string.dashboard_title))
-        mvm.disableBack()
+        mvm.init(
+            title = context.getString(R.string.dashboard_title),
+            disableBack = true
+        )
     }
 
-    ScannerHost()
+    ScannerHost(nav = nav)
 
     Column {
         SimpleText("Dashboard")

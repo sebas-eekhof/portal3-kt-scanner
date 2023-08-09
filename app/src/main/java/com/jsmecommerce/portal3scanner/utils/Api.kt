@@ -1,8 +1,12 @@
 package com.jsmecommerce.portal3scanner.utils
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.net.wifi.WifiManager
 import androidx.compose.ui.text.toLowerCase
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.IOException
 import java.io.OutputStreamWriter
 import java.lang.Exception
 import java.net.HttpURLConnection
@@ -10,7 +14,7 @@ import java.net.URL
 import java.net.URLEncoder
 
 class Api {
-    class Request(private val path: String) {
+    class Request(private val context: Context, private val path: String) {
         private var method: RequestMethod = RequestMethod.GET
         private var query: HashMap<String, String> = HashMap()
         private var body: String? = null
@@ -57,62 +61,77 @@ class Api {
         }
 
         fun exec(): Response {
-            val url = toURL()
-            with(url.openConnection() as HttpURLConnection) {
-                requestMethod = method.toString()
-                setRequestProperty("Content-Type", "application/json; charset=utf-8")
-                setRequestProperty("Accept", "application/json")
-                if(body != null) {
-                    val wr = OutputStreamWriter(outputStream)
-                    wr.write(body)
-                    wr.close()
-                }
-                println("\nSent '${method}' request to URL : $url; Response Code : $responseCode")
-                println(headerFields.toString())
-                (if (responseCode < 200 || responseCode >= 300) errorStream else inputStream).bufferedReader().use { output ->
-                    val rawRes = output.lines().toArray().joinToString()
-                    println(rawRes)
-                    output.close()
-                    return try {
-                        var res = JSONObject(rawRes)
+            try {
+                val url = toURL()
+                with(url.openConnection() as HttpURLConnection) {
+                    requestMethod = method.toString()
+                    val jwt = Auth(context).getJWT()
+                    if(jwt != null)
+                        setRequestProperty("Authorization", "Bearer $jwt")
+                    setRequestProperty("Content-Type", "application/json; charset=utf-8")
+                    setRequestProperty("Accept", "application/json")
+                    setRequestProperty("x-mac", Device().getMAC())
+                    if(body != null) {
+                        val wr = OutputStreamWriter(outputStream)
+                        wr.write(body)
+                        wr.close()
+                    }
+                    println("\nSent '${method}' request to URL : $url; Response Code : $responseCode")
+                    println(headerFields.toString())
+                    (if (responseCode < 200 || responseCode >= 300) errorStream else inputStream).bufferedReader().use { output ->
+                        val rawRes = output.lines().toArray().joinToString()
+                        println(rawRes)
+                        output.close()
+                        return try {
+                            var res = JSONObject(rawRes)
 
-                        if(namespace == Namespace.REST) {
-                            res = if(res.has("err") && res.has("code"))
-                                JSONObject()
-                                    .put("success", false)
-                                    .put("err", res.optString("code", "UNKNOWN_ERROR"))
-                                    .put("message", res.optJSONObject("message")?.optString("nl") ?: "Unknown error occurred")
-                                    .put("data", null)
-                            else
-                                JSONObject()
-                                    .put("success", true)
-                                    .put("data", res)
-                                    .put("err", null)
-                                    .put("message", null)
+                            if(namespace == Namespace.REST) {
+                                res = if(res.has("err") && res.has("code"))
+                                    JSONObject()
+                                        .put("success", false)
+                                        .put("err", res.optString("code", "UNKNOWN_ERROR"))
+                                        .put("message", res.optJSONObject("message")?.optString("nl") ?: "Unknown error occurred")
+                                        .put("data", null)
+                                else
+                                    JSONObject()
+                                        .put("success", true)
+                                        .put("data", res)
+                                        .put("err", null)
+                                        .put("message", null)
+                            }
+
+                            val success: Boolean = res.optBoolean("success", false)
+
+                            Response(
+                                success,
+                                error = (if (!success) Error(
+                                    err = res.optString("err", "UNKNOWN_ERROR"),
+                                    message = res.optString("message", "Unknown error occurred")
+                                ) else null),
+                                ms = res.optInt("ms", 0),
+                                mms = res.optInt("mms", 0),
+                                data = res
+                            )
+                        } catch(e: Exception) {
+                            Response(
+                                success = false,
+                                error = Error("PARSE_ERROR", e.localizedMessage ?: e.message ?: "Unknown error occurred"),
+                                ms = 0,
+                                mms = 0,
+                                data = null
+                            )
                         }
-
-                        val success: Boolean = res.optBoolean("success", false)
-
-                        Response(
-                            success,
-                            error = (if (!success) Error(
-                                err = res.optString("err", "UNKNOWN_ERROR"),
-                                message = res.optString("message", "Unknown error occurred")
-                            ) else null),
-                            ms = res.optInt("ms", 0),
-                            mms = res.optInt("mms", 0),
-                            data = res
-                        )
-                    } catch(e: Exception) {
-                        Response(
-                            success = false,
-                            error = Error("PARSE_ERROR", e.message ?: "Unknown error occurred"),
-                            ms = 0,
-                            mms = 0,
-                            data = null
-                        )
                     }
                 }
+            } catch(e: IOException) {
+                e.printStackTrace()
+                return Response(
+                    success = false,
+                    error = Error("CONNECTION_ERROR", e.localizedMessage ?: e.message ?: "Unknown connection error"),
+                    ms = 0,
+                    mms = 0,
+                    data = null
+                )
             }
         }
     }

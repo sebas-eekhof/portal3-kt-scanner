@@ -27,5 +27,35 @@ enum class ColorEnum(val color: Color) {
     violet(Color(0xFF8b5cf6)),
     warmGray(Color(0xFF78716c)),
     white(Color(0xFFffffff)),
-    yellow(Color(0xFFeab308))
+    yellow(Color(0xFFeab308));
+
+    companion object {
+        fun fromString(color: String): ColorEnum = when(color) {
+            "amber" -> amber
+            "black" -> black
+            "blue" -> blue
+            "blueGray" -> blueGray
+            "coolGray" -> coolGray
+            "cyan" -> cyan
+            "emerald" -> emerald
+            "fuchsia" -> fuchsia
+            "gray" -> gray
+            "green" -> green
+            "indigo" -> indigo
+            "lime" -> lime
+            "orange" -> orange
+            "purple" -> purple
+            "pink" -> pink
+            "red" -> red
+            "rose" -> rose
+            "sky" -> sky
+            "teal" -> teal
+            "trueGray" -> trueGray
+            "violet" -> violet
+            "warmGray" -> warmGray
+            "white" -> white
+            "yellow" -> yellow
+            else -> indigo
+        }
+    }
 }

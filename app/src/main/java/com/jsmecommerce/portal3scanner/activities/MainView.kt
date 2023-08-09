@@ -29,17 +29,21 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.jsmecommerce.portal3scanner.R
 import com.jsmecommerce.portal3scanner.activities.tabs.DashboardTab
+import com.jsmecommerce.portal3scanner.activities.tabs.OrdersTab.OrderView
 import com.jsmecommerce.portal3scanner.activities.tabs.OrdersTab.OrdersOverview
 import com.jsmecommerce.portal3scanner.activities.tabs.SettingsTab.SettingsInformation
 import com.jsmecommerce.portal3scanner.activities.tabs.SettingsTab.SettingsOverview
 import com.jsmecommerce.portal3scanner.models.Tab
+import com.jsmecommerce.portal3scanner.models.general.Spinner
 import com.jsmecommerce.portal3scanner.ui.components.general.Title
 import com.jsmecommerce.portal3scanner.ui.theme.Color
 import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
@@ -58,6 +62,7 @@ fun MainView(mvm: MainViewModel = viewModel()) {
     val currentDestination = navBackStackEntry?.destination
     val title: String by mvm.title.observeAsState("NO TITLE")
     val backEnabled: Boolean by mvm.backEnabled.observeAsState(false)
+    val loading: Boolean by mvm.loading.observeAsState(false)
 
     Scaffold(
         modifier = Modifier
@@ -69,6 +74,10 @@ fun MainView(mvm: MainViewModel = viewModel()) {
                     containerColor = Color.Menu
                 ),
                 title = { Title(title) },
+                actions = {
+//                    if(loading)
+                        Spinner()
+                },
                 navigationIcon = {
                     if(backEnabled)
                         Surface(
@@ -124,12 +133,27 @@ fun MainView(mvm: MainViewModel = viewModel()) {
         ) {
             NavHost(navController = navController, startDestination = "dashboard") {
                 composable("dashboard") { DashboardTab(navController, mvm) }
-                navigation(startDestination = "overview", route = "orders") {
-                    composable("overview") { OrdersOverview(navController, mvm) }
+                navigation(startDestination = "orders/overview", route = "orders") {
+                    composable("orders/overview") { OrdersOverview(navController, mvm) }
+                    composable(
+                        "orders/view/{orderId}?title={title}",
+                        arguments = listOf(
+                            navArgument("orderId") { type = NavType.IntType },
+                            navArgument("title") {
+                                type = NavType.StringType
+                                defaultValue = "Order"
+                            }
+                        )
+                    ) {
+                        val orderId: Int? = it.arguments?.getInt("orderId")
+                        val orderTitle: String? = it.arguments?.getString("title")
+                        if(orderId != null && orderTitle != null)
+                            OrderView(navController, mvm, orderId, orderTitle)
+                    }
                 }
-                navigation(startDestination = "overview", route = "settings") {
-                    composable("overview") { SettingsOverview(navController, mvm) }
-                    composable("information") { SettingsInformation(navController, mvm) }
+                navigation(startDestination = "settings/overview", route = "settings") {
+                    composable("settings/overview") { SettingsOverview(navController, mvm) }
+                    composable("settings/information") { SettingsInformation(navController, mvm) }
                 }
             }
         }

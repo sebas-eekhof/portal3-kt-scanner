@@ -17,6 +17,10 @@ class Auth(val context: Context) {
         db.del("jwt")
     }
 
+    fun getJWT(): String? {
+        return db.get("jwt")
+    }
+
     fun login(jwt: String): Boolean {
         if(getUser(jwt) == null)
             return false;

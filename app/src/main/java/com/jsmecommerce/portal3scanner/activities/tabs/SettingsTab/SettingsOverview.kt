@@ -3,8 +3,6 @@ package com.jsmecommerce.portal3scanner.activities.tabs.SettingsTab
 import android.app.Activity
 import android.content.Intent
 import android.provider.Settings
-import android.view.Surface
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -30,6 +27,7 @@ import com.jsmecommerce.portal3scanner.R
 import com.jsmecommerce.portal3scanner.activities.AuthActivity
 import com.jsmecommerce.portal3scanner.ui.components.general.Description
 import com.jsmecommerce.portal3scanner.ui.components.general.Jdenticon
+import com.jsmecommerce.portal3scanner.ui.components.general.ScannerHost
 import com.jsmecommerce.portal3scanner.ui.components.general.SmallTitle
 import com.jsmecommerce.portal3scanner.ui.components.settings.SettingsDivider
 import com.jsmecommerce.portal3scanner.ui.theme.Color
@@ -51,9 +49,13 @@ fun SettingsOverview(nav: NavHostController, mvm: MainViewModel) {
     }
 
     LaunchedEffect(Unit) {
-        mvm.setTitle(context.getString(R.string.settings_title))
-        mvm.disableBack()
+        mvm.init(
+            title = context.getString(R.string.settings_title),
+            disableBack = true
+        )
     }
+    
+    ScannerHost(nav = nav)
 
     Column(
         modifier = Modifier
@@ -105,7 +107,7 @@ fun SettingsOverview(nav: NavHostController, mvm: MainViewModel) {
             SettingsClickableItem(
                 name = R.string.settings_cat_app_information,
                 icon = R.drawable.ic_info,
-                onClick = { nav.navigate("information") }
+                onClick = { nav.navigate("settings/information") }
             )
         }
         SettingsGroup(name = R.string.settings_cat_device) {

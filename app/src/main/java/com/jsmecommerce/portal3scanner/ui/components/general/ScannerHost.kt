@@ -10,7 +10,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.navigation.NavHostController
 import com.jsmecommerce.portal3scanner.models.Scan
+import com.jsmecommerce.portal3scanner.models.orders.ShipmentLabelLookup
+import com.jsmecommerce.portal3scanner.utils.Api
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ScannerReceiver(val callback: (scan: Scan) -> Unit) : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -46,7 +54,7 @@ class ScannerReceiver(val callback: (scan: Scan) -> Unit) : BroadcastReceiver() 
 
                 callback(
                     Scan(
-                        barcode = data,
+                        barcodeRaw = data,
                         labelType = labelType
                     )
                 )
@@ -57,34 +65,38 @@ class ScannerReceiver(val callback: (scan: Scan) -> Unit) : BroadcastReceiver() 
 
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 @SuppressLint("UnspecifiedRegisterReceiverFlag")
 @Composable
-fun ScannerHost(onScan: ((scan: Scan) -> Unit)? = null) {
+fun ScannerHost(nav: NavHostController, onScan: ((scan: Scan) -> Unit)? = null) {
     val context = LocalContext.current
 
     DisposableEffect(LocalLifecycleOwner.current) {
         val receiver = ScannerReceiver { scan ->
+            println("[SCAN]\nlabelType = ${scan.labelType}\nbarcodeType = ${scan.barcodeType ?: "NULL"}\nbarcodeSubType = ${scan.barcodeSubType ?: "NULL"}\nbarcode = ${scan.barcode}\n[/SCAN]")
             if(onScan != null)
                 onScan(scan)
             else {
-                println("[SCAN] (${scan.labelType}) - ${scan.barcode}")
-                if(scan.isEAN()) {
-                    Toast.makeText(context, "EAN - ${scan.barcode}", Toast.LENGTH_SHORT).show()
-                    println("EAN")
-                }
-                else if(scan.isDHL()) {
-                    Toast.makeText(context, "DHL - ${scan.barcode}", Toast.LENGTH_SHORT).show()
-                    println("DHL")
-                }
-                else if(scan.isDPD()) {
-                    Toast.makeText(context, "DPD - ${scan.barcode}", Toast.LENGTH_SHORT).show()
-                    println("DPD")
-                }
-                else if(scan.isPostNL()) {
-                    Toast.makeText(context, "PostNL - ${scan.barcode}", Toast.LENGTH_SHORT).show()
-                    println("PostNL")
+                if(scan.barcodeType == Scan.BarcodeType.SHIPMENT) {
+                    GlobalScope.launch(Dispatchers.IO) {
+                        val res = Api.Request(context, "/shipments/by_barcode")
+                            .setQuery("barcode", scan.getShipmentBarcode())
+                            .exec()
+                        if(!res.hasError) {
+                            val shipmentObject = res.getJsonObject()
+                            if(shipmentObject != null) {
+                                val label = ShipmentLabelLookup.fromJSON(shipmentObject)
+                                withContext(Dispatchers.Main) {
+                                    nav.navigate("orders/view/${label.order.id}?title=${label.order.ordernumber_full}")
+                                }
+                            }
+                        } else
+                            withContext(Dispatchers.Main) {
+                                Toast.makeText(context, "Unknown shipment label", Toast.LENGTH_LONG).show()
+                            }
+                    }
                 } else {
-                    Toast.makeText(context, "${scan.labelType} - ${scan.barcode}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, scan.barcode, Toast.LENGTH_SHORT).show()
                 }
             }
         }

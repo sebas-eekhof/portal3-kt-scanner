@@ -4,15 +4,14 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.jsmecommerce.portal3scanner.models.general.Spinner
 import com.jsmecommerce.portal3scanner.ui.components.general.SimpleText
 import com.jsmecommerce.portal3scanner.ui.theme.Color
 
@@ -33,11 +32,7 @@ fun AuthButton(@StringRes text: Int, onClick: () -> Unit, loading: Boolean = fal
         enabled = !loading
     ) {
         if(loading)
-            CircularProgressIndicator(
-                color = Color.White,
-                modifier = Modifier.size(16.dp),
-                strokeWidth = 2.dp
-            )
+            Spinner()
         else
             SimpleText(stringResource(id = text))
     }

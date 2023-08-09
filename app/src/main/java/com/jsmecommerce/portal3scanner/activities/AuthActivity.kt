@@ -2,21 +2,29 @@ package com.jsmecommerce.portal3scanner.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
@@ -31,6 +39,7 @@ import com.jsmecommerce.portal3scanner.ui.components.general.Description
 import com.jsmecommerce.portal3scanner.ui.components.general.Title
 import com.jsmecommerce.portal3scanner.ui.components.auth.AuthButton
 import com.jsmecommerce.portal3scanner.ui.components.auth.AuthInput
+import com.jsmecommerce.portal3scanner.ui.theme.Color
 import com.jsmecommerce.portal3scanner.ui.theme.Portal3ScannerTheme
 import com.jsmecommerce.portal3scanner.utils.Api
 import com.jsmecommerce.portal3scanner.utils.Auth
@@ -45,7 +54,7 @@ import org.json.JSONObject
 import kotlin.concurrent.thread
 
 class AuthActivity : ComponentActivity() {
-    @OptIn(DelicateCoroutinesApi::class)
+    @OptIn(DelicateCoroutinesApi::class, ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -65,8 +74,7 @@ class AuthActivity : ComponentActivity() {
                 }
                 GlobalScope.launch(Dispatchers.IO) {
                     loading = true
-                    val res = Api.Request("/legacy/auth/login")
-                        .setNamespace(Api.Namespace.REST)
+                    val res = Api.Request(this@AuthActivity.applicationContext, "/auth/login_scanner")
                         .setMethod(Api.RequestMethod.POST)
                         .setBody(
                             JSONObject()
@@ -81,7 +89,7 @@ class AuthActivity : ComponentActivity() {
                         }
                     } else {
                         val data = res.getJsonObject()
-                        if((data != null) && (data.getString("type") == "jwt")) {
+                        if(data != null) {
                             val valid = auth.login(data.getString("jwt"))
                             loading = false
                             if(valid) {
@@ -117,50 +125,70 @@ class AuthActivity : ComponentActivity() {
                 }
             }
 
-            Portal3ScannerTheme(centerHorizontal = true, centerVertical = true, padding = 32.dp) {
-                Image(
-                    painter = painterResource(id = R.drawable.icon_white),
-                    contentDescription = "Portal3 Icon",
-                    Modifier.size(72.dp)
-                )
-                Spacer(Modifier.size(24.dp))
-                Title(stringResource(id = R.string.login_title))
-                Spacer(Modifier.size(8.dp))
-                Description(stringResource(id = R.string.login_description), textAlign = TextAlign.Center)
-                Spacer(Modifier.size(64.dp))
-                Column {
-                    AuthInput(
-                        label = R.string.email,
-                        keyboardType = KeyboardType.Email,
-                        error = emailError,
-                        value = email,
-                        onValueChange = {
-                            email = it
-                            emailError = false
-                        },
-                        imeAction = ImeAction.Next,
-                        keyboardActions = KeyboardActions(
-                            onNext = { focusManager.moveFocus(FocusDirection.Down) }
-                        ),
-                        disabled = loading
-                    )
-                    Spacer(Modifier.size(16.dp))
-                    AuthInput(
-                        label = R.string.password,
-                        keyboardType = KeyboardType.Password,
-                        value = password,
-                        onValueChange = { password = it },
-                        imeAction = ImeAction.Go,
-                        keyboardActions = KeyboardActions(
-                            onGo = {
-                                focusManager.clearFocus(true)
-                                login()
-                            }
-                        ),
-                        disabled = loading
-                    )
-                    Spacer(Modifier.size(32.dp))
-                    AuthButton(text = R.string.login_title, onClick = { login() }, loading = loading)
+            Portal3ScannerTheme(padding = 32.dp) {
+                Box(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.End,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Surface(
+                            onClick = { startActivity(Intent(Settings.ACTION_WIFI_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
+                        ) {
+                            Icon(painter = painterResource(id = R.drawable.ic_wifi), contentDescription = "Wi-Fi Settings", tint = Color.TextSecondary)
+                        }
+                    }
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.icon_white),
+                            contentDescription = "Portal3 Icon",
+                            Modifier.size(72.dp)
+                        )
+                        Spacer(Modifier.size(24.dp))
+                        Title(stringResource(id = R.string.login_title))
+                        Spacer(Modifier.size(8.dp))
+                        Description(stringResource(id = R.string.login_description), textAlign = TextAlign.Center)
+                        Spacer(Modifier.size(64.dp))
+                        Column {
+                            AuthInput(
+                                label = R.string.email,
+                                keyboardType = KeyboardType.Email,
+                                error = emailError,
+                                value = email,
+                                onValueChange = {
+                                    email = it
+                                    emailError = false
+                                },
+                                imeAction = ImeAction.Next,
+                                keyboardActions = KeyboardActions(
+                                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                                ),
+                                disabled = loading
+                            )
+                            Spacer(Modifier.size(16.dp))
+                            AuthInput(
+                                label = R.string.password,
+                                keyboardType = KeyboardType.Password,
+                                value = password,
+                                onValueChange = { password = it },
+                                imeAction = ImeAction.Go,
+                                keyboardActions = KeyboardActions(
+                                    onGo = {
+                                        focusManager.clearFocus(true)
+                                        login()
+                                    }
+                                ),
+                                disabled = loading
+                            )
+                            Spacer(Modifier.size(32.dp))
+                            AuthButton(text = R.string.login_title, onClick = { login() }, loading = loading)
+                        }
+                    }
                 }
             }
         }

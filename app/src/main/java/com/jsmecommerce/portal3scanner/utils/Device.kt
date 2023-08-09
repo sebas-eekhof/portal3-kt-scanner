@@ -1,6 +1,7 @@
 package com.jsmecommerce.portal3scanner.utils
 
 import java.io.File
+import java.net.NetworkInterface
 import java.text.DecimalFormat
 import java.util.regex.Pattern
 
@@ -23,5 +24,19 @@ class Device {
 
     fun getCores(): Int {
         return Runtime.getRuntime().availableProcessors()
+    }
+
+    fun getMAC(): String {
+        val iface = NetworkInterface.getByName("wlan0")
+        val addr = iface.hardwareAddress
+        val builder = StringBuilder("")
+        for(part in addr) {
+            val v = part.toInt() and 0xFF
+            val hv = Integer.toHexString(v).uppercase()
+            if(hv.length < 2)
+                builder.append(0)
+            builder.append(hv).append(":")
+        }
+        return builder.substring(0, builder.length - 1)
     }
 }
