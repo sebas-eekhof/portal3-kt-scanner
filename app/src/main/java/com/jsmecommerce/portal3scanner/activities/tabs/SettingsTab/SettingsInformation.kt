@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.jsmecommerce.portal3scanner.BuildConfig
@@ -41,33 +42,33 @@ fun SettingsInformation(nav: NavHostController, mvm: MainViewModel) {
             .padding(16.dp),
 
     ) {
-        InfoGroup(name = "Installatie", first = true) {
-            InfoItem(name = "Versie", value = BuildConfig.VERSION_NAME)
+        InfoGroup(name = stringResource(id = R.string.settings_information_installation), first = true) {
+            InfoItem(name = stringResource(id = R.string.version), value = BuildConfig.VERSION_NAME)
             SettingsDivider()
-            InfoItem(name = "Build", value = BuildConfig.VERSION_CODE.toString())
+            InfoItem(name = stringResource(id = R.string.build), value = BuildConfig.VERSION_CODE.toString())
         }
-        InfoGroup(name = "Sessie") {
-            InfoItem(name = "ID", value = user?.id.toString() ?: "")
+        InfoGroup(name = stringResource(id = R.string.settings_information_session)) {
+            InfoItem(name = stringResource(id = R.string.settings_information_session_id), value = user?.id.toString() ?: "")
             SettingsDivider()
-            InfoItem(name = "Email", value = user?.email ?: "")
+            InfoItem(name = stringResource(id = R.string.settings_information_session_email), value = user?.email ?: "")
             SettingsDivider()
-            InfoItem(name = "Naam", value = user?.fullName ?: "")
+            InfoItem(name = stringResource(id = R.string.settings_information_session_name), value = user?.fullName ?: "")
             SettingsDivider()
-            InfoItem(name = "Geldig tot", value = if (user != null) humanDate(user.expire, context) else "")
+            InfoItem(name = stringResource(id = R.string.settings_information_session_valid_till), value = if (user != null) humanDate(user.expire, context) else "")
         }
-        InfoGroup(name = "Software") {
-            InfoItem(name = "Android versie", value = Build.VERSION.RELEASE)
+        InfoGroup(name = stringResource(id = R.string.settings_information_software)) {
+            InfoItem(name = stringResource(id = R.string.settings_information_software_android_version), value = Build.VERSION.RELEASE)
             SettingsDivider()
-            InfoItem(name = "SDK versie", value = Build.VERSION.SDK_INT.toString())
+            InfoItem(name = stringResource(id = R.string.settings_information_software_sdk_version), value = Build.VERSION.SDK_INT.toString())
         }
-        InfoGroup(name = "Hardware") {
-            InfoItem(name = "Apparaat", value = "${Build.MANUFACTURER} ${Build.MODEL}")
+        InfoGroup(name = stringResource(id = R.string.settings_information_hardware)) {
+            InfoItem(name = stringResource(id = R.string.settings_information_hardware_device), value = "${Build.MANUFACTURER} ${Build.MODEL}")
             SettingsDivider()
-            InfoItem(name = "MAC", value = Device().getMAC())
+            InfoItem(name = stringResource(id = R.string.settings_information_hardware_mac), value = Device().getMAC())
             SettingsDivider()
-            InfoItem(name = "Cores", value = Device().getCores().toString())
+            InfoItem(name = stringResource(id = R.string.settings_information_hardware_cpu_cores), value = Device().getCores().toString())
             SettingsDivider()
-            InfoItem(name = "Memory", value = Device().getMemoryGB())
+            InfoItem(name = stringResource(id = R.string.settings_information_hardware_memory), value = Device().getMemoryGB())
         }
     }
 }

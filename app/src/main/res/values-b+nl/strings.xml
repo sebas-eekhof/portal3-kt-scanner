@@ -6,4 +6,8 @@
     <string name="yesterday">Gisteren</string>
     <string name="today_at">Vandaag om %1$s</string>
     <string name="yesterday_at">Gisteren om %1$s</string>
+    <string name="please_wait_fetching_data">Een moment geduld, data ophalen...</string>
+    <string name="close">Sluiten</string>
+    <string name="version">Versie</string>
+    <string name="build">Build</string>
 </resources>

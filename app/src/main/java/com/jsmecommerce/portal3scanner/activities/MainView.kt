@@ -1,13 +1,12 @@
 package com.jsmecommerce.portal3scanner.activities
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -42,9 +41,11 @@ import com.jsmecommerce.portal3scanner.activities.tabs.OrdersTab.OrderView
 import com.jsmecommerce.portal3scanner.activities.tabs.OrdersTab.OrdersOverview
 import com.jsmecommerce.portal3scanner.activities.tabs.SettingsTab.SettingsInformation
 import com.jsmecommerce.portal3scanner.activities.tabs.SettingsTab.SettingsOverview
+import com.jsmecommerce.portal3scanner.activities.tabs.SettingsTab.SettingsScanner
 import com.jsmecommerce.portal3scanner.models.Tab
-import com.jsmecommerce.portal3scanner.models.general.Spinner
+import com.jsmecommerce.portal3scanner.ui.components.general.Spinner
 import com.jsmecommerce.portal3scanner.ui.components.general.Title
+import com.jsmecommerce.portal3scanner.ui.components.screens.TutorialScreen
 import com.jsmecommerce.portal3scanner.ui.theme.Color
 import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
 
@@ -63,99 +64,112 @@ fun MainView(mvm: MainViewModel = viewModel()) {
     val title: String by mvm.title.observeAsState("NO TITLE")
     val backEnabled: Boolean by mvm.backEnabled.observeAsState(false)
     val loading: Boolean by mvm.loading.observeAsState(false)
+    val popup: (@Composable () -> Unit)? by mvm.popup.observeAsState(null)
 
-    Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Background),
-        topBar = {
-            TopAppBar(
-                colors = TopAppBarDefaults.mediumTopAppBarColors(
-                    containerColor = Color.Menu
-                ),
-                title = { Title(title) },
-                actions = {
-//                    if(loading)
-                        Spinner()
-                },
-                navigationIcon = {
-                    if(backEnabled)
-                        Surface(
-                            color = Color.Transparent,
-                            modifier = Modifier.fillMaxHeight(),
-                            onClick = { navController.popBackStack() }
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_chevron_left),
-                                contentDescription = "Terug",
-                                tint = Color.TextSecondary,
-                                modifier = Modifier.padding(start = 4.dp, end = 16.dp)
-                            )
-                        }
-                }
-            )
-        },
-        bottomBar = {
-            NavigationBar(
-                containerColor = Color.Menu
-            ) {
-                tabs.forEach { item ->
-                    NavigationBarItem(
-                        selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
-                        onClick = {
-                            navController.navigate(item.route) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        },
-                        icon = { Icon(painter = painterResource(id = item.icon), contentDescription = stringResource(id = item.title)) },
-                        colors = NavigationBarItemDefaults.colors(
-                            indicatorColor = Color.Primary.Regular,
-                            selectedIconColor = Color.White,
-                            selectedTextColor = Color.White,
-                            unselectedIconColor = Color.TextSecondary,
-                            unselectedTextColor = Color.TextSecondary
-                        ),
-                        label = { Text(stringResource(id = item.title)) }
-                    )
-                }
-            }
-        }
-    ) { paddingValues ->
-        Surface(
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Scaffold(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues),
-            color = Color.Background
-        ) {
-            NavHost(navController = navController, startDestination = "dashboard") {
-                composable("dashboard") { DashboardTab(navController, mvm) }
-                navigation(startDestination = "orders/overview", route = "orders") {
-                    composable("orders/overview") { OrdersOverview(navController, mvm) }
-                    composable(
-                        "orders/view/{orderId}?title={title}",
-                        arguments = listOf(
-                            navArgument("orderId") { type = NavType.IntType },
-                            navArgument("title") {
-                                type = NavType.StringType
-                                defaultValue = "Order"
+                .background(Color.Background),
+            topBar = {
+                TopAppBar(
+                    colors = TopAppBarDefaults.mediumTopAppBarColors(
+                        containerColor = Color.Menu
+                    ),
+                    title = { Title(title) },
+                    actions = {
+                        Row(
+                            modifier = Modifier.padding(end = 8.dp),
+                            horizontalArrangement = Arrangement.End,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            if(loading)
+                                Spinner(color = Color.TextSecondary)
+                        }
+                    },
+                    navigationIcon = {
+                        if(backEnabled)
+                            Surface(
+                                color = Color.Transparent,
+                                modifier = Modifier.fillMaxHeight(),
+                                onClick = { navController.popBackStack() }
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_chevron_left),
+                                    contentDescription = "Terug",
+                                    tint = Color.TextSecondary,
+                                    modifier = Modifier.padding(start = 4.dp, end = 16.dp)
+                                )
                             }
+                    }
+                )
+            },
+            bottomBar = {
+                NavigationBar(
+                    containerColor = Color.Menu
+                ) {
+                    tabs.forEach { item ->
+                        NavigationBarItem(
+                            selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
+                            onClick = {
+                                navController.navigate(item.route) {
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                            },
+                            icon = { Icon(painter = painterResource(id = item.icon), contentDescription = stringResource(id = item.title)) },
+                            colors = NavigationBarItemDefaults.colors(
+                                indicatorColor = Color.Primary.Regular,
+                                selectedIconColor = Color.White,
+                                selectedTextColor = Color.White,
+                                unselectedIconColor = Color.TextSecondary,
+                                unselectedTextColor = Color.TextSecondary
+                            ),
+                            label = { Text(stringResource(id = item.title)) }
                         )
-                    ) {
-                        val orderId: Int? = it.arguments?.getInt("orderId")
-                        val orderTitle: String? = it.arguments?.getString("title")
-                        if(orderId != null && orderTitle != null)
-                            OrderView(navController, mvm, orderId, orderTitle)
                     }
                 }
-                navigation(startDestination = "settings/overview", route = "settings") {
-                    composable("settings/overview") { SettingsOverview(navController, mvm) }
-                    composable("settings/information") { SettingsInformation(navController, mvm) }
+            }
+        ) { paddingValues ->
+            Surface(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                color = Color.Background
+            ) {
+                NavHost(navController = navController, startDestination = "dashboard") {
+                    composable("dashboard") { DashboardTab(navController, mvm) }
+                    navigation(startDestination = "orders/overview", route = "orders") {
+                        composable("orders/overview") { OrdersOverview(navController, mvm) }
+                        composable(
+                            "orders/view/{orderId}?title={title}",
+                            arguments = listOf(
+                                navArgument("orderId") { type = NavType.IntType },
+                                navArgument("title") {
+                                    type = NavType.StringType
+                                    defaultValue = "Order"
+                                }
+                            )
+                        ) {
+                            val orderId: Int? = it.arguments?.getInt("orderId")
+                            val orderTitle: String? = it.arguments?.getString("title")
+                            if(orderId != null && orderTitle != null)
+                                OrderView(navController, mvm, orderId, orderTitle)
+                        }
+                    }
+                    navigation(startDestination = "settings/overview", route = "settings") {
+                        composable("settings/overview") { SettingsOverview(navController, mvm) }
+                        composable("settings/information") { SettingsInformation(navController, mvm) }
+                        composable("settings/scanner") { SettingsScanner(navController, mvm) }
+                    }
                 }
             }
         }
+        popup?.invoke()
     }
 }

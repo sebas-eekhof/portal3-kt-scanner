@@ -3,34 +3,24 @@ package com.jsmecommerce.portal3scanner.activities.tabs.SettingsTab
 import android.app.Activity
 import android.content.Intent
 import android.provider.Settings
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.jsmecommerce.portal3scanner.ui.components.settings.SettingsClickableItem
-import com.jsmecommerce.portal3scanner.ui.components.settings.SettingsGroup
 import com.jsmecommerce.portal3scanner.R
 import com.jsmecommerce.portal3scanner.activities.AuthActivity
-import com.jsmecommerce.portal3scanner.ui.components.general.Description
-import com.jsmecommerce.portal3scanner.ui.components.general.Jdenticon
 import com.jsmecommerce.portal3scanner.ui.components.general.ScannerHost
-import com.jsmecommerce.portal3scanner.ui.components.general.SmallTitle
+import com.jsmecommerce.portal3scanner.ui.components.general.UserBanner
+import com.jsmecommerce.portal3scanner.ui.components.screens.TutorialScreen
+import com.jsmecommerce.portal3scanner.ui.components.settings.SettingsClickableItem
 import com.jsmecommerce.portal3scanner.ui.components.settings.SettingsDivider
-import com.jsmecommerce.portal3scanner.ui.theme.Color
+import com.jsmecommerce.portal3scanner.ui.components.settings.SettingsGroup
 import com.jsmecommerce.portal3scanner.utils.Auth
 import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
 
@@ -38,8 +28,7 @@ import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
 fun SettingsOverview(nav: NavHostController, mvm: MainViewModel) {
     val context = LocalContext.current
     val auth = Auth(context)
-
-    val user = auth.getUser()
+    val user = auth.getUser()!!
 
     fun logout() {
         auth.logout()
@@ -63,30 +52,9 @@ fun SettingsOverview(nav: NavHostController, mvm: MainViewModel) {
             .padding(16.dp),
 
     ) {
-        if(user != null)
-            Surface(
-                shape = RoundedCornerShape(4),
-                color = Color.Element,
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Jdenticon(user.jdenticon, size = 86)
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Column {
-                        SmallTitle(text = user.fullName)
-                        Description(text = user.email)
-                    }
-                }
-            }
+        UserBanner(user = user)
 
-        SettingsGroup(name = R.string.settings_cat_account, first = (user == null)) {
+        SettingsGroup(name = R.string.settings_cat_account) {
             SettingsClickableItem(
                 name = R.string.settings_cat_account_change_password,
                 icon = R.drawable.ic_password
@@ -99,6 +67,12 @@ fun SettingsOverview(nav: NavHostController, mvm: MainViewModel) {
             )
         }
         SettingsGroup(name = R.string.settings_cat_app) {
+            SettingsClickableItem(
+                name = R.string.settings_cat_app_tutorial,
+                icon = R.drawable.ic_info,
+                onClick = { mvm.setPopup { TutorialScreen { mvm.setPopup(null) } } }
+            )
+            SettingsDivider()
             SettingsClickableItem(
                 name = R.string.settings_cat_app_notifications,
                 icon = R.drawable.ic_bell
@@ -133,6 +107,12 @@ fun SettingsOverview(nav: NavHostController, mvm: MainViewModel) {
                 name = R.string.settings_cat_device_security,
                 icon = R.drawable.ic_lock,
                 onClick = { context.startActivity(Intent(Settings.ACTION_SECURITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
+            )
+            SettingsDivider()
+            SettingsClickableItem(
+                name = R.string.settings_cat_device_scanner,
+                icon = R.drawable.ic_scan,
+                onClick = { nav.navigate("settings/scanner") }
             )
             SettingsDivider()
             SettingsClickableItem(

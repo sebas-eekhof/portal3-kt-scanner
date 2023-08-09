@@ -45,6 +45,7 @@ import com.jsmecommerce.portal3scanner.utils.Api
 import com.jsmecommerce.portal3scanner.utils.Auth
 import com.jsmecommerce.portal3scanner.utils.Database
 import com.jsmecommerce.portal3scanner.utils.Validator
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -72,7 +73,7 @@ class AuthActivity : ComponentActivity() {
                     Toast.makeText(applicationContext, "Ongeldig e-mail adres", Toast.LENGTH_SHORT).show()
                     return
                 }
-                GlobalScope.launch(Dispatchers.IO) {
+                CoroutineScope(Dispatchers.IO).launch {
                     loading = true
                     val res = Api.Request(this@AuthActivity.applicationContext, "/auth/login_scanner")
                         .setMethod(Api.RequestMethod.POST)

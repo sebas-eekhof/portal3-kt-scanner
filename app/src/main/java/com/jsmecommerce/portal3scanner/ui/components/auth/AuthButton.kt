@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.jsmecommerce.portal3scanner.models.general.Spinner
+import com.jsmecommerce.portal3scanner.ui.components.general.Spinner
 import com.jsmecommerce.portal3scanner.ui.components.general.SimpleText
 import com.jsmecommerce.portal3scanner.ui.theme.Color
 

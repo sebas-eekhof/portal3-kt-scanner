@@ -14,9 +14,8 @@ import androidx.navigation.NavHostController
 import com.jsmecommerce.portal3scanner.models.Scan
 import com.jsmecommerce.portal3scanner.models.orders.ShipmentLabelLookup
 import com.jsmecommerce.portal3scanner.utils.Api
-import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -65,7 +64,6 @@ class ScannerReceiver(val callback: (scan: Scan) -> Unit) : BroadcastReceiver() 
 
 }
 
-@OptIn(DelicateCoroutinesApi::class)
 @SuppressLint("UnspecifiedRegisterReceiverFlag")
 @Composable
 fun ScannerHost(nav: NavHostController, onScan: ((scan: Scan) -> Unit)? = null) {
@@ -78,7 +76,7 @@ fun ScannerHost(nav: NavHostController, onScan: ((scan: Scan) -> Unit)? = null) 
                 onScan(scan)
             else {
                 if(scan.barcodeType == Scan.BarcodeType.SHIPMENT) {
-                    GlobalScope.launch(Dispatchers.IO) {
+                    CoroutineScope(Dispatchers.IO).launch {
                         val res = Api.Request(context, "/shipments/by_barcode")
                             .setQuery("barcode", scan.getShipmentBarcode())
                             .exec()

@@ -6,6 +6,7 @@
     <string name="settings_cat_account_sign_out">Uitloggen</string>
 
     <string name="settings_cat_app">App</string>
+    <string name="settings_cat_app_tutorial">Uitleg</string>
     <string name="settings_cat_app_notifications">Meldingen</string>
     <string name="settings_cat_app_information">Informatie</string>
 
@@ -14,7 +15,30 @@
     <string name="settings_cat_device_display">Beeldscherm</string>
     <string name="settings_cat_device_sound">Geluid</string>
     <string name="settings_cat_device_security">Beveiliging</string>
+    <string name="settings_cat_device_scanner">Scanner</string>
     <string name="settings_cat_device_about">Over</string>
 
     <string name="settings_information_title">Informatie</string>
+    <string name="settings_information_installation">Installation</string>
+    <string name="settings_information_session">Sessie</string>
+    <string name="settings_information_session_id">ID</string>
+    <string name="settings_information_session_email">E-mail</string>
+    <string name="settings_information_session_name">Naam</string>
+    <string name="settings_information_session_valid_till">Geldit tot</string>
+    <string name="settings_information_software">Software</string>
+    <string name="settings_information_software_android_version">Android versie</string>
+    <string name="settings_information_software_sdk_version">SDK versie</string>
+    <string name="settings_information_hardware">Hardware</string>
+    <string name="settings_information_hardware_device">Apparaat</string>
+    <string name="settings_information_hardware_mac">MAC</string>
+    <string name="settings_information_hardware_cpu_cores">Processor cores</string>
+    <string name="settings_information_hardware_memory">Werkgeheugen</string>
+
+    <string name="settings_scanner_title">Scanner test</string>
+    <string name="settings_scanner_waiting">Wachten op scan...</string>
+
+    <string name="settings_tutorial_scan">Scan</string>
+    <string name="settings_tutorial_back">Terug</string>
+    <string name="settings_tutorial_volume_up">Volume omhoog</string>
+    <string name="settings_tutorial_volume_down">Volume omlaag</string>
 </resources>

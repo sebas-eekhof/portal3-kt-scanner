@@ -1,9 +1,6 @@
 package com.jsmecommerce.portal3scanner.utils
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.net.wifi.WifiManager
-import androidx.compose.ui.text.toLowerCase
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException

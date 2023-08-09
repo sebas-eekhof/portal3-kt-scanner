@@ -20,15 +20,14 @@ import com.jsmecommerce.portal3scanner.models.orders.OverviewOrder
 import com.jsmecommerce.portal3scanner.ui.components.orders.OverviewOrder
 import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
 import com.jsmecommerce.portal3scanner.R
+import com.jsmecommerce.portal3scanner.ui.components.screens.LoadingScreen
 import com.jsmecommerce.portal3scanner.ui.components.general.ScannerHost
 import com.jsmecommerce.portal3scanner.utils.Api
-import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-@OptIn(DelicateCoroutinesApi::class)
 @Composable
 fun OrdersOverview(nav: NavHostController, mvm: MainViewModel) {
     var orders by remember { mutableStateOf<List<OverviewOrder>?>(null) }
@@ -41,35 +40,34 @@ fun OrdersOverview(nav: NavHostController, mvm: MainViewModel) {
             disableBack = true
         )
         mvm.setLoading()
-        GlobalScope.launch(Dispatchers.IO) {
-            val res = Api.Request(context, "/orders")
-                .exec()
+        CoroutineScope(Dispatchers.IO).launch {
+            val res = Api.Request(context, "/orders").exec()
             if(!res.hasError) {
                 val JSONOrders = res.getJsonObject()?.getJSONArray("items")
                 if(JSONOrders != null)
                     orders = OverviewOrder.fromJSONArray(JSONOrders)
-
             }
-            withContext(Dispatchers.Main) {
-                mvm.setLoading(true)
-            }
+            withContext(Dispatchers.Main) { mvm.setLoading(false) }
         }
     }
 
     ScannerHost(nav = nav)
 
-    Column(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .padding(bottom = 16.dp, start = 16.dp, end = 16.dp, top = 8.dp),
+    if(orders != null) {
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(top = 8.dp, bottom = 16.dp, start = 16.dp, end = 16.dp),
 
         ) {
-        orders?.forEach { order ->
-            Spacer(modifier = Modifier.height(8.dp))
-            OverviewOrder(
-                order = order,
-                onClick = { nav.navigate("orders/view/${order.id}?title=${order.ordernumber_full}") }
-            )
+            orders!!.forEach { order ->
+                Spacer(modifier = Modifier.height(8.dp))
+                OverviewOrder(
+                    order = order,
+                    onClick = { nav.navigate("orders/view/${order.id}?title=${order.ordernumber_full}") }
+                )
+            }
         }
-    }
+    } else
+        LoadingScreen()
 }
