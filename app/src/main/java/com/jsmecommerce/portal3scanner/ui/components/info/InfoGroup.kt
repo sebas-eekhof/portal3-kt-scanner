@@ -22,7 +22,7 @@ fun InfoGroup(name: String, first: Boolean = false, content: @Composable () -> U
         Description(name)
         Spacer(Modifier.height(16.dp))
         Surface(
-            color = Color.Subelement,
+            color = Color.Element,
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(4)
         ) {
