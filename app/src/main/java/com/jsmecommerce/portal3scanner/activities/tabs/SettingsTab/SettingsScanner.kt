@@ -26,14 +26,21 @@ import androidx.navigation.NavHostController
 import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
 import com.jsmecommerce.portal3scanner.R
 import com.jsmecommerce.portal3scanner.models.Scan
+import com.jsmecommerce.portal3scanner.models.products.ScanProduct
 import com.jsmecommerce.portal3scanner.ui.components.general.Description
 import com.jsmecommerce.portal3scanner.ui.components.general.ScannerHost
 import com.jsmecommerce.portal3scanner.ui.components.general.SimpleText
+import com.jsmecommerce.portal3scanner.ui.components.general.Spinner
 import com.jsmecommerce.portal3scanner.ui.components.screens.LoadingScreen
 import com.jsmecommerce.portal3scanner.ui.theme.Color
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun SettingsScanner(nav: NavHostController, mvm: MainViewModel) {
+    var portalProductLoading by remember { mutableStateOf(false) }
+    var portalProduct by remember { mutableStateOf<ScanProduct?>(null) }
     var scan by remember { mutableStateOf<Scan?>(null) }
     val context = LocalContext.current
 
@@ -43,7 +50,16 @@ fun SettingsScanner(nav: NavHostController, mvm: MainViewModel) {
         )
     }
 
-    ScannerHost(nav = nav) { scan = it }
+    ScannerHost(nav = nav) {
+        portalProduct = null
+        scan = it
+        if(it.barcodeType == Scan.BarcodeType.EAN)
+            CoroutineScope(Dispatchers.IO).launch {
+                portalProductLoading = true
+                portalProduct = ScanProduct.findByBarcode(context, it.barcode)
+                portalProductLoading = false
+            }
+    }
 
     if(scan == null)
         LoadingScreen(text = R.string.settings_scanner_waiting)
@@ -85,6 +101,20 @@ fun SettingsScanner(nav: NavHostController, mvm: MainViewModel) {
                     Row {
                         SimpleText("Shipment barcode", modifier = Modifier.width(164.dp))
                         Description(scan!!.getShipmentBarcode())
+                    }
+                }
+                if(portalProductLoading) {
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Row {
+                        SimpleText("Portal product", modifier = Modifier.width(164.dp))
+                        Spinner()
+                    }
+                }
+                if(portalProduct != null) {
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Row {
+                        SimpleText("Portal product", modifier = Modifier.width(164.dp))
+                        Description(portalProduct!!.name)
                     }
                 }
             }

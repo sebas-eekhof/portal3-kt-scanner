@@ -45,16 +45,19 @@ data class Scan(private val barcodeRaw: String, val labelType: LabelType) {
 
     init {
         barcode = barcodeRaw.trim()
-        if(labelType == LabelType.CODE39 && barcode.matches(Regex("^3S[A-Z]{4}[0-9]{9}$"))) {
+        if(listOf(LabelType.CODE39, LabelType.CODE128).contains(labelType) && barcode.matches(Regex("^3S[A-Z]{4}[0-9]{7,9}$"))) {
             barcodeType = BarcodeType.SHIPMENT
             barcodeSubType = BarcodeSubType.SHIPMENT_POSTNL
         } else if(labelType == LabelType.CODE128 && barcode.matches(Regex("^%[0-9]{5,7}[A-Z]{2}[0-9A-Z]{20}$"))) {
             barcodeType = BarcodeType.SHIPMENT
             barcodeSubType = BarcodeSubType.SHIPMENT_DPD
-        } else if(labelType == LabelType.CODE128 && barcode.matches(Regex("^JVGL[0-9]{20}$"))) {
+        } else if(labelType == LabelType.CODE128 && barcode.matches(Regex("^JVGL[0-9]{16,20}$"))) {
             barcodeType = BarcodeType.SHIPMENT
             barcodeSubType = BarcodeSubType.SHIPMENT_DHL
-        } else if(listOf(LabelType.EAN8, LabelType.EAN13, LabelType.EAN128).contains(labelType) && (barcode.matches(Regex("^[0-9]{12,13}$")))) {
+        } else if(labelType == LabelType.PDF417 && barcode.startsWith("UNH") && barcode.contains(Regex("JVGL[0-9]{16,20}"))) {
+            barcodeType = BarcodeType.SHIPMENT
+            barcodeSubType = BarcodeSubType.SHIPMENT_DHL
+        } else if(listOf(LabelType.EAN8, LabelType.EAN13, LabelType.EAN128, LabelType.CODE128).contains(labelType) && (barcode.matches(Regex("^[0-9]{12,13}$")))) {
             barcodeType = BarcodeType.EAN
             barcodeSubType = if (barcode.length == 12) BarcodeSubType.UPS else BarcodeSubType.EAN
         } else if(labelType == LabelType.CODE128 && barcode.matches(Regex("^[0-9]{1,6}$"))) {
@@ -72,6 +75,11 @@ data class Scan(private val barcodeRaw: String, val labelType: LabelType) {
     fun getShipmentBarcode(): String {
         if(barcodeSubType == BarcodeSubType.SHIPMENT_DPD) {
             val matchRes = Regex("%[0-9]{5,7}[A-Z]{2}([0-9A-Z]{14})").find(barcode)
+            if(matchRes != null && matchRes.groupValues.count() >= 2)
+                return matchRes.groupValues[1]
+            return barcode
+        } else if(barcodeSubType == BarcodeSubType.SHIPMENT_DHL && labelType == LabelType.PDF417) {
+            val matchRes = Regex("(JVGL[0-9]{16,20})").find(barcode)
             if(matchRes != null && matchRes.groupValues.count() >= 2)
                 return matchRes.groupValues[1]
             return barcode
