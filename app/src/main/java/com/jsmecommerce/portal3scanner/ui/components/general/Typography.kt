@@ -72,13 +72,13 @@ fun SimpleTextPreview() {
 }
 
 @Composable
-fun SimpleTextBold(text: String, modifier: Modifier = Modifier) {
+fun SimpleTextBold(text: String, modifier: Modifier = Modifier, color: androidx.compose.ui.graphics.Color = Color.TextPrimary) {
     Text(
         text = text,
         fontSize = 12.sp,
         fontFamily = Font.Roboto,
         fontWeight = FontWeight.Bold,
-        color = Color.TextPrimary,
+        color = color,
         modifier = modifier
     )
 }

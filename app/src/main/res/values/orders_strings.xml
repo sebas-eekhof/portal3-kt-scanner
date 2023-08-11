@@ -2,4 +2,7 @@
     <string name="orders_title">Orders</string>
     <string name="orders_in_stock">In stock</string>
     <string name="orders_out_of_stock">Out of stock</string>
+    <string name="orders_view_info">Info</string>
+    <string name="orders_view_scan">Scan</string>
+    <string name="orders_view_shipments">Shipments</string>
 </resources>
