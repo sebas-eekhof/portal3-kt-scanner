@@ -14,10 +14,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.jsmecommerce.portal3scanner.models.TabbarTab
 import com.jsmecommerce.portal3scanner.models.orders.Order
 import com.jsmecommerce.portal3scanner.ui.components.general.Description
 import com.jsmecommerce.portal3scanner.utils.Api
 import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
+import com.jsmecommerce.portal3scanner.R
+import com.jsmecommerce.portal3scanner.ui.components.general.Tabbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,6 +50,13 @@ fun OrderView(nav: NavHostController, mvm: MainViewModel, orderId: Int, title: S
             }
         }
     }
+
+    val tabs = listOf(
+        TabbarTab(R.string.dashboard_title) {},
+        TabbarTab(R.string.settings_title) {},
+        TabbarTab(R.string.login_title) {},
+        TabbarTab(R.string.settings_scanner_title) {}
+    )
     
     Column(
         modifier = Modifier
@@ -56,6 +66,7 @@ fun OrderView(nav: NavHostController, mvm: MainViewModel, orderId: Int, title: S
         if(order == null)
             Description(text = "Loading order...")
         else {
+//            Tabbar(tabs = tabs)
             Description(text = "Order ${if (order!!.is_paid) "is paid" else "is not paid"}")
             Description(text = "Order customer name = ${order!!.customer.admin_address?.full_name ?: "Geen adres"}")
             order!!.rules.forEach { rule ->

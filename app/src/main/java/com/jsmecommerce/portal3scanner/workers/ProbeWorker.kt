@@ -35,7 +35,7 @@ class ProbeWorker(private val context: Context, private val params: WorkerParame
             !Permissions.has(Manifest.permission.ACCESS_FINE_LOCATION, applicationContext) ||
             !Permissions.has(Manifest.permission.ACCESS_COARSE_LOCATION, applicationContext)
         ) return Result.failure()
-        val loc = getLocation() ?: return Result.failure()
+        val loc = getLocation()
         val batteryStatus: Intent? = IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { context.registerReceiver(null, it) }
         val batteryPercentage: Float? = batteryStatus?.let { it.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) * 100 / it.getIntExtra(BatteryManager.EXTRA_SCALE, -1).toFloat() }
         val res = Api.Request(context, "/scanner/probe")
@@ -44,10 +44,10 @@ class ProbeWorker(private val context: Context, private val params: WorkerParame
                 JSONObject()
                     .put("battery", batteryPercentage ?: 0f)
                     .put("location", JSONObject()
-                        .put("lat", loc.latitude)
-                        .put("lon", loc.longitude)
-                        .put("alt", loc.altitude)
-                        .put("acc", loc.accuracy))
+                        .put("lat", loc?.latitude ?: 0)
+                        .put("lon", loc?.longitude ?: 0)
+                        .put("alt", loc?.altitude ?: 0)
+                        .put("acc", loc?.accuracy ?: 0))
             )
             .exec()
         if(res.hasError) {
