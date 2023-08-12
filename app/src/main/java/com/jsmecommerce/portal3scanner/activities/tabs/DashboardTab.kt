@@ -2,8 +2,12 @@ package com.jsmecommerce.portal3scanner.activities.tabs
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -15,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.jsmecommerce.portal3scanner.R
 import com.jsmecommerce.portal3scanner.models.DashboardShortcutHolder
+import com.jsmecommerce.portal3scanner.ui.components.dashboard.DashboardBatteryWidget
 import com.jsmecommerce.portal3scanner.ui.components.dashboard.DashboardShortcut
 import com.jsmecommerce.portal3scanner.ui.components.general.ScannerHost
 import com.jsmecommerce.portal3scanner.ui.components.general.UserBanner
@@ -26,11 +31,6 @@ fun DashboardTab(nav: NavHostController, mvm: MainViewModel) {
     val context = LocalContext.current
     val auth = Auth(context)
     val user = auth.getUser()!!
-    val shortcuts = listOf(
-        DashboardShortcutHolder(icon = R.drawable.ic_info, name = R.string.settings_cat_app_tutorial, onClick = { mvm.setPopup { TutorialScreen { mvm.setPopup(null) } } }),
-        DashboardShortcutHolder(icon = R.drawable.ic_orders, name = R.string.orders_title, onClick = { nav.navigate("orders/overview") }),
-        DashboardShortcutHolder(icon = R.drawable.ic_settings, name = R.string.settings_title, onClick = { nav.navigate("settings/overview") }),
-    )
 
     LaunchedEffect(Unit) {
         mvm.init(
@@ -41,31 +41,37 @@ fun DashboardTab(nav: NavHostController, mvm: MainViewModel) {
 
     ScannerHost(nav = nav)
 
-    Column {
-        Column(
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)
+    Column(
+        modifier = Modifier.padding(16.dp)
+    ) {
+        UserBanner(user = user)
+        Spacer(modifier = Modifier.height(8.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth()
         ) {
-            UserBanner(user = user)
+            Column(Modifier.weight(1f)) { DashboardBatteryWidget(mvm = mvm) }
+            Spacer(modifier = Modifier.width(8.dp))
+            Column(Modifier.weight(1f)) { DashboardBatteryWidget(mvm = mvm) }
         }
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 128.dp),
-            contentPadding = PaddingValues(
-                start = 12.dp,
-                top = 4.dp,
-                end = 12.dp,
-                bottom = 0.dp
-            ),
-            content = {
-                items(items = shortcuts) {
-                    Column(
-                        modifier = Modifier
-                            .padding(4.dp)
-                            .fillMaxWidth()
-                    ) {
-                        DashboardShortcut(icon = it.icon, name = it.name, onClick = it.onClick)
-                    }
-                }
-            }
-        )
+//        LazyVerticalGrid(
+//            columns = GridCells.Adaptive(minSize = 128.dp),
+//            contentPadding = PaddingValues(
+//                start = 12.dp,
+//                top = 4.dp,
+//                end = 12.dp,
+//                bottom = 0.dp
+//            ),
+//            content = {
+//                items(items = shortcuts) {
+//                    Column(
+//                        modifier = Modifier
+//                            .padding(4.dp)
+//                            .fillMaxWidth()
+//                    ) {
+//                        DashboardShortcut(icon = it.icon, name = it.name, onClick = it.onClick)
+//                    }
+//                }
+//            }
+//        )
     }
 }

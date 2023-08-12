@@ -20,7 +20,7 @@ import com.jsmecommerce.portal3scanner.ui.components.info.InfoItem
 import com.jsmecommerce.portal3scanner.ui.components.settings.SettingsDivider
 import com.jsmecommerce.portal3scanner.utils.Auth
 import com.jsmecommerce.portal3scanner.utils.Device
-import com.jsmecommerce.portal3scanner.utils.humanDate
+import com.jsmecommerce.portal3scanner.utils.Formatter
 import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
 
 @Composable
@@ -54,7 +54,7 @@ fun SettingsInformation(nav: NavHostController, mvm: MainViewModel) {
             SettingsDivider()
             InfoItem(name = stringResource(id = R.string.settings_information_session_name), value = user?.fullName ?: "")
             SettingsDivider()
-            InfoItem(name = stringResource(id = R.string.settings_information_session_valid_till), value = if (user != null) humanDate(user.expire, context) else "")
+            InfoItem(name = stringResource(id = R.string.settings_information_session_valid_till), value = if (user != null) Formatter.humanDate(user.expire, context) else "")
         }
         InfoGroup(name = stringResource(id = R.string.settings_information_software)) {
             InfoItem(name = stringResource(id = R.string.settings_information_software_android_version), value = Build.VERSION.RELEASE)

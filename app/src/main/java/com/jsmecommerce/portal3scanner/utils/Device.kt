@@ -1,5 +1,8 @@
 package com.jsmecommerce.portal3scanner.utils
 
+import android.content.Context
+import android.os.VibrationEffect
+import android.os.Vibrator
 import java.io.File
 import java.net.NetworkInterface
 import java.text.DecimalFormat
@@ -38,5 +41,10 @@ class Device {
             builder.append(hv).append(":")
         }
         return builder.substring(0, builder.length - 1)
+    }
+
+    fun vibrateScan(context: Context) {
+        val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        vibrator.vibrate(VibrationEffect.createOneShot(75, VibrationEffect.EFFECT_TICK))
     }
 }

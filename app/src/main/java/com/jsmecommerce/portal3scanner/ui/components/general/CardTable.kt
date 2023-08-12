@@ -16,19 +16,20 @@ import com.jsmecommerce.portal3scanner.models.TableRow
 import com.jsmecommerce.portal3scanner.ui.theme.Color
 
 @Composable
-fun CardTable(title: String?, rows: List<TableRow> = listOf()) {
+fun CardTable(title: String?, rows: List<TableRow?> = listOf()) {
+    val filteredRows = rows.filterNotNull()
     Column {
         if(title != null) {
             SmallTitle(title)
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(16.dp))
         }
         Column(
             modifier = Modifier
                 .background(Color.Element, RoundedCornerShape(4.dp))
                 .padding(8.dp)
         ) {
-            for(i in 0 until rows.count()) {
-                val row = rows[i]
+            for(i in 0 until filteredRows.count()) {
+                val row = filteredRows[i]
                 if(i != 0) {
                     Spacer(modifier = Modifier.height(8.dp))
                     Divider(color = Color.TextSecondary, modifier = Modifier.alpha(0.2f))

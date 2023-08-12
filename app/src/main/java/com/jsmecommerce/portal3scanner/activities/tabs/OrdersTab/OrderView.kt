@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.jsmecommerce.portal3scanner.R
 import com.jsmecommerce.portal3scanner.activities.tabs.OrdersTab.OrderViewTabs.OrderViewInfo
+import com.jsmecommerce.portal3scanner.activities.tabs.OrdersTab.OrderViewTabs.OrderViewShipments
 import com.jsmecommerce.portal3scanner.models.TabbarTab
 import com.jsmecommerce.portal3scanner.models.orders.Order
 import com.jsmecommerce.portal3scanner.ui.components.general.Description
@@ -65,7 +66,7 @@ fun OrderView(nav: NavHostController, mvm: MainViewModel, orderId: Int, title: S
 
                 },
                 TabbarTab(R.string.orders_view_shipments) {
-
+                    OrderViewShipments(order = order!!)
                 }
             ),
             defaultTab = 1

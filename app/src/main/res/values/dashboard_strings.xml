@@ -1,3 +1,5 @@
 <resources>
     <string name="dashboard_title">Dashboard</string>
+    <string name="dashboard_battery">Battery</string>
+    <string name="dashboard_battery_fully_charged">Fully charged</string>
 </resources>

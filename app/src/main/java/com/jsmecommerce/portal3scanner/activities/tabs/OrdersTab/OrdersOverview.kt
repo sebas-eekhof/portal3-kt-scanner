@@ -41,7 +41,9 @@ fun OrdersOverview(nav: NavHostController, mvm: MainViewModel) {
         )
         mvm.setLoading()
         CoroutineScope(Dispatchers.IO).launch {
-            val res = Api.Request(context, "/orders").exec()
+            val res = Api.Request(context, "/orders")
+                .setQuery("status_id", 4.toString())
+                .exec()
             if(!res.hasError) {
                 val JSONOrders = res.getJsonObject()?.getJSONArray("items")
                 if(JSONOrders != null)

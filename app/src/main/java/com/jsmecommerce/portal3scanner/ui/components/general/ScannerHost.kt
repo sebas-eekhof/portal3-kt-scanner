@@ -14,6 +14,7 @@ import androidx.navigation.NavHostController
 import com.jsmecommerce.portal3scanner.models.Scan
 import com.jsmecommerce.portal3scanner.models.orders.ShipmentLabelLookup
 import com.jsmecommerce.portal3scanner.utils.Api
+import com.jsmecommerce.portal3scanner.utils.Device
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -71,6 +72,7 @@ fun ScannerHost(nav: NavHostController, onScan: ((scan: Scan) -> Unit)? = null) 
 
     DisposableEffect(LocalLifecycleOwner.current) {
         val receiver = ScannerReceiver { scan ->
+            Device().vibrateScan(context)
             println("[SCAN]\nlabelType = ${scan.labelType}\nbarcodeType = ${scan.barcodeType ?: "NULL"}\nbarcodeSubType = ${scan.barcodeSubType ?: "NULL"}\nbarcode = ${scan.barcode}\n[/SCAN]")
             if(onScan != null)
                 onScan(scan)
@@ -94,7 +96,7 @@ fun ScannerHost(nav: NavHostController, onScan: ((scan: Scan) -> Unit)? = null) 
                             }
                     }
                 } else {
-                    Toast.makeText(context, scan.barcode, Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(context, scan.barcode, Toast.LENGTH_SHORT).show()
                 }
             }
         }

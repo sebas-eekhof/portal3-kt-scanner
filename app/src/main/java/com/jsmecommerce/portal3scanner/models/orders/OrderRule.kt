@@ -25,6 +25,7 @@ data class OrderRule(
     val scans_amount: Int,
     val stock: Int
 ) {
+    val total_ex = quantity.toDouble() * (price - discount)
     data class OrderRuleProduct(
         val id: Int,
         val name: String,

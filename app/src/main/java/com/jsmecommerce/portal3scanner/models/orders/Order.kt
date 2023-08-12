@@ -27,6 +27,7 @@ data class Order(
     val created_at: String,
     val updated_at: String
 ) {
+    val total_ex = rules.fold((0).toDouble()) { sum, rule -> sum + rule.total_ex}
     companion object {
         fun fromJSON(obj: JSONObject): Order {
             val item = JSON(obj)
