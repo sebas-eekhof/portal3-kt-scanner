@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">Portal3 Scanner</string>
-    <string name="email">Email</string>
-    <string name="password">Password</string>
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
     <string name="today_at">Today at %1$s</string>
@@ -10,4 +8,14 @@
     <string name="close">Close</string>
     <string name="version">Version</string>
     <string name="build">Build</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="phone">Phone</string>
+    <string name="road">Road</string>
+    <string name="zipcode">Zip code</string>
+    <string name="city">City</string>
+    <string name="province">Province</string>
+    <string name="country">Country</string>
+    <string name="no_items_found">No items found</string>
 </resources>

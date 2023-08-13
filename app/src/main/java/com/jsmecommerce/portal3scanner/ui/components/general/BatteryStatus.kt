@@ -7,17 +7,12 @@ import android.content.IntentFilter
 import android.os.BatteryManager
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -27,20 +22,33 @@ import androidx.compose.ui.unit.dp
 import com.jsmecommerce.portal3scanner.R
 import com.jsmecommerce.portal3scanner.models.BatteryInfo
 import com.jsmecommerce.portal3scanner.ui.theme.Color
+import com.jsmecommerce.portal3scanner.utils.getDebugExtra
+import com.jsmecommerce.portal3scanner.utils.getIntOrNull
+import com.jsmecommerce.portal3scanner.utils.getStringOrNull
 import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
 
 private class BatteryStatusReceiver(val mvm: MainViewModel) : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-        if(intent == null) return
+        if(intent == null || context == null) return
         when(intent.action) {
             Intent.ACTION_POWER_CONNECTED -> mvm._batteryCharging.value = true
             Intent.ACTION_POWER_DISCONNECTED -> mvm._batteryCharging.value = false
             Intent.ACTION_BATTERY_CHANGED -> {
-                val level: Int = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
-                val scale: Int = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
+                val batteryManager = context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
                 mvm._batteryInfo.value = BatteryInfo(
-                    level,
-                    scale
+                    level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1),
+                    scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1),
+                    voltage = intent.getIntOrNull("voltage"),
+                    temperature = intent.getIntOrNull("temperature"),
+                    chargeCounter = intent.getIntOrNull("charge_counter"),
+                    health = intent.getIntOrNull("health"),
+                    maxChargingCurrent = intent.getIntOrNull("max_charging_current"),
+                    mfd = intent.getStringOrNull("mfd"),
+                    partnumber = intent.getStringOrNull("partnumber"),
+                    ratedCapacity = intent.getIntOrNull("ratedcapacity"),
+                    serialnumber = intent.getStringOrNull("serialnumber"),
+                    batteryDecomission = if (intent.hasExtra("battery_decommission")) (intent.getIntExtra("battery_decommission", 0) == 1) else null,
+                    current = batteryManager.getLongProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW)
                 )
             }
         }
@@ -56,11 +64,11 @@ fun BatteryStatus(mvm: MainViewModel) {
     DisposableEffect(LocalLifecycleOwner.current) {
         val batteryStatus: Intent? = IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { context.registerReceiver(null, it) }
         val batteryInfo: BatteryInfo? = batteryStatus?.let { intent ->
-            val level: Int = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
-            val scale: Int = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
+            val batteryManager = context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
             BatteryInfo(
-                level = level,
-                scale = scale
+                level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1),
+                scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1),
+                current = batteryManager.getLongProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW)
             )
         }
         val status: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1

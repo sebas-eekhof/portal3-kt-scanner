@@ -1,5 +1,12 @@
 <resources>
     <string name="dashboard_title">Dashboard</string>
-    <string name="dashboard_battery">Batterij</string>
+    <string name="dashboard_battery_charge">Niveau</string>
     <string name="dashboard_battery_fully_charged">Volledig opgeladen</string>
+    <string name="dashboard_battery_voltage">Voltage</string>
+    <string name="dashboard_battery_health">Gezondheid</string>
+    <string name="dashboard_battery_health_healthy">Gezond</string>
+    <string name="dashboard_battery_health_unhealthy">Ongezond</string>
+    <string name="dashboard_battery_temperature">Temperatuur</string>
+    <string name="dashboard_battery_capacity">Capaciteit</string>
+    <string name="dashboard_battery_current">Stroom</string>
 </resources>

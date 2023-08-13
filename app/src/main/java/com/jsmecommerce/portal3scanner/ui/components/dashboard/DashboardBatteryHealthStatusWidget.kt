@@ -9,13 +9,12 @@ import com.jsmecommerce.portal3scanner.models.BatteryInfo
 import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
 
 @Composable
-fun DashboardBatteryWidget(mvm: MainViewModel) {
-    val isCharging: Boolean by mvm.batteryCharging.observeAsState(false)
+fun DashboardBatteryHealthStatusWidget(mvm: MainViewModel) {
     val batteryInfo: BatteryInfo? by mvm.batteryInfo.observeAsState(null)
 
     DashboardWidget(
-        icon = if (isCharging) R.drawable.ic_battery_charging else (if (batteryInfo == null) R.drawable.ic_battery_0 else batteryInfo!!.icon),
-        title = R.string.dashboard_battery,
-        value = if (isCharging && batteryInfo?.percentage?.toInt() == 100) stringResource(id = R.string.dashboard_battery_fully_charged) else "${batteryInfo?.percentage?.toInt() ?: 0} %"
+        icon = R.drawable.ic_activity,
+        title = R.string.dashboard_battery_health,
+        value = stringResource(id = if (batteryInfo?.isHealthy == true) R.string.dashboard_battery_health_healthy else R.string.dashboard_battery_health_unhealthy)
     )
 }

@@ -6,6 +6,7 @@
     <string name="settings_cat_account_sign_out">Sign out</string>
 
     <string name="settings_cat_app">App</string>
+    <string name="settings_cat_app_language">Language</string>
     <string name="settings_cat_app_tutorial">Tutorial</string>
     <string name="settings_cat_app_notifications">Notifications</string>
     <string name="settings_cat_app_information">Information</string>
@@ -31,6 +32,7 @@
     <string name="settings_information_hardware">Hardware</string>
     <string name="settings_information_hardware_device">Device</string>
     <string name="settings_information_hardware_mac">MAC</string>
+    <string name="settings_information_hardware_hwid">Hardware ID</string>
     <string name="settings_information_hardware_cpu_cores">CPU Cores</string>
     <string name="settings_information_hardware_memory">Memory</string>
 

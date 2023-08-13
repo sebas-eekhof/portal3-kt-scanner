@@ -1,0 +1,17 @@
+<resources>
+    <string name="permissions_title">Portal3 heeft rechten nodig</string>
+    <string name="permissions_description">Deze rechten zijn vereist voor de functionaliteit van de app</string>
+    <string name="permissions_allow_in_settings">Toestaan in Instellingen</string>
+
+    <string name="permissions_location_background_title">Achtergrond locatie</string>
+    <string name="permissions_location_background_description">Locatie ophalen wanneer de app in de achtergrond is</string>
+
+    <string name="permissions_location_coarse_title">Groffe locatie</string>
+    <string name="permissions_location_coarse_description">Groffe locatie ophalen om de positie van het apparaat te bepalen</string>
+
+    <string name="permissions_location_fine_title">Precieze locatie</string>
+    <string name="permissions_location_fine_description">Precieze locatie ophalen om de locatie van het apparaat te bepalen</string>
+
+    <string name="permissions_camera_title">Camera</string>
+    <string name="permissions_camera_description">Gebruik de camera om barcodes te scannen en foto\'s te nemen</string>
+</resources>

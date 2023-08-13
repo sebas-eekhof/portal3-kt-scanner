@@ -5,7 +5,8 @@ import com.jsmecommerce.portal3scanner.models.general.Event
 import com.jsmecommerce.portal3scanner.models.general.OverviewStore
 import com.jsmecommerce.portal3scanner.models.general.Tag
 import com.jsmecommerce.portal3scanner.models.invoices.Invoice
-import com.jsmecommerce.portal3scanner.utils.JSON
+import com.jsmecommerce.portal3scanner.utils.getIntOrNull
+import com.jsmecommerce.portal3scanner.utils.getStringOrNull
 import org.json.JSONObject
 
 data class Order(
@@ -29,27 +30,24 @@ data class Order(
 ) {
     val total_ex = rules.fold((0).toDouble()) { sum, rule -> sum + rule.total_ex}
     companion object {
-        fun fromJSON(obj: JSONObject): Order {
-            val item = JSON(obj)
-            return Order(
-                obj.getInt("id"),
-                item.intOrNull("ordernumber"),
-                item.stringOrNull("ordernumber_full"),
-                obj.getBoolean("is_concept"),
-                obj.getBoolean("is_paid"),
-                OrderStatus.fromJSON(obj.getJSONObject("status")),
-                OverviewStore.fromJSON(obj.getJSONObject("store")),
-                Customer.fromJSON(obj.getJSONObject("customer")),
-                item.stringOrNull("comments"),
-                Tag.fromJSONArray(obj.getJSONArray("tags")),
-                Event.fromJSONArray(obj.getJSONArray("events")),
-                Invoice.fromJSONArray(obj.getJSONArray("invoices")),
-                OrderRule.fromJSONArray(obj.getJSONArray("rules")),
-                OrderShipment.fromJSONArray(obj.getJSONArray("shipments")),
-                item.stringOrNull("payment_method"),
-                obj.getString("created_at"),
-                obj.getString("updated_at")
-            )
-        }
+        fun fromJSON(obj: JSONObject): Order = Order(
+            obj.getInt("id"),
+            obj.getIntOrNull("ordernumber"),
+            obj.getStringOrNull("ordernumber_full"),
+            obj.getBoolean("is_concept"),
+            obj.getBoolean("is_paid"),
+            OrderStatus.fromJSON(obj.getJSONObject("status")),
+            OverviewStore.fromJSON(obj.getJSONObject("store")),
+            Customer.fromJSON(obj.getJSONObject("customer")),
+            obj.getStringOrNull("comments"),
+            Tag.fromJSONArray(obj.getJSONArray("tags")),
+            Event.fromJSONArray(obj.getJSONArray("events")),
+            Invoice.fromJSONArray(obj.getJSONArray("invoices")),
+            OrderRule.fromJSONArray(obj.getJSONArray("rules")),
+            OrderShipment.fromJSONArray(obj.getJSONArray("shipments")),
+            obj.getStringOrNull("payment_method"),
+            obj.getString("created_at"),
+            obj.getString("updated_at")
+        )
     }
 }

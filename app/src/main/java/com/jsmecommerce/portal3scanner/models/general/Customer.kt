@@ -1,6 +1,6 @@
 package com.jsmecommerce.portal3scanner.models.general
 
-import com.jsmecommerce.portal3scanner.utils.JSON
+import com.jsmecommerce.portal3scanner.utils.getStringOrNull
 import org.json.JSONObject
 
 data class Customer(
@@ -17,23 +17,18 @@ data class Customer(
         private
     }
     companion object {
-        fun fromJSON(obj: JSONObject): Customer {
-            val item = JSON(obj)
-            val admin_address = item.jsonObjectOrNull("admin_address")
-            val delivery_address = item.jsonObjectOrNull("delivery_address")
-            return Customer(
-                obj.getInt("id"),
-                when(item.stringOrNull("customer_type")) {
-                    "private" -> CustomerType.private
-                    "company" -> CustomerType.company
-                    else -> null
-                },
-                item.stringOrNull("company_name"),
-                item.stringOrNull("company_coc"),
-                item.stringOrNull("company_vat"),
-                if (admin_address == null) null else Address.fromJSON(admin_address),
-                if (delivery_address == null) null else Address.fromJSON(delivery_address)
-            )
-        }
+        fun fromJSON(obj: JSONObject): Customer = Customer(
+            obj.getInt("id"),
+            when(obj.getStringOrNull("customer_type")) {
+                "private" -> CustomerType.private
+                "company" -> CustomerType.company
+                else -> null
+            },
+            obj.getStringOrNull("company_name"),
+            obj.getStringOrNull("company_coc"),
+            obj.getStringOrNull("company_vat"),
+            if (obj.isNull("admin_address")) null else Address.fromJSON(obj.getJSONObject("admin_address")),
+            if (obj.isNull("delivery_address")) null else Address.fromJSON(obj.getJSONObject("delivery_address"))
+        )
     }
 }

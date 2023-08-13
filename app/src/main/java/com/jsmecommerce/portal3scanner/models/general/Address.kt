@@ -1,6 +1,6 @@
 package com.jsmecommerce.portal3scanner.models.general
 
-import com.jsmecommerce.portal3scanner.utils.JSON
+import com.jsmecommerce.portal3scanner.utils.getStringOrNull
 import org.json.JSONObject
 
 data class Address(
@@ -15,19 +15,16 @@ data class Address(
     val country: String? = null
 ) {
     companion object {
-        fun fromJSON(obj: JSONObject): Address {
-            val item = JSON(obj)
-            return Address(
-                item.stringOrNull("full_name"),
-                item.stringOrNull("email"),
-                item.stringOrNull("phone"),
-                item.stringOrNull("road"),
-                item.stringOrNull("postcode"),
-                item.stringOrNull("house_number"),
-                item.stringOrNull("city"),
-                item.stringOrNull("state"),
-                item.stringOrNull("country")
-            )
-        }
+        fun fromJSON(obj: JSONObject): Address = Address(
+            obj.getStringOrNull("full_name"),
+            obj.getStringOrNull("email"),
+            obj.getStringOrNull("phone"),
+            obj.getStringOrNull("road"),
+            obj.getStringOrNull("postcode"),
+            obj.getStringOrNull("house_number"),
+            obj.getStringOrNull("city"),
+            obj.getStringOrNull("state"),
+            obj.getStringOrNull("country")
+        )
     }
 }

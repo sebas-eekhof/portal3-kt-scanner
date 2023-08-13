@@ -10,13 +10,11 @@ data class OrderStatus(
     val type: String
 ) {
     companion object {
-        fun fromJSON(obj: JSONObject): OrderStatus {
-            return OrderStatus(
-                obj.getInt("id"),
-                obj.getString("name"),
-                ColorEnum.fromString(obj.getString("color")),
-                obj.getString("type")
-            )
-        }
+        fun fromJSON(obj: JSONObject): OrderStatus = OrderStatus(
+            obj.getInt("id"),
+            obj.getString("name"),
+            ColorEnum.fromString(obj.getString("color")),
+            obj.getString("type")
+        )
     }
 }

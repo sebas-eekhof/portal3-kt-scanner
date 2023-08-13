@@ -56,7 +56,7 @@ fun Tabbar(tabs: List<TabbarTab>, defaultTab: Int = 0) {
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        SimpleText(stringResource(tab.name))
+                        SimpleText(tab.name)
                     }
                 }
             }
@@ -68,7 +68,7 @@ fun Tabbar(tabs: List<TabbarTab>, defaultTab: Int = 0) {
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .padding(16.dp)
             ) {
                 tabs[activeTab].component()

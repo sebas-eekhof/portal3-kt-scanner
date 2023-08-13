@@ -4,5 +4,19 @@
     <string name="orders_out_of_stock">Niet op voorraad</string>
     <string name="orders_view_info">Info</string>
     <string name="orders_view_scan">Scannen</string>
-    <string name="orders_view_shipments">Zendingen</string>
+    <string name="orders_view_shipments">Zendingen (%1$d)</string>
+
+    <string name="orders_info_files">Bestanden</string>
+
+    <string name="orders_info_order">Bestelling</string>
+    <string name="orders_info_order_ordernumber">Bestelnummer</string>
+    <string name="orders_info_order_status">Status</string>
+    <string name="orders_info_order_store">Winkel</string>
+    <string name="orders_info_order_payment">Betaling</string>
+    <string name="orders_info_order_payment_paid">Betaald</string>
+    <string name="orders_info_order_payment_unpaid">Niet betaald</string>
+    <string name="orders_info_order_paymethod">Betaalmethode</string>
+    <string name="orders_info_order_total_ex">Totaal excl.</string>
+
+    <string name="orders_info_customer">Klant</string>
 </resources>

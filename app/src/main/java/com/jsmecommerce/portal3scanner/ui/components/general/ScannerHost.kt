@@ -72,7 +72,7 @@ fun ScannerHost(nav: NavHostController, onScan: ((scan: Scan) -> Unit)? = null) 
 
     DisposableEffect(LocalLifecycleOwner.current) {
         val receiver = ScannerReceiver { scan ->
-            Device().vibrateScan(context)
+            Device(context).vibrateScan()
             println("[SCAN]\nlabelType = ${scan.labelType}\nbarcodeType = ${scan.barcodeType ?: "NULL"}\nbarcodeSubType = ${scan.barcodeSubType ?: "NULL"}\nbarcode = ${scan.barcode}\n[/SCAN]")
             if(onScan != null)
                 onScan(scan)

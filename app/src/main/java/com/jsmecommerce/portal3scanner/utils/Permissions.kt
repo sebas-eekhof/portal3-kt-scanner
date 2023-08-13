@@ -1,7 +1,5 @@
 package com.jsmecommerce.portal3scanner.utils
 
-import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.activity.ComponentActivity
@@ -10,6 +8,7 @@ import androidx.core.app.ActivityCompat
 
 class Permissions(private val activity: ComponentActivity) {
     fun has(permission: String): Boolean = ActivityCompat.checkSelfPermission(activity.applicationContext, permission) == PackageManager.PERMISSION_GRANTED
+    fun has(permission: List<String>): Boolean = permission.none { ActivityCompat.checkSelfPermission(activity.applicationContext, it) != PackageManager.PERMISSION_GRANTED }
     fun request(permission: String, onResult: (result: Boolean) -> Unit) {
         activity.registerForActivityResult(
             ActivityResultContracts.RequestPermission()

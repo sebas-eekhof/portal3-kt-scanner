@@ -1,6 +1,5 @@
 package com.jsmecommerce.portal3scanner.activities.tabs.OrdersTab.OrderViewTabs
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,10 +17,13 @@ import com.jsmecommerce.portal3scanner.models.orders.Order
 import com.jsmecommerce.portal3scanner.ui.components.general.AppIcon
 import com.jsmecommerce.portal3scanner.ui.components.general.Description
 import com.jsmecommerce.portal3scanner.ui.components.general.SmallTitle
+import com.jsmecommerce.portal3scanner.ui.components.screens.EmptyScreen
 import com.jsmecommerce.portal3scanner.ui.theme.Color
 
 @Composable
 fun OrderViewShipments(order: Order) {
+    if(order.shipments.isEmpty())
+        EmptyScreen()
     for(i in 0 until order.shipments.count()) {
         val shipment = order.shipments[i]
         Surface(

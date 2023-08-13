@@ -74,5 +74,6 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:1.4.3")
     implementation("androidx.work:work-runtime-ktx:2.8.1")
     implementation("com.google.android.gms:play-services-location:21.0.1")
+    implementation("com.karumi:dexter:6.2.3")
 //    implementation("com.symbol:emdk:9.1.1")
 }

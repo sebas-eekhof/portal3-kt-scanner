@@ -39,11 +39,13 @@ import com.jsmecommerce.portal3scanner.ui.components.general.Description
 import com.jsmecommerce.portal3scanner.ui.components.general.Title
 import com.jsmecommerce.portal3scanner.ui.components.auth.AuthButton
 import com.jsmecommerce.portal3scanner.ui.components.auth.AuthInput
+import com.jsmecommerce.portal3scanner.ui.components.general.SimpleText
 import com.jsmecommerce.portal3scanner.ui.theme.Color
 import com.jsmecommerce.portal3scanner.ui.theme.Portal3ScannerTheme
 import com.jsmecommerce.portal3scanner.utils.Api
 import com.jsmecommerce.portal3scanner.utils.Auth
 import com.jsmecommerce.portal3scanner.utils.Database
+import com.jsmecommerce.portal3scanner.utils.Device
 import com.jsmecommerce.portal3scanner.utils.Validator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi

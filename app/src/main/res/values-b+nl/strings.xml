@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">Portal3 Scanner</string>
-    <string name="email">E-Mail</string>
-    <string name="password">Wachtwoord</string>
     <string name="today">Vandaag</string>
     <string name="yesterday">Gisteren</string>
     <string name="today_at">Vandaag om %1$s</string>
@@ -10,4 +8,14 @@
     <string name="close">Sluiten</string>
     <string name="version">Versie</string>
     <string name="build">Build</string>
+    <string name="name">Naam</string>
+    <string name="email">E-Mail</string>
+    <string name="password">Wachtwoord</string>
+    <string name="phone">Telefoonnummer</string>
+    <string name="road">Straat</string>
+    <string name="zipcode">Postcode</string>
+    <string name="city">Stad</string>
+    <string name="province">Provincie</string>
+    <string name="country">Land</string>
+    <string name="no_items_found">Geen items gevonden</string>
 </resources>

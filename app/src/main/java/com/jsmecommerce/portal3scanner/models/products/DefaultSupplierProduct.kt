@@ -1,7 +1,7 @@
 package com.jsmecommerce.portal3scanner.models.products
 
 import com.jsmecommerce.portal3scanner.enums.VatEnum
-import com.jsmecommerce.portal3scanner.utils.JSON
+import com.jsmecommerce.portal3scanner.utils.getStringOrNull
 import org.json.JSONObject
 
 data class DefaultSupplierProduct(
@@ -13,7 +13,7 @@ data class DefaultSupplierProduct(
     companion object {
         fun fromJSON(obj: JSONObject): DefaultSupplierProduct = DefaultSupplierProduct(
             obj.getInt("supplier_id"),
-            JSON(obj).stringOrNull("article_code"),
+            obj.getStringOrNull("article_code"),
             VatEnum.fromString(obj.getString("vat")),
             obj.getDouble("price")
         )

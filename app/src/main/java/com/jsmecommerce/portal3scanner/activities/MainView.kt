@@ -27,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavDeepLink
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
@@ -36,11 +37,13 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import com.jsmecommerce.portal3scanner.R
 import com.jsmecommerce.portal3scanner.activities.tabs.DashboardTab
 import com.jsmecommerce.portal3scanner.activities.tabs.OrdersTab.OrderView
 import com.jsmecommerce.portal3scanner.activities.tabs.OrdersTab.OrdersOverview
 import com.jsmecommerce.portal3scanner.activities.tabs.SettingsTab.SettingsInformation
+import com.jsmecommerce.portal3scanner.activities.tabs.SettingsTab.SettingsLanguage
 import com.jsmecommerce.portal3scanner.activities.tabs.SettingsTab.SettingsOverview
 import com.jsmecommerce.portal3scanner.activities.tabs.SettingsTab.SettingsScanner
 import com.jsmecommerce.portal3scanner.models.Tab
@@ -67,6 +70,15 @@ fun MainView(mvm: MainViewModel = viewModel()) {
     val backEnabled: Boolean by mvm.backEnabled.observeAsState(false)
     val loading: Boolean by mvm.loading.observeAsState(false)
     val popup: (@Composable () -> Unit)? by mvm.popup.observeAsState(null)
+
+    fun Portal3DeepLinks(path: String): List<NavDeepLink> = listOf(
+        NavDeepLink(
+            uri = "https://ui.portal3.nl${if (path.startsWith("/")) path else "/$path"}"
+        ),
+        NavDeepLink(
+            uri = "app://portal3${if (path.startsWith("/")) path else "/$path"}"
+        )
+    )
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -155,6 +167,7 @@ fun MainView(mvm: MainViewModel = viewModel()) {
                             composable("orders/overview") { OrdersOverview(navController, mvm) }
                             composable(
                                 "orders/view/{orderId}?title={title}",
+                                deepLinks = Portal3DeepLinks("/orders/{orderId}"),
                                 arguments = listOf(
                                     navArgument("orderId") { type = NavType.IntType },
                                     navArgument("title") {
@@ -173,6 +186,7 @@ fun MainView(mvm: MainViewModel = viewModel()) {
                             composable("settings/overview") { SettingsOverview(navController, mvm) }
                             composable("settings/information") { SettingsInformation(navController, mvm) }
                             composable("settings/scanner") { SettingsScanner(navController, mvm) }
+                            composable("settings/language") { SettingsLanguage(navController, mvm) }
                         }
                     }
                 }

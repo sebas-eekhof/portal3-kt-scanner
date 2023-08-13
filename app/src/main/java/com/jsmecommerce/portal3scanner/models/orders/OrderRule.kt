@@ -5,7 +5,8 @@ import com.jsmecommerce.portal3scanner.enums.VatEnum
 import com.jsmecommerce.portal3scanner.models.general.OverviewCategory
 import com.jsmecommerce.portal3scanner.models.general.Tag
 import com.jsmecommerce.portal3scanner.models.products.DefaultSupplierProduct
-import com.jsmecommerce.portal3scanner.utils.JSON
+import com.jsmecommerce.portal3scanner.utils.getIntOrNull
+import com.jsmecommerce.portal3scanner.utils.getStringOrNull
 import com.jsmecommerce.portal3scanner.utils.toJSONObjectList
 import org.json.JSONArray
 import org.json.JSONObject
@@ -52,24 +53,21 @@ data class OrderRule(
         }
     }
     companion object {
-        fun fromJSON(obj: JSONObject): OrderRule {
-            val item = JSON(obj)
-            return OrderRule(
-                obj.getInt("id"),
-                obj.getBoolean("dropshipped"),
-                item.intOrNull("parent_id"),
-                obj.getString("title"),
-                item.stringOrNull("description"),
-                obj.getInt("quantity"),
-                obj.getDouble("price"),
-                obj.getDouble("discount"),
-                VatEnum.fromString(obj.getString("vat")),
-                obj.getBoolean("is_group_product"),
-                if (obj.isNull("product")) null else OrderRuleProduct.fromJSON(obj.getJSONObject("product")),
-                obj.getInt("scans_amount"),
-                obj.getInt("stock")
-            )
-        }
+        fun fromJSON(obj: JSONObject): OrderRule = OrderRule(
+            obj.getInt("id"),
+            obj.getBoolean("dropshipped"),
+            obj.getIntOrNull("parent_id"),
+            obj.getString("title"),
+            obj.getStringOrNull("description"),
+            obj.getInt("quantity"),
+            obj.getDouble("price"),
+            obj.getDouble("discount"),
+            VatEnum.fromString(obj.getString("vat")),
+            obj.getBoolean("is_group_product"),
+            if (obj.isNull("product")) null else OrderRuleProduct.fromJSON(obj.getJSONObject("product")),
+            obj.getInt("scans_amount"),
+            obj.getInt("stock")
+        )
         fun fromJSONArray(obj: JSONArray): List<OrderRule> = obj.toJSONObjectList().map { fromJSON(it) }
     }
 }

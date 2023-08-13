@@ -11,13 +11,11 @@ data class Tag(
     val color: ColorEnum
 ) {
     companion object {
-        fun fromJSON(obj: JSONObject): Tag {
-            return Tag(
-                obj.getInt("id"),
-                obj.getString("title"),
-                ColorEnum.fromString(obj.getString("color"))
-            )
-        }
+        fun fromJSON(obj: JSONObject): Tag = Tag(
+            obj.getInt("id"),
+            obj.getString("title"),
+            ColorEnum.fromString(obj.getString("color"))
+        )
 
         fun fromJSONArray(obj: JSONArray): List<Tag> {
             return obj.toJSONObjectList().map { fromJSON(it) }

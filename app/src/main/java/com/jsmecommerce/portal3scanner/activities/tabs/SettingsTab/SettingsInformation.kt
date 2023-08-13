@@ -27,6 +27,7 @@ import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
 fun SettingsInformation(nav: NavHostController, mvm: MainViewModel) {
     val context = LocalContext.current
     val user = Auth(context).getUser()
+    val device = Device(context)
 
     LaunchedEffect(Unit) {
         mvm.init(
@@ -64,11 +65,13 @@ fun SettingsInformation(nav: NavHostController, mvm: MainViewModel) {
         InfoGroup(name = stringResource(id = R.string.settings_information_hardware)) {
             InfoItem(name = stringResource(id = R.string.settings_information_hardware_device), value = "${Build.MANUFACTURER} ${Build.MODEL}")
             SettingsDivider()
-            InfoItem(name = stringResource(id = R.string.settings_information_hardware_mac), value = Device().getMAC())
+            InfoItem(name = stringResource(id = R.string.settings_information_hardware_mac), value = Device.getMAC() ?: "02:00:00:00:00:00")
             SettingsDivider()
-            InfoItem(name = stringResource(id = R.string.settings_information_hardware_cpu_cores), value = Device().getCores().toString())
+            InfoItem(name = stringResource(id = R.string.settings_information_hardware_hwid), value = device.getHWID())
             SettingsDivider()
-            InfoItem(name = stringResource(id = R.string.settings_information_hardware_memory), value = Device().getMemoryGB())
+            InfoItem(name = stringResource(id = R.string.settings_information_hardware_cpu_cores), value = Device.getCores().toString())
+            SettingsDivider()
+            InfoItem(name = stringResource(id = R.string.settings_information_hardware_memory), value = Device.getMemoryGB())
         }
     }
 }

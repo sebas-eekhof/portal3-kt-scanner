@@ -4,6 +4,6 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 
 data class TabbarTab(
-    @StringRes val name: Int,
+    val name: String,
     val component: @Composable () -> Unit
 )

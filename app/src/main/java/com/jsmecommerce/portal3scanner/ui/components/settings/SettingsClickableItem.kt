@@ -50,3 +50,31 @@ fun SettingsClickableItem(@StringRes name: Int, @DrawableRes icon: Int, onClick:
         }
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SettingsClickableItem(name: String, @DrawableRes icon: Int? = null, onClick: (() -> Unit)? = null) {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp)
+            .padding(0.dp)
+            .defaultMinSize(0.dp),
+        onClick = { if (onClick != null) onClick() },
+        color = Color.Transparent
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(16.dp)
+        ) {
+            if(icon != null) {
+                Icon(painter = painterResource(id = icon), contentDescription = name, modifier = Modifier.size(20.dp), tint = com.jsmecommerce.portal3scanner.ui.theme.Color.TextSecondary)
+                Spacer(modifier = Modifier.width(16.dp))
+            }
+            SimpleText(name)
+            Spacer(modifier = Modifier.weight(1f))
+            Icon(imageVector = Icons.Default.KeyboardArrowRight, contentDescription = name, tint = com.jsmecommerce.portal3scanner.ui.theme.Color.TextSecondary)
+        }
+    }
+}

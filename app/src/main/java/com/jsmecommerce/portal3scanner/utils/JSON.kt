@@ -4,18 +4,39 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 
-class JSON(val obj: JSONObject) {
-    fun stringOrNull(key: String): String? = try { if(obj.has(key)) obj.getString(key) else null } catch(e: Exception) { null }
-    fun intOrNull(key: String): Int? = try { if(obj.has(key)) obj.getInt(key) else null } catch(e: Exception) { null }
-    fun booleanOrNull(key: String): Boolean? = try { if(obj.has(key)) obj.getBoolean(key) else null } catch(e: Exception) { null }
-    fun jsonObjectOrNull(key: String): JSONObject? = try { if(obj.has(key)) obj.getJSONObject(key) else null } catch(e: Exception) { null }
-    fun jsonArrayOrNull(key: String): JSONArray? = try { if(obj.has(key)) obj.getJSONArray(key) else null } catch(e: Exception) { null }
-}
-
 @Throws(JSONException::class)
 fun JSONArray.toJSONObjectList(): List<JSONObject> {
     val list = mutableListOf<JSONObject>()
     for (i in 0 until this.length())
         list.add(this.getJSONObject(i))
     return list
+}
+
+fun JSONObject.getStringOrNull(key: String): String? {
+    if(!has(key)) return null
+    try {
+        val res = getString(key)
+        if(res == "null") return null
+        return res
+    } catch(e: JSONException) { return null }
+}
+
+fun JSONObject.getIntOrNull(key: String): Int? {
+    if(!has(key)) return null
+    return try { getInt(key) } catch(e: JSONException) { null }
+}
+
+fun JSONObject.getBooleanOrNull(key: String): Boolean? {
+    if(!has(key)) return null
+    return try { getBoolean(key) } catch(e: JSONException) { null }
+}
+
+fun JSONObject.getJSONObjectOrNull(key: String): JSONObject? {
+    if(!has(key)) return null
+    return try { getJSONObject(key) } catch(e: JSONException) { null }
+}
+
+fun JSONObject.getJSONArrayOrNull(key: String): JSONArray? {
+    if(!has(key)) return null
+    return try { getJSONArray(key) } catch(e: JSONException) { null }
 }

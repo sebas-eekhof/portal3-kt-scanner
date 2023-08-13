@@ -4,5 +4,19 @@
     <string name="orders_out_of_stock">Out of stock</string>
     <string name="orders_view_info">Info</string>
     <string name="orders_view_scan">Scan</string>
-    <string name="orders_view_shipments">Shipments</string>
+    <string name="orders_view_shipments">Shipments (%1$d)</string>
+
+    <string name="orders_info_files">Files</string>
+
+    <string name="orders_info_order">Order</string>
+    <string name="orders_info_order_ordernumber">Order number</string>
+    <string name="orders_info_order_status">Status</string>
+    <string name="orders_info_order_store">Store</string>
+    <string name="orders_info_order_payment">Payment</string>
+    <string name="orders_info_order_payment_paid">Paid</string>
+    <string name="orders_info_order_payment_unpaid">Unpaid</string>
+    <string name="orders_info_order_paymethod">Pay method</string>
+    <string name="orders_info_order_total_ex">Total ex.</string>
+
+    <string name="orders_info_customer">Customer</string>
 </resources>

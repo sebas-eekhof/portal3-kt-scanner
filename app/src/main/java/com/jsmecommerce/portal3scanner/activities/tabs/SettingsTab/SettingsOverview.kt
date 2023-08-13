@@ -68,6 +68,12 @@ fun SettingsOverview(nav: NavHostController, mvm: MainViewModel) {
         }
         SettingsGroup(name = R.string.settings_cat_app) {
             SettingsClickableItem(
+                name = R.string.settings_cat_app_language,
+                icon = R.drawable.ic_language,
+                onClick = { nav.navigate("settings/language") }
+            )
+            SettingsDivider()
+            SettingsClickableItem(
                 name = R.string.settings_cat_app_tutorial,
                 icon = R.drawable.ic_info,
                 onClick = { mvm.setPopup { TutorialScreen { mvm.setPopup(null) } } }

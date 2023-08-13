@@ -67,7 +67,7 @@ class Api {
                         setRequestProperty("Authorization", "Bearer $jwt")
                     setRequestProperty("Content-Type", "application/json; charset=utf-8")
                     setRequestProperty("Accept", "application/json")
-                    setRequestProperty("x-mac", Device().getMAC())
+                    setRequestProperty("x-hwid", Device(context).getHWID())
                     if(body != null) {
                         val wr = OutputStreamWriter(outputStream)
                         wr.write(body)
@@ -197,6 +197,6 @@ class Api {
         POST,
         PUT,
         PATCH,
-DELETE
+        DELETE
     }
 }

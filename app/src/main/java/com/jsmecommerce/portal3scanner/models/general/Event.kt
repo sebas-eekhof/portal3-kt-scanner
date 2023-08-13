@@ -1,6 +1,6 @@
 package com.jsmecommerce.portal3scanner.models.general
 
-import com.jsmecommerce.portal3scanner.utils.JSON
+import com.jsmecommerce.portal3scanner.utils.getStringOrNull
 import com.jsmecommerce.portal3scanner.utils.toJSONObjectList
 import org.json.JSONArray
 import org.json.JSONObject
@@ -32,7 +32,7 @@ data class Event(
             obj.getInt("id"),
             obj.getString("event"),
             if (obj.isNull("user")) null else EventUser.fromJSON(obj.getJSONObject("user")),
-            JSON(obj).stringOrNull("user_name"),
+            obj.getStringOrNull("user_name"),
             obj.getString("dispatched_at")
         )
         fun fromJSONArray(obj: JSONArray): List<Event> = obj.toJSONObjectList().map { fromJSON(it) }

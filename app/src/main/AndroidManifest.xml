@@ -34,8 +34,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="ui.portal3.nl" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="app" android:host="portal3" />
+            </intent-filter>
         </activity>
-        <activity android:name=".activities.AuthActivity" android:exported="true" />
+        <activity
+            android:name=".activities.PermissionsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activities.AuthActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

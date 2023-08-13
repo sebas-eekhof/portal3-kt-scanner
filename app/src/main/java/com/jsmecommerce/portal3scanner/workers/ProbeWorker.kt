@@ -30,7 +30,6 @@ import kotlin.coroutines.suspendCoroutine
 
 class ProbeWorker(private val context: Context, private val params: WorkerParameters): CoroutineWorker(context, params) {
     override suspend fun doWork(): Result {
-        Looper.prepare()
         if(
             !Permissions.has(Manifest.permission.ACCESS_FINE_LOCATION, applicationContext) ||
             !Permissions.has(Manifest.permission.ACCESS_COARSE_LOCATION, applicationContext)

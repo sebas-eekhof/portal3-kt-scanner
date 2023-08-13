@@ -1,7 +1,7 @@
 package com.jsmecommerce.portal3scanner.models.orders
 
 import com.jsmecommerce.portal3scanner.models.general.App
-import com.jsmecommerce.portal3scanner.utils.JSON
+import com.jsmecommerce.portal3scanner.utils.getStringOrNull
 import com.jsmecommerce.portal3scanner.utils.toJSONObjectList
 import org.json.JSONArray
 import org.json.JSONObject
@@ -31,19 +31,16 @@ data class OrderShipment(
     }
 
     companion object {
-        fun fromJSON(obj: JSONObject): OrderShipment {
-            val item = JSON(obj)
-            return OrderShipment(
-                obj.getInt("id"),
-                item.stringOrNull("barcode"),
-                item.stringOrNull("description"),
-                item.stringOrNull("sub_icon"),
-                if (obj.isNull("app")) null else App.fromJSON(obj.getJSONObject("app")),
-                if (obj.isNull("file")) null else ShipmentFile.fromJSON(obj.getJSONObject("file")),
-                obj.getString("created_at"),
-                obj.getString("updated_at")
-            )
-        }
+        fun fromJSON(obj: JSONObject): OrderShipment = OrderShipment(
+            obj.getInt("id"),
+            obj.getStringOrNull("barcode"),
+            obj.getStringOrNull("description"),
+            obj.getStringOrNull("sub_icon"),
+            if (obj.isNull("app")) null else App.fromJSON(obj.getJSONObject("app")),
+            if (obj.isNull("file")) null else ShipmentFile.fromJSON(obj.getJSONObject("file")),
+            obj.getString("created_at"),
+            obj.getString("updated_at")
+        )
         fun fromJSONArray(obj: JSONArray): List<OrderShipment> = obj.toJSONObjectList().map { fromJSON(it) }
     }
 }

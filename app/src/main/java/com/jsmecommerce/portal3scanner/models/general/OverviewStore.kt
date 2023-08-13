@@ -9,12 +9,10 @@ class OverviewStore(
     val color: ColorEnum
 ) {
     companion object {
-        fun fromJSON(obj: JSONObject): OverviewStore {
-            return OverviewStore(
-                obj.getInt("id"),
-                obj.getString("name"),
-                ColorEnum.fromString(obj.getString("color"))
-            )
-        }
+        fun fromJSON(obj: JSONObject): OverviewStore = OverviewStore(
+            obj.getInt("id"),
+            obj.getString("name"),
+            ColorEnum.fromString(obj.getString("color"))
+        )
     }
 }

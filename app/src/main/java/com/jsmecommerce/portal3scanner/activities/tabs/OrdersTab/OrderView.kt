@@ -1,25 +1,20 @@
 package com.jsmecommerce.portal3scanner.activities.tabs.OrdersTab
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import com.jsmecommerce.portal3scanner.R
 import com.jsmecommerce.portal3scanner.activities.tabs.OrdersTab.OrderViewTabs.OrderViewInfo
+import com.jsmecommerce.portal3scanner.activities.tabs.OrdersTab.OrderViewTabs.OrderViewScan
 import com.jsmecommerce.portal3scanner.activities.tabs.OrdersTab.OrderViewTabs.OrderViewShipments
 import com.jsmecommerce.portal3scanner.models.TabbarTab
 import com.jsmecommerce.portal3scanner.models.orders.Order
-import com.jsmecommerce.portal3scanner.ui.components.general.Description
 import com.jsmecommerce.portal3scanner.ui.components.general.Tabbar
 import com.jsmecommerce.portal3scanner.ui.components.screens.LoadingScreen
 import com.jsmecommerce.portal3scanner.utils.Api
@@ -59,13 +54,13 @@ fun OrderView(nav: NavHostController, mvm: MainViewModel, orderId: Int, title: S
     else
         Tabbar(
             tabs = listOf(
-                TabbarTab(R.string.orders_view_info) {
+                TabbarTab(stringResource(id = R.string.orders_view_info)) {
                     OrderViewInfo(order = order!!)
                 },
-                TabbarTab(R.string.orders_view_scan) {
-
+                TabbarTab(stringResource(id = R.string.orders_view_scan)) {
+                    OrderViewScan(order = order!!)
                 },
-                TabbarTab(R.string.orders_view_shipments) {
+                TabbarTab(String.format(stringResource(id = R.string.orders_view_shipments), order!!.shipments.count())) {
                     OrderViewShipments(order = order!!)
                 }
             ),

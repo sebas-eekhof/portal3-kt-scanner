@@ -32,14 +32,15 @@ fun TitlePreview() {
 }
 
 @Composable
-fun SmallTitle(text: String, modifier: Modifier = Modifier) {
+fun SmallTitle(text: String, modifier: Modifier = Modifier, textAlign: TextAlign = TextAlign.Left) {
     Text(
         text = text,
         fontSize = 18.sp,
         fontFamily = Font.Roboto,
         fontWeight = FontWeight.Bold,
         color = Color.TextPrimary,
-        modifier = modifier
+        modifier = modifier,
+        textAlign = textAlign
     )
 }
 
@@ -72,6 +73,26 @@ fun SimpleTextPreview() {
 }
 
 @Composable
+fun SimpleTextSmall(text: String, modifier: Modifier = Modifier, color: androidx.compose.ui.graphics.Color = Color.TextPrimary) {
+    Text(
+        text = text,
+        fontSize = 10.sp,
+        fontFamily = Font.Roboto,
+        fontWeight = FontWeight.Normal,
+        color = color,
+        modifier = modifier
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun SimpleTextSmallPreview() {
+    Portal3ScannerTheme {
+        SimpleTextSmall("Portal3 Scanner")
+    }
+}
+
+@Composable
 fun SimpleTextBold(text: String, modifier: Modifier = Modifier, color: androidx.compose.ui.graphics.Color = Color.TextPrimary) {
     Text(
         text = text,
@@ -88,6 +109,26 @@ fun SimpleTextBold(text: String, modifier: Modifier = Modifier, color: androidx.
 fun SimpleTextBoldPreview() {
     Portal3ScannerTheme {
         SimpleTextBold("Portal3 Scanner")
+    }
+}
+
+@Composable
+fun SimpleTextBoldSmall(text: String, modifier: Modifier = Modifier, color: androidx.compose.ui.graphics.Color = Color.TextPrimary) {
+    Text(
+        text = text,
+        fontSize = 10.sp,
+        fontFamily = Font.Roboto,
+        fontWeight = FontWeight.Bold,
+        color = color,
+        modifier = modifier
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun SimpleTextBoldSmallPreview() {
+    Portal3ScannerTheme {
+        SimpleTextBoldSmall("Portal3 Scanner")
     }
 }
 

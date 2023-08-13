@@ -1,6 +1,6 @@
 package com.jsmecommerce.portal3scanner.models.general
 
-import com.jsmecommerce.portal3scanner.utils.JSON
+import com.jsmecommerce.portal3scanner.utils.getStringOrNull
 import org.json.JSONObject
 
 data class App(
@@ -14,7 +14,7 @@ data class App(
             obj.getInt("id"),
             obj.getString("identifier"),
             obj.getString("name"),
-            JSON(obj).stringOrNull("icon")
+            obj.getStringOrNull("icon")
         )
     }
 }
