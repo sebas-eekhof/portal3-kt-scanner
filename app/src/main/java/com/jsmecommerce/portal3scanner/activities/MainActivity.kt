@@ -8,6 +8,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.jsmecommerce.portal3scanner.utils.Auth
+import com.jsmecommerce.portal3scanner.utils.Device
 import com.jsmecommerce.portal3scanner.utils.Permissions
 import com.jsmecommerce.portal3scanner.utils.Static
 import com.jsmecommerce.portal3scanner.workers.ProbeWorker
@@ -21,6 +22,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        println("HWID: ${Device(this).getHWID()}")
 
         val perms = Permissions(this)
 

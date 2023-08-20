@@ -1,5 +1,6 @@
 package com.jsmecommerce.portal3scanner.activities.tabs.OrdersTab
 
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -13,8 +14,10 @@ import com.jsmecommerce.portal3scanner.R
 import com.jsmecommerce.portal3scanner.activities.tabs.OrdersTab.OrderViewTabs.OrderViewInfo
 import com.jsmecommerce.portal3scanner.activities.tabs.OrdersTab.OrderViewTabs.OrderViewScan
 import com.jsmecommerce.portal3scanner.activities.tabs.OrdersTab.OrderViewTabs.OrderViewShipments
+import com.jsmecommerce.portal3scanner.models.Scan
 import com.jsmecommerce.portal3scanner.models.TabbarTab
 import com.jsmecommerce.portal3scanner.models.orders.Order
+import com.jsmecommerce.portal3scanner.ui.components.general.ScannerHost
 import com.jsmecommerce.portal3scanner.ui.components.general.Tabbar
 import com.jsmecommerce.portal3scanner.ui.components.screens.LoadingScreen
 import com.jsmecommerce.portal3scanner.utils.Api
@@ -44,6 +47,43 @@ fun OrderView(nav: NavHostController, mvm: MainViewModel, orderId: Int, title: S
                     withContext(Dispatchers.Main) {
                         mvm.setTitle(order!!.ordernumber_full ?: title)
                     }
+                }
+            }
+        }
+    }
+
+    ScannerHost(nav = nav) {
+        if(it.barcodeType != null && it.barcodeSubType != null && order != null) {
+            if(
+                listOf(
+                    Scan.BarcodeType.PRODUCT,
+                    Scan.BarcodeType.EAN
+                ).contains(it.barcodeType) &&
+                listOf(
+                    Scan.BarcodeSubType.EAN,
+                    Scan.BarcodeSubType.UPS,
+                    Scan.BarcodeSubType.PRODUCT_ID
+                ).contains(it.barcodeSubType)
+            ) {
+                val rules =
+                    if(listOf(Scan.BarcodeSubType.EAN, Scan.BarcodeSubType.UPS).contains(it.barcodeSubType))
+                        order!!.rules.filter { rule ->
+                            if(rule.product?.ean == null || rule.scans_amount >= rule.quantity)
+                                false
+                            else
+                                rule.product.ean == it.barcode
+                        }
+                    else
+                        order!!.rules.filter { rule ->
+                            if(rule.product?.ean == null || rule.scans_amount >= rule.quantity)
+                                false
+                            else
+                                rule.product.id == it.barcode.toInt()
+                        }
+                if(rules.isEmpty())
+                    Toast.makeText(context, "Geen geldige productregel gevonden voor deze scan", Toast.LENGTH_LONG).show();
+                else {
+                    Toast.makeText(context, "Afscannen: 1x ${rules.first().title}", Toast.LENGTH_LONG).show()
                 }
             }
         }
