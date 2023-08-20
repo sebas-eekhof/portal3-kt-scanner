@@ -18,4 +18,6 @@
     <string name="province">Province</string>
     <string name="country">Country</string>
     <string name="no_items_found">No items found</string>
+    <string name="filters">Filters</string>
+    <string name="select_a_item">Select a item</string>
 </resources>

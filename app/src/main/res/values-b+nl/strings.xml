@@ -18,4 +18,6 @@
     <string name="province">Provincie</string>
     <string name="country">Land</string>
     <string name="no_items_found">Geen items gevonden</string>
+    <string name="filters">Filters</string>
+    <string name="select_a_item">Selecteer een item</string>
 </resources>

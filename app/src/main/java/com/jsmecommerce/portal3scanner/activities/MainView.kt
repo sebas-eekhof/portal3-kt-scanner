@@ -46,6 +46,7 @@ import com.jsmecommerce.portal3scanner.activities.tabs.SettingsTab.SettingsInfor
 import com.jsmecommerce.portal3scanner.activities.tabs.SettingsTab.SettingsLanguage
 import com.jsmecommerce.portal3scanner.activities.tabs.SettingsTab.SettingsOverview
 import com.jsmecommerce.portal3scanner.activities.tabs.SettingsTab.SettingsScanner
+import com.jsmecommerce.portal3scanner.models.Popup
 import com.jsmecommerce.portal3scanner.models.Tab
 import com.jsmecommerce.portal3scanner.ui.components.general.Spinner
 import com.jsmecommerce.portal3scanner.ui.components.general.Title
@@ -69,7 +70,7 @@ fun MainView(mvm: MainViewModel = viewModel()) {
     val title: String by mvm.title.observeAsState("NO TITLE")
     val backEnabled: Boolean by mvm.backEnabled.observeAsState(false)
     val loading: Boolean by mvm.loading.observeAsState(false)
-    val popup: (@Composable () -> Unit)? by mvm.popup.observeAsState(null)
+    val popup: Popup? by mvm.popup.observeAsState(null)
 
     fun Portal3DeepLinks(path: String): List<NavDeepLink> = listOf(
         NavDeepLink(
@@ -192,6 +193,8 @@ fun MainView(mvm: MainViewModel = viewModel()) {
                 }
             }
         }
-        popup?.invoke()
+        popup?.Render {
+            mvm.setPopup(null)
+        }
     }
 }

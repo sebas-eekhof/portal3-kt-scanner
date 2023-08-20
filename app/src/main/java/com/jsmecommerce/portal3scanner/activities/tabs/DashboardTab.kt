@@ -22,6 +22,8 @@ import com.jsmecommerce.portal3scanner.ui.components.dashboard.DashboardBatteryT
 import com.jsmecommerce.portal3scanner.ui.components.dashboard.DashboardBatteryVoltageWidget
 import com.jsmecommerce.portal3scanner.ui.components.general.ScannerHost
 import com.jsmecommerce.portal3scanner.ui.components.general.UserBanner
+import com.jsmecommerce.portal3scanner.ui.components.popups.FilterPopup
+import com.jsmecommerce.portal3scanner.ui.components.popups.LoadingPopup
 import com.jsmecommerce.portal3scanner.utils.Auth
 import com.jsmecommerce.portal3scanner.utils.Device
 import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
@@ -37,6 +39,9 @@ fun DashboardTab(nav: NavHostController, mvm: MainViewModel) {
             title = context.getString(R.string.dashboard_title),
             disableBack = true
         )
+        mvm.setPopup(true) {
+            FilterPopup()
+        }
     }
 
     ScannerHost(nav = nav)

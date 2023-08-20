@@ -19,6 +19,7 @@ import com.jsmecommerce.portal3scanner.models.TabbarTab
 import com.jsmecommerce.portal3scanner.models.orders.Order
 import com.jsmecommerce.portal3scanner.ui.components.general.ScannerHost
 import com.jsmecommerce.portal3scanner.ui.components.general.Tabbar
+import com.jsmecommerce.portal3scanner.ui.components.popups.LoadingPopup
 import com.jsmecommerce.portal3scanner.ui.components.screens.LoadingScreen
 import com.jsmecommerce.portal3scanner.utils.Api
 import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
@@ -26,16 +27,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONArray
+import org.json.JSONObject
 
 @Composable
 fun OrderView(nav: NavHostController, mvm: MainViewModel, orderId: Int, title: String) {
     var order by remember { mutableStateOf<Order?>(null) }
     val context = LocalContext.current
 
-    LaunchedEffect(Unit) {
-        mvm.init(
-            title = title
-        )
+    fun fetchOrder() {
         CoroutineScope(Dispatchers.IO).launch {
             val res = Api.Request(context, "/orders/get")
                 .setQuery("order_id", orderId.toString())
@@ -50,6 +50,13 @@ fun OrderView(nav: NavHostController, mvm: MainViewModel, orderId: Int, title: S
                 }
             }
         }
+    }
+
+    LaunchedEffect(Unit) {
+        mvm.init(
+            title = title
+        )
+        fetchOrder()
     }
 
     ScannerHost(nav = nav) {
@@ -83,7 +90,30 @@ fun OrderView(nav: NavHostController, mvm: MainViewModel, orderId: Int, title: S
                 if(rules.isEmpty())
                     Toast.makeText(context, "Geen geldige productregel gevonden voor deze scan", Toast.LENGTH_LONG).show();
                 else {
-                    Toast.makeText(context, "Afscannen: 1x ${rules.first().title}", Toast.LENGTH_LONG).show()
+                    mvm.setPopup {
+                        LoadingPopup(text = R.string.orders_processing_scan)
+                    }
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val res = Api.Request(context, "/orders/rules/scan")
+                            .setMethod(Api.RequestMethod.POST)
+                            .setQuery("order_id", order!!.id.toString())
+                            .setBody(
+                                JSONObject()
+                                    .put(
+                                        "items",
+                                        JSONArray()
+                                            .put(
+                                                JSONObject()
+                                                    .put("order_rule_id", rules.first().id)
+                                                    .put("amount", 1)
+                                            )
+                                    )
+                            )
+                            .exec()
+                        if(!res.hasError)
+                            fetchOrder()
+                        mvm.setPopup(null)
+                    }
                 }
             }
         }

@@ -6,6 +6,8 @@
     <string name="orders_view_scan">Scan</string>
     <string name="orders_view_shipments">Shipments (%1$d)</string>
 
+    <string name="orders_processing_scan">Please wait, processing scan...</string>
+
     <string name="orders_info_files">Files</string>
 
     <string name="orders_info_order">Order</string>

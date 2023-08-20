@@ -5,19 +5,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.jsmecommerce.portal3scanner.models.BatteryInfo
+import com.jsmecommerce.portal3scanner.models.Popup
 
 class MainViewModel : ViewModel() {
     private var _title = MutableLiveData("")
     private var _backEnabled = MutableLiveData(false)
     private var _loading = MutableLiveData(false)
-    private var _popup = MutableLiveData<(@Composable () -> Unit)?>(null)
+    private var _popup = MutableLiveData<Popup?>(null)
     var _batteryCharging = MutableLiveData(false)
     var _batteryInfo = MutableLiveData<BatteryInfo?>(null)
     var _time = MutableLiveData<String>("")
     val title: LiveData<String> get() = _title
     val backEnabled: LiveData<Boolean> get() = _backEnabled
     val loading: LiveData<Boolean> get() = _loading
-    val popup: LiveData<(@Composable () -> Unit)?> get() = _popup
+    val popup: LiveData<Popup?> get() = _popup
     val batteryCharging: LiveData<Boolean> get() = _batteryCharging
     val batteryInfo: LiveData<BatteryInfo?> get() = _batteryInfo
     val time: LiveData<String> get() = _time
@@ -37,6 +38,22 @@ class MainViewModel : ViewModel() {
     }
 
     fun setPopup(popup: (@Composable () -> Unit)? = null) {
-        _popup.value = popup
+        if(popup == null)
+            _popup.value = null
+        else
+            _popup.value = Popup(
+                content = popup,
+                backdrop = false
+            )
+    }
+
+    fun setPopup(backdrop: Boolean = false, popup: (@Composable () -> Unit)? = null) {
+        if(popup == null)
+            _popup.value = null
+        else
+            _popup.value = Popup(
+                content = popup,
+                backdrop = backdrop
+            )
     }
 }
