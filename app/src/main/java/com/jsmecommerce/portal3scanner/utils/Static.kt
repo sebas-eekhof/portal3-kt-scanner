@@ -31,6 +31,12 @@ class Static {
                 R.drawable.ic_camera,
                 R.string.permissions_camera_title,
                 R.string.permissions_camera_description
+            ),
+            Permission(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                R.drawable.ic_download,
+                R.string.permissions_storage_title,
+                R.string.permissions_storage_description
             )
         )
         val locales = listOf(

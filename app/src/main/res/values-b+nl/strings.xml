@@ -20,4 +20,10 @@
     <string name="no_items_found">Geen items gevonden</string>
     <string name="filters">Filters</string>
     <string name="select_a_item">Selecteer een item</string>
+    <string name="update_available">Update beschikbaar</string>
+    <string name="update_available_text">Versie %1$s is klaar om gedownload te worden</string>
+    <string name="update_button">Download versie %1$s</string>
+    <string name="update_downloading_title">Aan het updaten...</string>
+    <string name="update_went_wrong">Er ging iets mis tijdens het downloaden van de update, probeer het opnieuw</string>
+    <string name="update_downloading_text">Versie %1$s is aan het downloaden, een moment geduld</string>
 </resources>

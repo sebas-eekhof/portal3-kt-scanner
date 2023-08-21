@@ -20,4 +20,10 @@
     <string name="no_items_found">No items found</string>
     <string name="filters">Filters</string>
     <string name="select_a_item">Select a item</string>
+    <string name="update_available">Update available</string>
+    <string name="update_available_text">Version %1$s is ready to download</string>
+    <string name="update_button">Download version %1$s</string>
+    <string name="update_downloading_title">Updating...</string>
+    <string name="update_went_wrong">Something went wrong while downloading the update, please try again</string>
+    <string name="update_downloading_text">Version %1$s is downloading, please wait</string>
 </resources>

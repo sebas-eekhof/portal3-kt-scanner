@@ -14,4 +14,7 @@
 
     <string name="permissions_camera_title">Camera</string>
     <string name="permissions_camera_description">Gebruik de camera om barcodes te scannen en foto\'s te nemen</string>
+
+    <string name="permissions_storage_title">Opslag</string>
+    <string name="permissions_storage_description">Bestanden en updates downloaden</string>
 </resources>

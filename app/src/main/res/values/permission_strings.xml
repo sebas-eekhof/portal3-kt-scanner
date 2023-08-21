@@ -14,4 +14,7 @@
 
     <string name="permissions_camera_title">Access camera</string>
     <string name="permissions_camera_description">Access device camera to scan barcodes and take pictures</string>
+
+    <string name="permissions_storage_title">Access storage</string>
+    <string name="permissions_storage_description">Access device storage to download files and updates</string>
 </resources>

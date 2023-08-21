@@ -19,10 +19,16 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -37,7 +43,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import androidx.navigation.navDeepLink
+import com.jsmecommerce.portal3scanner.BuildConfig
 import com.jsmecommerce.portal3scanner.R
 import com.jsmecommerce.portal3scanner.activities.tabs.DashboardTab
 import com.jsmecommerce.portal3scanner.activities.tabs.OrdersTab.OrderView
@@ -48,12 +54,17 @@ import com.jsmecommerce.portal3scanner.activities.tabs.SettingsTab.SettingsOverv
 import com.jsmecommerce.portal3scanner.activities.tabs.SettingsTab.SettingsScanner
 import com.jsmecommerce.portal3scanner.models.Popup
 import com.jsmecommerce.portal3scanner.models.Tab
+import com.jsmecommerce.portal3scanner.models.general.UpdateVersion
 import com.jsmecommerce.portal3scanner.ui.components.general.Spinner
 import com.jsmecommerce.portal3scanner.ui.components.general.Title
 import com.jsmecommerce.portal3scanner.ui.components.general.TopBar
-import com.jsmecommerce.portal3scanner.ui.components.screens.TutorialScreen
+import com.jsmecommerce.portal3scanner.ui.components.screens.UpdateScreen
 import com.jsmecommerce.portal3scanner.ui.theme.Color
+import com.jsmecommerce.portal3scanner.utils.Api
 import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 val tabs = listOf(
     Tab.DASHBOARD,
@@ -72,6 +83,21 @@ fun MainView(mvm: MainViewModel = viewModel()) {
     val loading: Boolean by mvm.loading.observeAsState(false)
     val popup: Popup? by mvm.popup.observeAsState(null)
     val actions: (@Composable () -> Unit)? by mvm.actions.observeAsState(null)
+    var updateVersion by remember { mutableStateOf<UpdateVersion?>(null) }
+
+    val context = LocalContext.current;
+
+    LaunchedEffect(Unit) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val res = Api.Request(context, "/scanner_versions/latest")
+                .exec()
+            if(!res.hasError) {
+                val version = UpdateVersion.fromJSON(res.getJsonObject()!!)
+                if(BuildConfig.VERSION_CODE < version.version_code)
+                    updateVersion = version
+            }
+        }
+    }
 
     fun Portal3DeepLinks(path: String): List<NavDeepLink> = listOf(
         NavDeepLink(
@@ -198,5 +224,7 @@ fun MainView(mvm: MainViewModel = viewModel()) {
         popup?.Render {
             mvm.setPopup(null)
         }
+        if(updateVersion != null)
+            UpdateScreen(version = updateVersion!!)
     }
 }
