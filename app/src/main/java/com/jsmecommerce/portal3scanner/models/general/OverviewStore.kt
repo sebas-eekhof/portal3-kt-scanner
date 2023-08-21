@@ -1,6 +1,8 @@
 package com.jsmecommerce.portal3scanner.models.general
 
 import com.jsmecommerce.portal3scanner.enums.ColorEnum
+import com.jsmecommerce.portal3scanner.utils.toJSONObjectList
+import org.json.JSONArray
 import org.json.JSONObject
 
 class OverviewStore(
@@ -14,5 +16,6 @@ class OverviewStore(
             obj.getString("name"),
             ColorEnum.fromString(obj.getString("color"))
         )
+        fun fromJSONArray(obj: JSONArray): List<OverviewStore> = obj.toJSONObjectList().map { fromJSON(it) }
     }
 }

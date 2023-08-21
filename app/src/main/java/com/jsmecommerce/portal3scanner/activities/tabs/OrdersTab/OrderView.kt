@@ -90,7 +90,7 @@ fun OrderView(nav: NavHostController, mvm: MainViewModel, orderId: Int, title: S
                 if(rules.isEmpty())
                     Toast.makeText(context, "Geen geldige productregel gevonden voor deze scan", Toast.LENGTH_LONG).show();
                 else {
-                    mvm.setPopup {
+                    mvm.setPopup(false) {
                         LoadingPopup(text = R.string.orders_processing_scan)
                     }
                     CoroutineScope(Dispatchers.IO).launch {

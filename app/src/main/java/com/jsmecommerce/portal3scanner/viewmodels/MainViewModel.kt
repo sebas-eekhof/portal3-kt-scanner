@@ -12,6 +12,7 @@ class MainViewModel : ViewModel() {
     private var _backEnabled = MutableLiveData(false)
     private var _loading = MutableLiveData(false)
     private var _popup = MutableLiveData<Popup?>(null)
+    private var _actions = MutableLiveData<(@Composable () -> Unit)?>(null)
     var _batteryCharging = MutableLiveData(false)
     var _batteryInfo = MutableLiveData<BatteryInfo?>(null)
     var _time = MutableLiveData<String>("")
@@ -22,12 +23,14 @@ class MainViewModel : ViewModel() {
     val batteryCharging: LiveData<Boolean> get() = _batteryCharging
     val batteryInfo: LiveData<BatteryInfo?> get() = _batteryInfo
     val time: LiveData<String> get() = _time
+    val actions: LiveData<(@Composable () -> Unit)?> get() = _actions
 
     fun init(title: String, disableBack: Boolean = false) {
         _title.value = title
         _backEnabled.value = !disableBack
         _loading.value = false
         _popup.value = null
+        _actions.value = null
     }
     fun setTitle(title: String) {
         _title.value = title
@@ -42,12 +45,11 @@ class MainViewModel : ViewModel() {
             _popup.value = null
         else
             _popup.value = Popup(
-                content = popup,
-                backdrop = false
+                content = popup
             )
     }
 
-    fun setPopup(backdrop: Boolean = false, popup: (@Composable () -> Unit)? = null) {
+    fun setPopup(backdrop: Boolean = true, popup: (@Composable () -> Unit)? = null) {
         if(popup == null)
             _popup.value = null
         else
@@ -55,5 +57,20 @@ class MainViewModel : ViewModel() {
                 content = popup,
                 backdrop = backdrop
             )
+    }
+
+    fun setPopup(backdrop: Boolean = true, onClose: (() -> Unit)? = null, popup: (@Composable () -> Unit)? = null) {
+        if(popup == null)
+            _popup.value = null
+        else
+            _popup.value = Popup(
+                content = popup,
+                backdrop = backdrop,
+                onClose = onClose
+            )
+    }
+
+    fun setActions(actions: (@Composable () -> Unit)? = null) {
+        _actions.value = actions
     }
 }

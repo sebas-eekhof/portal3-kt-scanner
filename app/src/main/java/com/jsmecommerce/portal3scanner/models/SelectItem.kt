@@ -1,6 +1,9 @@
 package com.jsmecommerce.portal3scanner.models
 
+import androidx.compose.runtime.Composable
+
 data class SelectItem(
-    val title: String,
-    val name: String
+    val name: String,
+    val title: String? = null,
+    val component: (@Composable () -> Unit)? = null
 )

@@ -8,6 +8,9 @@
 
     <string name="orders_processing_scan">Please wait, processing scan...</string>
 
+    <string name="orders_filter_all_statuses">All statuses</string>
+    <string name="orders_filter_all_stores">All stores</string>
+
     <string name="orders_info_files">Files</string>
 
     <string name="orders_info_order">Order</string>

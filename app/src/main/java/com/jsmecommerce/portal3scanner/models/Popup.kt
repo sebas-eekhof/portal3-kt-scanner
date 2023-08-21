@@ -11,11 +11,12 @@ import com.jsmecommerce.portal3scanner.ui.theme.Color
 
 class Popup(
     val content: @Composable () -> Unit,
-    val backdrop: Boolean = false
+    val backdrop: Boolean = true,
+    val onClose: (() -> Unit)? = null
 ) {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun Render(onClose: () -> Unit) {
+    fun Render(doClose: () -> Unit) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -24,9 +25,12 @@ class Popup(
                 Surface(
                     modifier = Modifier
                         .fillMaxSize()
-                        .alpha(0.5f),
+                        .alpha(0.7f),
                     color = Color.Black,
-                    onClick = { onClose() }
+                    onClick = {
+                        doClose()
+                        onClose?.let { it() }
+                    }
                 ) {
 
                 }

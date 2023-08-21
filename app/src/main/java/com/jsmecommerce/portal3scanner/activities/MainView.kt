@@ -71,6 +71,7 @@ fun MainView(mvm: MainViewModel = viewModel()) {
     val backEnabled: Boolean by mvm.backEnabled.observeAsState(false)
     val loading: Boolean by mvm.loading.observeAsState(false)
     val popup: Popup? by mvm.popup.observeAsState(null)
+    val actions: (@Composable () -> Unit)? by mvm.actions.observeAsState(null)
 
     fun Portal3DeepLinks(path: String): List<NavDeepLink> = listOf(
         NavDeepLink(
@@ -107,6 +108,7 @@ fun MainView(mvm: MainViewModel = viewModel()) {
                             ) {
                                 if(loading)
                                     Spinner(color = Color.TextSecondary)
+                                actions?.let { it() }
                             }
                         },
                         navigationIcon = {

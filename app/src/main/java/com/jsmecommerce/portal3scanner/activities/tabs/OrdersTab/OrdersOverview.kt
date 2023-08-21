@@ -20,8 +20,15 @@ import com.jsmecommerce.portal3scanner.models.orders.OverviewOrder
 import com.jsmecommerce.portal3scanner.ui.components.orders.OverviewOrder
 import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
 import com.jsmecommerce.portal3scanner.R
+import com.jsmecommerce.portal3scanner.models.SelectItem
+import com.jsmecommerce.portal3scanner.models.general.OverviewStore
+import com.jsmecommerce.portal3scanner.models.orders.OrderStatus
+import com.jsmecommerce.portal3scanner.ui.components.form.Select
+import com.jsmecommerce.portal3scanner.ui.components.general.ActionButton
+import com.jsmecommerce.portal3scanner.ui.components.general.DotText
 import com.jsmecommerce.portal3scanner.ui.components.screens.LoadingScreen
 import com.jsmecommerce.portal3scanner.ui.components.general.ScannerHost
+import com.jsmecommerce.portal3scanner.ui.components.popups.BottomPopup
 import com.jsmecommerce.portal3scanner.utils.Api
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,25 +38,87 @@ import kotlinx.coroutines.withContext
 @Composable
 fun OrdersOverview(nav: NavHostController, mvm: MainViewModel) {
     var orders by remember { mutableStateOf<List<OverviewOrder>?>(null) }
+    var stores by remember { mutableStateOf<List<OverviewStore>?>(null) }
+    var statuses by remember { mutableStateOf<List<OrderStatus>?>(null) }
+
+    var filterStatus by remember { mutableStateOf<String?>(null) }
+    var filterStore by remember { mutableStateOf<String?>(null) }
 
     val context = LocalContext.current
+
+    suspend fun refreshOrders() {
+        withContext(Dispatchers.IO) {
+            val req = Api.Request(context, "/orders")
+
+            if(filterStatus != null)
+                req.setQuery("status_id", filterStatus!!)
+
+            if(filterStore != null)
+                req.setQuery("store_id", filterStore!!)
+
+            val res = req.exec()
+            if(!res.hasError) {
+                val jsonOrders = res.getJsonObject()?.getJSONArray("items")
+                if(jsonOrders != null)
+                    orders = OverviewOrder.fromJSONArray(jsonOrders)
+            }
+            withContext(Dispatchers.Main) { mvm.setLoading(false) }
+        }
+    }
 
     LaunchedEffect(Unit) {
         mvm.init(
             title = context.getString(R.string.orders_title),
             disableBack = true
         )
+        mvm.setActions {
+            ActionButton(icon = R.drawable.ic_filter) {
+                mvm.setPopup(
+                    onClose = { CoroutineScope(Dispatchers.IO).launch { refreshOrders() } }
+                ) {
+                    BottomPopup {
+                        if(statuses != null)
+                            Select(
+                                label = R.string.orders_info_order_status,
+                                placeholder = R.string.orders_filter_all_statuses,
+                                items = statuses!!.map {
+                                    SelectItem(name = it.id.toString()) {
+                                        DotText(text = it.name, color = it.color)
+                                    }
+                                },
+                                value = filterStatus,
+                                onChange = { filterStatus = it }
+                            )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        if(stores != null)
+                            Select(
+                                label = R.string.orders_info_order_store,
+                                placeholder = R.string.orders_filter_all_stores,
+                                items = stores!!.map {
+                                    SelectItem(name = it.id.toString()) {
+                                        DotText(text = it.name, color = it.color)
+                                    }
+                                },
+                                value = filterStore,
+                                onChange = { filterStore = it }
+                            )
+                    }
+                }
+            }
+        }
         mvm.setLoading()
         CoroutineScope(Dispatchers.IO).launch {
-            val res = Api.Request(context, "/orders")
-                .setQuery("status_id", 4.toString())
+            val resStatuses = Api.Request(context, "/orders/statusses")
                 .exec()
-            if(!res.hasError) {
-                val JSONOrders = res.getJsonObject()?.getJSONArray("items")
-                if(JSONOrders != null)
-                    orders = OverviewOrder.fromJSONArray(JSONOrders)
+            if(!resStatuses.hasError) {
+                statuses = resStatuses.getJsonArray()?.let { OrderStatus.fromJSONArray(it) }
+                filterStatus = statuses!!.firstOrNull { it.type == "new" }?.id.toString()
             }
-            withContext(Dispatchers.Main) { mvm.setLoading(false) }
+            val resStores = Api.Request(context, "/stores/all")
+                .exec()
+            if(!resStores.hasError)
+                stores = OverviewStore.fromJSONArray(resStores.getJsonArray()!!)
+            refreshOrders()
         }
     }
 

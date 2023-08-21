@@ -8,6 +8,9 @@
 
     <string name="orders_processing_scan">Een moment geduld, scan verwerken...</string>
 
+    <string name="orders_filter_all_statuses">Alle statussen</string>
+    <string name="orders_filter_all_stores">Alle winkels</string>
+
     <string name="orders_info_files">Bestanden</string>
 
     <string name="orders_info_order">Bestelling</string>

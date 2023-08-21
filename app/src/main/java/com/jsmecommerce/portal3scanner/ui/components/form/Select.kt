@@ -33,11 +33,12 @@ import com.jsmecommerce.portal3scanner.R
 @Composable
 fun Select(
     @StringRes label: Int,
+    @StringRes placeholder: Int = R.string.select_a_item,
     items: List<SelectItem>,
-    defaultValue: String? = null
+    value: String? = null,
+    onChange: ((value: String?) -> Unit)? = null
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var value by remember { mutableStateOf(defaultValue) }
 
     val selectedItem: SelectItem? = if (value == null) null else items.firstOrNull { it.name == value }
 
@@ -59,7 +60,13 @@ fun Select(
                         .padding(horizontal = 8.dp),
                     verticalArrangement = Arrangement.Center
                 ) {
-                    SimpleText(selectedItem?.name ?: stringResource(id = R.string.select_a_item))
+                    if(selectedItem != null) {
+                        if(selectedItem.component != null)
+                            selectedItem.component!!()
+                        else if(selectedItem.title != null)
+                            SimpleText(selectedItem.title)
+                    } else
+                        SimpleText(stringResource(id = placeholder))
                 }
             }
             DropdownMenu(
@@ -68,13 +75,25 @@ fun Select(
                 modifier = Modifier
                     .background(Color.Subelement)
             ) {
+                DropdownMenuItem(
+                    text = {
+                        SimpleText(stringResource(id = placeholder))
+                    },
+                    onClick = {
+                        onChange?.let { it(null) }
+                        expanded = false
+                    }
+                )
                 items.forEach {
                     DropdownMenuItem(
                         text = {
-                            SimpleText(text = it.title)
+                            if(it.component != null)
+                                it.component!!()
+                            else if(it.title != null)
+                                SimpleText(text = it.title)
                         },
                         onClick = {
-                            value = it.name
+                            onChange?.let { func -> func(it.name) }
                             expanded = false
                         }
                     )
