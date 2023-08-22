@@ -1,5 +1,12 @@
 package com.jsmecommerce.portal3scanner.activities
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.EaseIn
+import androidx.compose.animation.core.EaseOut
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -74,7 +81,7 @@ val tabs = listOf(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainView(mvm: MainViewModel = viewModel()) {
+fun MainView(mvm: MainViewModel) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -190,7 +197,30 @@ fun MainView(mvm: MainViewModel = viewModel()) {
                         .padding(paddingValues),
                     color = Color.Background
                 ) {
-                    NavHost(navController = navController, startDestination = "dashboard") {
+                    NavHost(
+                        navController = navController,
+                        startDestination = "dashboard",
+                        enterTransition = {
+                            fadeIn(
+                                animationSpec = tween(
+                                    300, easing = LinearEasing
+                                )
+                            ) + slideIntoContainer(
+                                animationSpec = tween(300, easing = EaseIn),
+                                towards = AnimatedContentTransitionScope.SlideDirection.Start
+                            )
+                        },
+                        exitTransition = {
+                            fadeOut(
+                                animationSpec = tween(
+                                    300, easing = LinearEasing
+                                )
+                            ) + slideOutOfContainer(
+                                animationSpec = tween(300, easing = EaseOut),
+                                towards = AnimatedContentTransitionScope.SlideDirection.End
+                            )
+                        }
+                    ) {
                         composable("dashboard") { DashboardTab(navController, mvm) }
                         navigation(startDestination = "orders/overview", route = "orders") {
                             composable("orders/overview") { OrdersOverview(navController, mvm) }
@@ -221,8 +251,13 @@ fun MainView(mvm: MainViewModel = viewModel()) {
                 }
             }
         }
-        popup?.Render {
-            mvm.setPopup(null)
+        if(popup != null) {
+            if(popup!!.raw)
+                popup!!.content()
+            else
+                popup!!.Render {
+                    mvm.setPopup(null)
+                }
         }
         if(updateVersion != null)
             UpdateScreen(version = updateVersion!!)

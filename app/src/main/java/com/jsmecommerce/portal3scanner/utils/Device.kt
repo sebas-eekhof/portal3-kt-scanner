@@ -9,6 +9,7 @@ import android.os.Vibrator
 import android.provider.Settings.Secure
 import android.telephony.TelephonyManager
 import androidx.compose.ui.text.toUpperCase
+import androidx.compose.ui.unit.Dp
 import java.io.File
 import java.net.NetworkInterface
 import java.text.DecimalFormat
@@ -54,11 +55,14 @@ class Device(private val context: Context) {
 
     @SuppressLint("HardwareIds")
     fun getHWID(): String {
-        return Secure.getString(context.contentResolver, Secure.ANDROID_ID)
+        return Device.getMAC() ?: Secure.getString(context.contentResolver, Secure.ANDROID_ID)
     }
 
     fun vibrateScan() {
         val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         vibrator.vibrate(VibrationEffect.createOneShot(75, VibrationEffect.EFFECT_TICK))
     }
+
+    val screenHeight get() = context.resources.displayMetrics.heightPixels.toDp
+    val screenWidth get() = context.resources.displayMetrics.widthPixels.toDp
 }

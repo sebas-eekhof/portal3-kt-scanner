@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.jsmecommerce.portal3scanner"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.jsmecommerce.portal3scanner"
@@ -70,8 +70,8 @@ dependencies {
     implementation("com.github.bumptech.glide:compose:1.0.0-alpha.1")
     implementation("com.caverock:androidsvg-aar:1.4")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    implementation("androidx.navigation:navigation-compose:2.6.0")
-    implementation("androidx.compose.runtime:runtime-livedata:1.4.3")
+    implementation("androidx.navigation:navigation-compose:2.7.0")
+    implementation("androidx.compose.runtime:runtime-livedata:1.5.0")
     implementation("androidx.work:work-runtime-ktx:2.8.1")
     implementation("com.google.android.gms:play-services-location:21.0.1")
     implementation("com.karumi:dexter:6.2.3")

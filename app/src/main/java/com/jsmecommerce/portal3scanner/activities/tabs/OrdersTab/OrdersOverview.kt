@@ -73,36 +73,35 @@ fun OrdersOverview(nav: NavHostController, mvm: MainViewModel) {
         )
         mvm.setActions {
             ActionButton(icon = R.drawable.ic_filter) {
-                mvm.setPopup(
+                mvm.setDrawer(
+                    title = R.string.filters,
                     onClose = { CoroutineScope(Dispatchers.IO).launch { refreshOrders() } }
                 ) {
-                    BottomPopup {
-                        if(statuses != null)
-                            Select(
-                                label = R.string.orders_info_order_status,
-                                placeholder = R.string.orders_filter_all_statuses,
-                                items = statuses!!.map {
-                                    SelectItem(name = it.id.toString()) {
-                                        DotText(text = it.name, color = it.color)
-                                    }
-                                },
-                                value = filterStatus,
-                                onChange = { filterStatus = it }
-                            )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        if(stores != null)
-                            Select(
-                                label = R.string.orders_info_order_store,
-                                placeholder = R.string.orders_filter_all_stores,
-                                items = stores!!.map {
-                                    SelectItem(name = it.id.toString()) {
-                                        DotText(text = it.name, color = it.color)
-                                    }
-                                },
-                                value = filterStore,
-                                onChange = { filterStore = it }
-                            )
-                    }
+                    if(statuses != null)
+                        Select(
+                            label = R.string.orders_info_order_status,
+                            placeholder = R.string.orders_filter_all_statuses,
+                            items = statuses!!.map {
+                                SelectItem(name = it.id.toString()) {
+                                    DotText(text = it.name, color = it.color)
+                                }
+                            },
+                            value = filterStatus,
+                            onChange = { filterStatus = it }
+                        )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    if(stores != null)
+                        Select(
+                            label = R.string.orders_info_order_store,
+                            placeholder = R.string.orders_filter_all_stores,
+                            items = stores!!.map {
+                                SelectItem(name = it.id.toString()) {
+                                    DotText(text = it.name, color = it.color)
+                                }
+                            },
+                            value = filterStore,
+                            onChange = { filterStore = it }
+                        )
                 }
             }
         }

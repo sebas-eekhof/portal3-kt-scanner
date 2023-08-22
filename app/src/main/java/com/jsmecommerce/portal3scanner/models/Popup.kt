@@ -10,6 +10,7 @@ import androidx.compose.ui.draw.alpha
 import com.jsmecommerce.portal3scanner.ui.theme.Color
 
 class Popup(
+    val raw: Boolean = false,
     val content: @Composable () -> Unit,
     val backdrop: Boolean = true,
     val onClose: (() -> Unit)? = null

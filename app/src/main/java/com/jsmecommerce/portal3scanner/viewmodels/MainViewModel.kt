@@ -1,11 +1,14 @@
 package com.jsmecommerce.portal3scanner.viewmodels
 
+import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.jsmecommerce.portal3scanner.models.BatteryInfo
 import com.jsmecommerce.portal3scanner.models.Popup
+import com.jsmecommerce.portal3scanner.ui.components.popups.DrawerPopup
 
 class MainViewModel : ViewModel() {
     private var _title = MutableLiveData("")
@@ -68,6 +71,20 @@ class MainViewModel : ViewModel() {
                 backdrop = backdrop,
                 onClose = onClose
             )
+    }
+
+    fun setDrawer(@StringRes title: Int, onClose: (() -> Unit)? = null, content: @Composable () -> Unit) {
+        _popup.value = Popup(
+            raw = true,
+            content = {
+                DrawerPopup(title = stringResource(id = title), onClose = {
+                    setPopup(null)
+                    onClose?.let { it() }
+                }) {
+                    content()
+                }
+            }
+        )
     }
 
     fun setActions(actions: (@Composable () -> Unit)? = null) {
