@@ -1,5 +1,7 @@
 package com.jsmecommerce.portal3scanner.ui.components.orders
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,7 +29,7 @@ import com.jsmecommerce.portal3scanner.ui.components.general.SmallTitle
 import com.jsmecommerce.portal3scanner.ui.theme.Color
 import com.jsmecommerce.portal3scanner.utils.Formatter
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun OverviewOrder(order: OverviewOrder, onClick: () -> Unit) {
     val context = LocalContext.current
@@ -35,8 +37,16 @@ fun OverviewOrder(order: OverviewOrder, onClick: () -> Unit) {
     Surface(
         color = Color.Element,
         shape = RoundedCornerShape(4.dp),
-        modifier = Modifier.fillMaxWidth(),
-        onClick = { onClick() }
+        modifier = Modifier
+            .fillMaxWidth()
+            .combinedClickable(
+                onClick = {
+                    onClick()
+                },
+                onLongClick = {
+                    onClick()
+                }
+            )
     ) {
         Row(
             modifier = Modifier.padding(8.dp),
