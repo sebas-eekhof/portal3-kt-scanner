@@ -4,6 +4,15 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        getByName("debug") {
+            storeFile =
+                file("C:\\Users\\sebas\\AndroidStudioProjects\\Portal3Scanner\\keystore.jks")
+            storePassword = "Qwerty221"
+            keyAlias = "key0"
+            keyPassword = "Qwerty221"
+        }
+    }
     namespace = "com.jsmecommerce.portal3scanner"
     compileSdk = 34
 
