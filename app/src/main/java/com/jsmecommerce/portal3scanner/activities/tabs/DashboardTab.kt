@@ -21,8 +21,10 @@ import com.jsmecommerce.portal3scanner.ui.components.dashboard.DashboardBatteryH
 import com.jsmecommerce.portal3scanner.ui.components.dashboard.DashboardBatteryTemperatureWidget
 import com.jsmecommerce.portal3scanner.ui.components.dashboard.DashboardBatteryVoltageWidget
 import com.jsmecommerce.portal3scanner.ui.components.general.ScannerHost
+import com.jsmecommerce.portal3scanner.ui.components.general.SimpleText
 import com.jsmecommerce.portal3scanner.ui.components.general.UserBanner
 import com.jsmecommerce.portal3scanner.utils.Auth
+import com.jsmecommerce.portal3scanner.utils.Device
 import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
 
 @Composable
@@ -44,6 +46,8 @@ fun DashboardTab(nav: NavHostController, mvm: MainViewModel) {
         modifier = Modifier.padding(16.dp)
     ) {
         UserBanner(user = user)
+        Spacer(modifier = Modifier.height(8.dp))
+        SimpleText(text = "IMEI: ${Device(context).imei}")
         Spacer(modifier = Modifier.height(8.dp))
         Row(
             modifier = Modifier.fillMaxWidth()

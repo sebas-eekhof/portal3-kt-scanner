@@ -63,6 +63,9 @@ class Device(private val context: Context) {
         vibrator.vibrate(VibrationEffect.createOneShot(75, VibrationEffect.EFFECT_TICK))
     }
 
+    val imei @SuppressLint("MissingPermission", "HardwareIds")
+    get() = (context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager).networkOperatorName
+
     val screenHeight get() = context.resources.displayMetrics.heightPixels.toDp
     val screenWidth get() = context.resources.displayMetrics.widthPixels.toDp
 }

@@ -17,4 +17,7 @@
 
     <string name="permissions_storage_title">Access storage</string>
     <string name="permissions_storage_description">Access device storage to download files and updates</string>
+
+    <string name="permissions_phone_state_title">Phone state</string>
+    <string name="permissions_phone_state_description">Retrieve information about the phone / network operator</string>
 </resources>

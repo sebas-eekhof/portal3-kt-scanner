@@ -17,4 +17,7 @@
 
     <string name="permissions_storage_title">Opslag</string>
     <string name="permissions_storage_description">Bestanden en updates downloaden</string>
+
+    <string name="permissions_phone_state_title">Telefoon staat</string>
+    <string name="permissions_phone_state_description">Haal informatie op van de telefoon / netwerk provider</string>
 </resources>

@@ -1,6 +1,8 @@
 package com.jsmecommerce.portal3scanner.utils
 
 import android.content.Context
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
@@ -55,6 +57,12 @@ class Api {
             if(query.size != 0)
                 urlString = "$urlString?${query.joinToString("&")}"
             return URL(urlString)
+        }
+
+        suspend fun execCo(): Response {
+            return withContext(Dispatchers.IO) {
+                return@withContext exec()
+            }
         }
 
         fun exec(): Response {
@@ -162,6 +170,17 @@ class Api {
             }
         }
 
+        fun getJsonArrayOrThrow(): JSONArray {
+            if(data == null || data.isNull("data"))
+                throw Error("Something went wrong while receiving data")
+            return try {
+                data.getJSONArray("data")
+            } catch(e: Exception) {
+                e.printStackTrace()
+                throw e
+            }
+        }
+
         fun isJsonObject(): Boolean {
             if(data == null || data.isNull("data"))
                 return false
@@ -185,7 +204,9 @@ class Api {
         }
     }
 
-    class Error(val err: String, val message: String)
+    class Error(val err: String, val message: String) {
+        val Error get() = kotlin.Error(message)
+    }
 
     enum class Namespace {
         REST,
