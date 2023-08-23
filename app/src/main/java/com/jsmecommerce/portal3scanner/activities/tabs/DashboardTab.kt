@@ -27,17 +27,16 @@ import com.jsmecommerce.portal3scanner.ui.components.general.SimpleText
 import com.jsmecommerce.portal3scanner.ui.components.general.UserBanner
 import com.jsmecommerce.portal3scanner.utils.Auth
 import com.jsmecommerce.portal3scanner.utils.Device
-import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
-import kotlinx.coroutines.CoroutineScope
+import com.jsmecommerce.portal3scanner.viewmodels.CoreViewModel
+import com.jsmecommerce.portal3scanner.viewmodels.UiViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(DelicateCoroutinesApi::class)
 @Composable
-fun DashboardTab(nav: NavHostController, mvm: MainViewModel) {
+fun DashboardTab(nav: NavHostController, coreViewModel: CoreViewModel, uiViewModel: UiViewModel) {
     val context = LocalContext.current
     val auth = Auth(context)
     val user = auth.getUser()!!
@@ -45,12 +44,11 @@ fun DashboardTab(nav: NavHostController, mvm: MainViewModel) {
     val api = Portal3Api.getInstance(context)
 
     GlobalScope.launch {
-        val stores = api.stores.all().body()
-        stores?.items?.forEach { println("Store: ${it.name} (${it.color.color})") }
+        val stores = api.stores.all()
     }
 
     LaunchedEffect(Unit) {
-        mvm.init(
+        uiViewModel.init(
             title = context.getString(R.string.dashboard_title),
             disableBack = true
         )
@@ -68,25 +66,25 @@ fun DashboardTab(nav: NavHostController, mvm: MainViewModel) {
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
-            Column(Modifier.weight(1f)) { DashboardBatteryChargeWidget(mvm = mvm) }
+            Column(Modifier.weight(1f)) { DashboardBatteryChargeWidget(coreViewModel = coreViewModel) }
             Spacer(modifier = Modifier.width(8.dp))
-            Column(Modifier.weight(1f)) { DashboardBatteryHealthStatusWidget(mvm = mvm) }
+            Column(Modifier.weight(1f)) { DashboardBatteryHealthStatusWidget(coreViewModel = coreViewModel) }
         }
         Spacer(modifier = Modifier.height(8.dp))
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
-            Column(Modifier.weight(1f)) { DashboardBatteryCapacityWidget(mvm = mvm) }
+            Column(Modifier.weight(1f)) { DashboardBatteryCapacityWidget(coreViewModel = coreViewModel) }
             Spacer(modifier = Modifier.width(8.dp))
-            Column(Modifier.weight(1f)) { DashboardBatteryTemperatureWidget(mvm = mvm) }
+            Column(Modifier.weight(1f)) { DashboardBatteryTemperatureWidget(coreViewModel = coreViewModel) }
         }
         Spacer(modifier = Modifier.height(8.dp))
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
-            Column(Modifier.weight(1f)) { DashboardBatteryVoltageWidget(mvm = mvm) }
+            Column(Modifier.weight(1f)) { DashboardBatteryVoltageWidget(coreViewModel = coreViewModel) }
             Spacer(modifier = Modifier.width(8.dp))
-            Column(Modifier.weight(1f)) { DashboardBatteryCurrentWidget(mvm = mvm) }
+            Column(Modifier.weight(1f)) { DashboardBatteryCurrentWidget(coreViewModel = coreViewModel) }
         }
     }
 }

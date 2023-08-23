@@ -13,10 +13,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.jsmecommerce.portal3scanner.ui.theme.Color
 import com.jsmecommerce.portal3scanner.utils.Auth
-import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
+import com.jsmecommerce.portal3scanner.viewmodels.CoreViewModel
+import com.jsmecommerce.portal3scanner.viewmodels.UiViewModel
 
 @Composable
-fun TopBar(mvm: MainViewModel) {
+fun TopBar(
+    uiViewModel: UiViewModel,
+    coreViewModel: CoreViewModel
+) {
     val context = LocalContext.current
     val auth = Auth(context)
     val user = auth.getUser()
@@ -32,7 +36,7 @@ fun TopBar(mvm: MainViewModel) {
             modifier = Modifier.weight(1f),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Clock(mvm = mvm)
+            Clock(uiViewModel = uiViewModel)
         }
         Row(
             modifier = Modifier.weight(1f),
@@ -47,7 +51,7 @@ fun TopBar(mvm: MainViewModel) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End
         ) {
-            BatteryStatus(mvm = mvm)
+            BatteryStatus(coreViewModel = coreViewModel)
         }
     }
 }

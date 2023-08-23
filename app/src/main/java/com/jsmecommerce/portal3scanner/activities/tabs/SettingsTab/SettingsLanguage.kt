@@ -9,14 +9,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.jsmecommerce.portal3scanner.ui.components.settings.SettingsGroup
 import com.jsmecommerce.portal3scanner.utils.Static
-import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
 import com.jsmecommerce.portal3scanner.R
 import com.jsmecommerce.portal3scanner.ui.components.settings.SettingsClickableItem
 import com.jsmecommerce.portal3scanner.ui.components.settings.SettingsDivider
+import com.jsmecommerce.portal3scanner.viewmodels.CoreViewModel
+import com.jsmecommerce.portal3scanner.viewmodels.UiViewModel
 import java.util.Locale
 
 @Composable
-fun SettingsLanguage(nav: NavController, mvm: MainViewModel) {
+fun SettingsLanguage(nav: NavController, coreViewModel: CoreViewModel, uiViewModel: UiViewModel) {
     val context = LocalContext.current
 
     fun setLocale(locale: Locale) {

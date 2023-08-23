@@ -1,7 +1,5 @@
 package com.jsmecommerce.portal3scanner.ui.components.screens
 
-import android.annotation.SuppressLint
-import android.app.Application
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
@@ -32,8 +30,6 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import com.jsmecommerce.portal3scanner.R
 import com.jsmecommerce.portal3scanner.models.general.DownloadProgress
 import com.jsmecommerce.portal3scanner.models.general.UpdateVersion
@@ -42,10 +38,6 @@ import com.jsmecommerce.portal3scanner.ui.components.general.SimpleTextBold
 import com.jsmecommerce.portal3scanner.ui.components.general.Title
 import com.jsmecommerce.portal3scanner.ui.theme.Color
 import com.jsmecommerce.portal3scanner.utils.DownloadTracker
-import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

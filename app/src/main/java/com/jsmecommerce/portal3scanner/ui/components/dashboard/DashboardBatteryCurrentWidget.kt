@@ -8,12 +8,12 @@ import com.jsmecommerce.portal3scanner.models.BatteryInfo
 import com.jsmecommerce.portal3scanner.ui.components.general.Description
 import com.jsmecommerce.portal3scanner.ui.components.general.SimpleText
 import com.jsmecommerce.portal3scanner.ui.theme.Color
-import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
+import com.jsmecommerce.portal3scanner.viewmodels.CoreViewModel
 
 @Composable
-fun DashboardBatteryCurrentWidget(mvm: MainViewModel) {
-    val batteryInfo: BatteryInfo? by mvm.batteryInfo.observeAsState(null)
-    val isCharging: Boolean by mvm.batteryCharging.observeAsState(false)
+fun DashboardBatteryCurrentWidget(coreViewModel: CoreViewModel) {
+    val batteryInfo: BatteryInfo? by coreViewModel.batteryInfo.observeAsState(null)
+    val isCharging: Boolean by coreViewModel.batteryCharging.observeAsState(false)
 
     val value = "${(batteryInfo?.current ?: 0) / 1000} mAh"
 

@@ -21,16 +21,17 @@ import com.jsmecommerce.portal3scanner.ui.components.settings.SettingsDivider
 import com.jsmecommerce.portal3scanner.utils.Auth
 import com.jsmecommerce.portal3scanner.utils.Device
 import com.jsmecommerce.portal3scanner.utils.Formatter
-import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
+import com.jsmecommerce.portal3scanner.viewmodels.CoreViewModel
+import com.jsmecommerce.portal3scanner.viewmodels.UiViewModel
 
 @Composable
-fun SettingsInformation(nav: NavHostController, mvm: MainViewModel) {
+fun SettingsInformation(nav: NavHostController, coreViewModel: CoreViewModel, uiViewModel: UiViewModel) {
     val context = LocalContext.current
     val user = Auth(context).getUser()
     val device = Device(context)
 
     LaunchedEffect(Unit) {
-        mvm.init(
+        uiViewModel.init(
             title = context.getString(R.string.settings_information_title)
         )
     }

@@ -1,5 +1,8 @@
 package com.jsmecommerce.portal3scanner.models
 
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.BatteryManager
 import com.jsmecommerce.portal3scanner.R
 
@@ -40,5 +43,25 @@ data class BatteryInfo(
             BatteryManager.BATTERY_HEALTH_UNKNOWN
         ).contains(health)) return false
         return true
+    }
+
+    companion object {
+        fun getCurrent(context: Context): BatteryInfo? {
+            val batteryStatus: Intent? = IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { context.registerReceiver(null, it) }
+            return batteryStatus?.let { intent ->
+                val batteryManager = context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
+                BatteryInfo(
+                    level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1),
+                    scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1),
+                    current = batteryManager.getLongProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW)
+                )
+            }
+        }
+
+        fun isCharging(context: Context): Boolean {
+            val batteryStatus: Intent? = IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { context.registerReceiver(null, it) }
+            val status: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
+            return status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL
+        }
     }
 }

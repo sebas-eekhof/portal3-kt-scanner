@@ -5,11 +5,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import com.jsmecommerce.portal3scanner.R
 import com.jsmecommerce.portal3scanner.models.BatteryInfo
-import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
+import com.jsmecommerce.portal3scanner.viewmodels.CoreViewModel
 
 @Composable
-fun DashboardBatteryTemperatureWidget(mvm: MainViewModel) {
-    val batteryInfo: BatteryInfo? by mvm.batteryInfo.observeAsState(null)
+fun DashboardBatteryTemperatureWidget(coreViewModel: CoreViewModel) {
+    val batteryInfo: BatteryInfo? by coreViewModel.batteryInfo.observeAsState(null)
 
     DashboardWidget(
         icon = R.drawable.ic_celcius,

@@ -20,10 +20,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
 import com.jsmecommerce.portal3scanner.R
 import com.jsmecommerce.portal3scanner.models.Scan
 import com.jsmecommerce.portal3scanner.models.products.ScanProduct
@@ -33,19 +31,21 @@ import com.jsmecommerce.portal3scanner.ui.components.general.SimpleText
 import com.jsmecommerce.portal3scanner.ui.components.general.Spinner
 import com.jsmecommerce.portal3scanner.ui.components.screens.LoadingScreen
 import com.jsmecommerce.portal3scanner.ui.theme.Color
+import com.jsmecommerce.portal3scanner.viewmodels.CoreViewModel
+import com.jsmecommerce.portal3scanner.viewmodels.UiViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun SettingsScanner(nav: NavHostController, mvm: MainViewModel) {
+fun SettingsScanner(nav: NavHostController, coreViewModel: CoreViewModel, uiViewModel: UiViewModel) {
     var portalProductLoading by remember { mutableStateOf(false) }
     var portalProduct by remember { mutableStateOf<ScanProduct?>(null) }
     var scan by remember { mutableStateOf<Scan?>(null) }
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
-        mvm.init(
+        uiViewModel.init(
             title = context.getString(R.string.settings_scanner_title)
         )
     }

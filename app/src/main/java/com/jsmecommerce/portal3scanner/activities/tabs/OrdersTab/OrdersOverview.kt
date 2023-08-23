@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.jsmecommerce.portal3scanner.models.orders.OverviewOrder
 import com.jsmecommerce.portal3scanner.ui.components.orders.OverviewOrder
-import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
 import com.jsmecommerce.portal3scanner.R
 import com.jsmecommerce.portal3scanner.models.SelectItem
 import com.jsmecommerce.portal3scanner.models.general.OverviewStore
@@ -28,15 +27,17 @@ import com.jsmecommerce.portal3scanner.ui.components.general.ActionButton
 import com.jsmecommerce.portal3scanner.ui.components.general.DotText
 import com.jsmecommerce.portal3scanner.ui.components.screens.LoadingScreen
 import com.jsmecommerce.portal3scanner.ui.components.general.ScannerHost
-import com.jsmecommerce.portal3scanner.ui.components.popups.BottomPopup
 import com.jsmecommerce.portal3scanner.utils.Api
+import com.jsmecommerce.portal3scanner.viewmodels.CoreViewModel
+import com.jsmecommerce.portal3scanner.viewmodels.OrdersOverviewViewModel
+import com.jsmecommerce.portal3scanner.viewmodels.UiViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
-fun OrdersOverview(nav: NavHostController, mvm: MainViewModel) {
+fun OrdersOverview(nav: NavHostController, coreViewModel: CoreViewModel, uiViewModel: UiViewModel, ordersOverviewViewModel: OrdersOverviewViewModel = OrdersOverviewViewModel()) {
     var orders by remember { mutableStateOf<List<OverviewOrder>?>(null) }
     var stores by remember { mutableStateOf<List<OverviewStore>?>(null) }
     var statuses by remember { mutableStateOf<List<OrderStatus>?>(null) }
@@ -62,18 +63,18 @@ fun OrdersOverview(nav: NavHostController, mvm: MainViewModel) {
                 if(jsonOrders != null)
                     orders = OverviewOrder.fromJSONArray(jsonOrders)
             }
-            withContext(Dispatchers.Main) { mvm.setLoading(false) }
+            withContext(Dispatchers.Main) { uiViewModel.setLoading(false) }
         }
     }
 
     LaunchedEffect(Unit) {
-        mvm.init(
+        uiViewModel.init(
             title = context.getString(R.string.orders_title),
             disableBack = true
         )
-        mvm.setActions {
+        uiViewModel.setActions {
             ActionButton(icon = R.drawable.ic_filter) {
-                mvm.setDrawer(
+                uiViewModel.setDrawer(
                     title = R.string.filters,
                     onClose = { CoroutineScope(Dispatchers.IO).launch { refreshOrders() } }
                 ) {
@@ -105,7 +106,7 @@ fun OrdersOverview(nav: NavHostController, mvm: MainViewModel) {
                 }
             }
         }
-        mvm.setLoading()
+        uiViewModel.setLoading()
         CoroutineScope(Dispatchers.IO).launch {
             val resStatuses = Api.Request(context, "/orders/statusses")
                 .exec()

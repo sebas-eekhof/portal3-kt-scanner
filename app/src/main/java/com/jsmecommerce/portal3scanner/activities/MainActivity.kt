@@ -9,19 +9,19 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.jsmecommerce.portal3scanner.ui.components.popups.SecretMenuPopup
-import com.jsmecommerce.portal3scanner.utils.Auth
-import com.jsmecommerce.portal3scanner.utils.Device
 import com.jsmecommerce.portal3scanner.utils.Permissions
 import com.jsmecommerce.portal3scanner.utils.Static
-import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
 import com.jsmecommerce.portal3scanner.workers.ProbeWorker
 import com.jsmecommerce.portal3scanner.R
+import com.jsmecommerce.portal3scanner.viewmodels.CoreViewModel
+import com.jsmecommerce.portal3scanner.viewmodels.UiViewModel
 import java.util.concurrent.TimeUnit
 
 class MainActivity : ComponentActivity() {
     var keysDown: ArrayList<Int> = ArrayList()
     var secretMenuStepActivated: Boolean = false
-    val mvm = MainViewModel()
+    val coreViewModel: CoreViewModel by CoreViewModel.Lazy()
+    val uiViewModel: UiViewModel by UiViewModel.Lazy()
 
     fun runWorker() {
         WorkManager.getInstance(applicationContext)
@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onBackPressed() {
-        if(mvm.backEnabled.value == true)
+        if(uiViewModel.backEnabled.value == true)
             super.onBackPressed()
     }
 
@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
         if(keysDown.contains(keyCode)) {
             if(secretMenuStepActivated && keyCode == 103) {
                 keysDown.removeAll(keysDown.toSet())
-                mvm.setDrawer(R.string.secret_menu_title) {
+                uiViewModel.setDrawer(R.string.secret_menu_title) {
                     SecretMenuPopup(activity = this)
                 }
             }
@@ -63,8 +63,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        println("HWID: ${Device(this).getHWID()}")
-
         val perms = Permissions(this)
 
         if(!perms.has(Static.requiredPermissions.map { it.permission })) {
@@ -73,8 +71,7 @@ class MainActivity : ComponentActivity() {
             return
         }
 
-        val auth = Auth(applicationContext)
-        val user = auth.getUser()
+        val user = coreViewModel.auth.getUser()
         if(user == null) {
             startActivity(Intent(this, AuthActivity::class.java))
             finish()
@@ -84,7 +81,10 @@ class MainActivity : ComponentActivity() {
         runWorker()
 
         setContent {
-            MainView(mvm = mvm)
+            MainView(
+                uiViewModel = uiViewModel,
+                coreViewModel = coreViewModel
+            )
         }
     }
 }

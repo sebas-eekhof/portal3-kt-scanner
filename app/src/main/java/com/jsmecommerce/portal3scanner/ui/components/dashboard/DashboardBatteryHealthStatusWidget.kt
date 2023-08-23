@@ -6,11 +6,11 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.stringResource
 import com.jsmecommerce.portal3scanner.R
 import com.jsmecommerce.portal3scanner.models.BatteryInfo
-import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
+import com.jsmecommerce.portal3scanner.viewmodels.CoreViewModel
 
 @Composable
-fun DashboardBatteryHealthStatusWidget(mvm: MainViewModel) {
-    val batteryInfo: BatteryInfo? by mvm.batteryInfo.observeAsState(null)
+fun DashboardBatteryHealthStatusWidget(coreViewModel: CoreViewModel) {
+    val batteryInfo: BatteryInfo? by coreViewModel.batteryInfo.observeAsState(null)
 
     DashboardWidget(
         icon = R.drawable.ic_activity,

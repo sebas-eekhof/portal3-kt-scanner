@@ -22,7 +22,8 @@ import com.jsmecommerce.portal3scanner.ui.components.general.Tabbar
 import com.jsmecommerce.portal3scanner.ui.components.popups.LoadingPopup
 import com.jsmecommerce.portal3scanner.ui.components.screens.LoadingScreen
 import com.jsmecommerce.portal3scanner.utils.Api
-import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
+import com.jsmecommerce.portal3scanner.viewmodels.CoreViewModel
+import com.jsmecommerce.portal3scanner.viewmodels.UiViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,7 +32,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 @Composable
-fun OrderView(nav: NavHostController, mvm: MainViewModel, orderId: Int, title: String) {
+fun OrderView(nav: NavHostController, coreViewModel: CoreViewModel, uiViewModel: UiViewModel, orderId: Int, title: String) {
     var order by remember { mutableStateOf<Order?>(null) }
     val context = LocalContext.current
 
@@ -45,7 +46,7 @@ fun OrderView(nav: NavHostController, mvm: MainViewModel, orderId: Int, title: S
                 if(jsonRes != null) {
                     order = Order.fromJSON(jsonRes)
                     withContext(Dispatchers.Main) {
-                        mvm.setTitle(order!!.ordernumber_full ?: title)
+                        uiViewModel.setTitle(order!!.ordernumber_full ?: title)
                     }
                 }
             }
@@ -53,7 +54,7 @@ fun OrderView(nav: NavHostController, mvm: MainViewModel, orderId: Int, title: S
     }
 
     LaunchedEffect(Unit) {
-        mvm.init(
+        uiViewModel.init(
             title = title
         )
         fetchOrder()
@@ -90,7 +91,7 @@ fun OrderView(nav: NavHostController, mvm: MainViewModel, orderId: Int, title: S
                 if(rules.isEmpty())
                     Toast.makeText(context, "Geen geldige productregel gevonden voor deze scan", Toast.LENGTH_LONG).show();
                 else {
-                    mvm.setPopup(false) {
+                    uiViewModel.setPopup(false) {
                         LoadingPopup(text = R.string.orders_processing_scan)
                     }
                     CoroutineScope(Dispatchers.IO).launch {
@@ -112,7 +113,7 @@ fun OrderView(nav: NavHostController, mvm: MainViewModel, orderId: Int, title: S
                             .exec()
                         if(!res.hasError)
                             fetchOrder()
-                        mvm.setPopup(null)
+                        uiViewModel.setPopup(null)
                     }
                 }
             }

@@ -7,7 +7,7 @@ android {
     signingConfigs {
         getByName("debug") {
             storeFile =
-                file("C:\\Users\\sebas\\Desktop\\projects\\portal3-kt-scanner\\keystore.jks")
+                file("C:\\Users\\sebas\\AndroidStudioProjects\\Portal3Scanner\\keystore.jks")
             storePassword = "Qwerty221"
             keyAlias = "key0"
             keyPassword = "Qwerty221"
@@ -88,4 +88,7 @@ dependencies {
     implementation("androidx.work:work-runtime-ktx:2.8.1")
     implementation("com.google.android.gms:play-services-location:21.0.1")
     implementation("com.karumi:dexter:6.2.3")
+    implementation("io.socket:socket.io-client:2.0.0") {
+        exclude(group = "org.json", module = "json")
+    }
 }

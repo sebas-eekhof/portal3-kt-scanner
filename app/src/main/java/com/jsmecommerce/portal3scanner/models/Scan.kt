@@ -1,5 +1,6 @@
 package com.jsmecommerce.portal3scanner.models
 
+import android.content.Intent
 import com.jsmecommerce.portal3scanner.utils.Validator
 import java.net.URLDecoder
 
@@ -22,7 +23,26 @@ data class Scan(private val barcodeRaw: String, val labelType: LabelType) {
         DATAMATRIX,
         AZTEC,
         MAXICODE,
-        UNDEFINED
+        UNDEFINED;
+
+        companion object {
+            fun fromDataWedgeString(string: String): LabelType = when(string) {
+                "LABEL-TYPE-EAN13" -> Scan.LabelType.EAN13
+                "LABEL-TYPE-QRCODE" -> Scan.LabelType.QRCODE
+                "LABEL-TYPE-EAN8" -> Scan.LabelType.EAN8
+                "LABEL-TYPE-PDF417" -> Scan.LabelType.PDF417
+                "LABEL-TYPE-GS1-DATABAR" -> Scan.LabelType.GS1_DATABAR
+                "LABEL-TYPE-EAN128" -> Scan.LabelType.EAN128
+                "LABEL-TYPE-CODE128" -> Scan.LabelType.CODE128
+                "LABEL-TYPE-CODE39" -> Scan.LabelType.CODE39
+                "LABEL-TYPE-UPCA" -> Scan.LabelType.UPCA
+                "LABEL-TYPE-UPCE0" -> Scan.LabelType.UPCE0
+                "LABEL-TYPE-DATAMATRIX" -> Scan.LabelType.DATAMATRIX
+                "LABEL-TYPE-AZTEC" -> Scan.LabelType.AZTEC
+                "LABEL-TYPE-MAXICODE" -> Scan.LabelType.DATAMATRIX
+                else -> Scan.LabelType.UNDEFINED
+            }
+        }
     }
 
     enum class BarcodeType {
@@ -85,5 +105,21 @@ data class Scan(private val barcodeRaw: String, val labelType: LabelType) {
             return barcode
         }
         return barcode
+    }
+
+    companion object {
+        fun fromIntent(intent: Intent): Scan? {
+            if(
+                listOf(
+                    "com.symbol.datawedge.label_type",
+                    "com.symbol.datawedge.scanner_identifier",
+                    "com.symbol.datawedge.data_string"
+                ).any { !intent.hasExtra(it) }
+            ) return null
+            return Scan(
+                barcodeRaw = intent.getStringExtra("com.symbol.datawedge.data_string")!!,
+                labelType = LabelType.fromDataWedgeString(intent.getStringExtra("com.symbol.datawedge.label_type")!!)
+            )
+        }
     }
 }

@@ -35,11 +35,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -68,7 +66,8 @@ import com.jsmecommerce.portal3scanner.ui.components.general.TopBar
 import com.jsmecommerce.portal3scanner.ui.components.screens.UpdateScreen
 import com.jsmecommerce.portal3scanner.ui.theme.Color
 import com.jsmecommerce.portal3scanner.utils.Api
-import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
+import com.jsmecommerce.portal3scanner.viewmodels.CoreViewModel
+import com.jsmecommerce.portal3scanner.viewmodels.UiViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -81,20 +80,26 @@ val tabs = listOf(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainView(mvm: MainViewModel) {
+fun MainView(
+    uiViewModel: UiViewModel,
+    coreViewModel: CoreViewModel
+) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
-    val title: String by mvm.title.observeAsState("NO TITLE")
-    val backEnabled: Boolean by mvm.backEnabled.observeAsState(false)
-    val loading: Boolean by mvm.loading.observeAsState(false)
-    val popup: Popup? by mvm.popup.observeAsState(null)
-    val actions: (@Composable () -> Unit)? by mvm.actions.observeAsState(null)
+    val title: String by uiViewModel.title.observeAsState("NO TITLE")
+    val backEnabled: Boolean by uiViewModel.backEnabled.observeAsState(false)
+    val loading: Boolean by uiViewModel.loading.observeAsState(false)
+    val popup: Popup? by uiViewModel.popup.observeAsState(null)
+    val actions: (@Composable () -> Unit)? by uiViewModel.actions.observeAsState(null)
     var updateVersion by remember { mutableStateOf<UpdateVersion?>(null) }
 
     val context = LocalContext.current;
 
     LaunchedEffect(Unit) {
+//        coreViewModel.scans.onEach {
+//            println("TESTTEST SCAN: ${it.barcode}")
+//        }
         CoroutineScope(Dispatchers.IO).launch {
             val res = Api.Request(context, "/scanner_versions/latest")
                 .exec()
@@ -122,7 +127,10 @@ fun MainView(mvm: MainViewModel) {
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            TopBar(mvm = mvm)
+            TopBar(
+                uiViewModel = uiViewModel,
+                coreViewModel = coreViewModel
+            )
             Scaffold(
                 modifier = Modifier
                     .fillMaxSize()
@@ -221,9 +229,9 @@ fun MainView(mvm: MainViewModel) {
                             )
                         }
                     ) {
-                        composable("dashboard") { DashboardTab(navController, mvm) }
+                        composable("dashboard") { DashboardTab(navController, coreViewModel, uiViewModel) }
                         navigation(startDestination = "orders/overview", route = "orders") {
-                            composable("orders/overview") { OrdersOverview(navController, mvm) }
+                            composable("orders/overview") { OrdersOverview(navController, coreViewModel, uiViewModel) }
                             composable(
                                 "orders/view/{orderId}?title={title}",
                                 deepLinks = Portal3DeepLinks("/orders/{orderId}"),
@@ -238,14 +246,14 @@ fun MainView(mvm: MainViewModel) {
                                 val orderId: Int? = it.arguments?.getInt("orderId")
                                 val orderTitle: String? = it.arguments?.getString("title")
                                 if(orderId != null && orderTitle != null)
-                                    OrderView(navController, mvm, orderId, orderTitle)
+                                    OrderView(navController, coreViewModel, uiViewModel, orderId, orderTitle)
                             }
                         }
                         navigation(startDestination = "settings/overview", route = "settings") {
-                            composable("settings/overview") { SettingsOverview(navController, mvm) }
-                            composable("settings/information") { SettingsInformation(navController, mvm) }
-                            composable("settings/scanner") { SettingsScanner(navController, mvm) }
-                            composable("settings/language") { SettingsLanguage(navController, mvm) }
+                            composable("settings/overview") { SettingsOverview(navController, coreViewModel, uiViewModel) }
+                            composable("settings/information") { SettingsInformation(navController, coreViewModel, uiViewModel) }
+                            composable("settings/scanner") { SettingsScanner(navController, coreViewModel, uiViewModel) }
+                            composable("settings/language") { SettingsLanguage(navController, coreViewModel, uiViewModel) }
                         }
                     }
                 }
@@ -256,7 +264,7 @@ fun MainView(mvm: MainViewModel) {
                 popup!!.content()
             else
                 popup!!.Render {
-                    mvm.setPopup(null)
+                    uiViewModel.setPopup(null)
                 }
         }
         if(updateVersion != null)

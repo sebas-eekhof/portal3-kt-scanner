@@ -22,10 +22,11 @@ import com.jsmecommerce.portal3scanner.ui.components.settings.SettingsClickableI
 import com.jsmecommerce.portal3scanner.ui.components.settings.SettingsDivider
 import com.jsmecommerce.portal3scanner.ui.components.settings.SettingsGroup
 import com.jsmecommerce.portal3scanner.utils.Auth
-import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
+import com.jsmecommerce.portal3scanner.viewmodels.CoreViewModel
+import com.jsmecommerce.portal3scanner.viewmodels.UiViewModel
 
 @Composable
-fun SettingsOverview(nav: NavHostController, mvm: MainViewModel) {
+fun SettingsOverview(nav: NavHostController, coreViewModel: CoreViewModel, uiViewModel: UiViewModel) {
     val context = LocalContext.current
     val auth = Auth(context)
     val user = auth.getUser()!!
@@ -38,7 +39,7 @@ fun SettingsOverview(nav: NavHostController, mvm: MainViewModel) {
     }
 
     LaunchedEffect(Unit) {
-        mvm.init(
+        uiViewModel.init(
             title = context.getString(R.string.settings_title),
             disableBack = true
         )
@@ -76,7 +77,7 @@ fun SettingsOverview(nav: NavHostController, mvm: MainViewModel) {
             SettingsClickableItem(
                 name = R.string.settings_cat_app_tutorial,
                 icon = R.drawable.ic_info,
-                onClick = { mvm.setPopup { TutorialScreen { mvm.setPopup(null) } } }
+                onClick = { uiViewModel.setPopup { TutorialScreen { uiViewModel.setPopup(null) } } }
             )
             SettingsDivider()
             SettingsClickableItem(
