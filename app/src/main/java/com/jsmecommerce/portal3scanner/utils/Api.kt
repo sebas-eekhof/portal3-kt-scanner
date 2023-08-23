@@ -7,10 +7,10 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
 import java.io.OutputStreamWriter
-import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
+import kotlin.Exception
 
 class Api {
     class Request(private val context: Context, private val path: String) {
@@ -29,8 +29,17 @@ class Api {
             return this
         }
 
-        fun setQuery(key: String, value: String): Request {
-            this.query[key] = value
+        fun setQuery(key: String, value: Int?): Request {
+            return setQuery(key, value?.toString())
+        }
+
+        fun setQuery(key: String, value: Boolean?): Request {
+            return setQuery(key, if (value == null) null else (if (value) "true" else "false"))
+        }
+
+        fun setQuery(key: String, value: String?): Request {
+            if(value != null)
+                this.query[key] = value
             return this
         }
 
@@ -141,6 +150,16 @@ class Api {
         }
     }
 
+    class ParsedResponse<T>(private val response: Response, private val getData: Response.() -> T, val error: Error? = null, val ms: Int, val mms: Int) {
+        val data: T? get() = if (error != null) null else {
+            try {
+               getData(response)
+            } catch(e: Exception) {
+                null
+            }
+        }
+    }
+
     class Response(private val success: Boolean, val error: Api.Error?, val ms: Int, val mms: Int, private val data: JSONObject?) {
         val hasError: Boolean = (!success)
 
@@ -202,6 +221,13 @@ class Api {
                 null
             }
         }
+
+        fun <T>toParsedResponse(getData: Response.() -> T): ParsedResponse<T> = ParsedResponse(
+            getData = getData,
+            ms = ms,
+            mms = mms,
+            response = this
+        )
     }
 
     class Error(val err: String, val message: String) {

@@ -1,5 +1,6 @@
 package com.jsmecommerce.portal3scanner.activities.tabs
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.jsmecommerce.portal3scanner.R
+import com.jsmecommerce.portal3scanner.datasource.portal3api.Portal3Api
 import com.jsmecommerce.portal3scanner.ui.components.dashboard.DashboardBatteryCapacityWidget
 import com.jsmecommerce.portal3scanner.ui.components.dashboard.DashboardBatteryChargeWidget
 import com.jsmecommerce.portal3scanner.ui.components.dashboard.DashboardBatteryCurrentWidget
@@ -26,12 +28,26 @@ import com.jsmecommerce.portal3scanner.ui.components.general.UserBanner
 import com.jsmecommerce.portal3scanner.utils.Auth
 import com.jsmecommerce.portal3scanner.utils.Device
 import com.jsmecommerce.portal3scanner.viewmodels.MainViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
+@SuppressLint("CoroutineCreationDuringComposition")
+@OptIn(DelicateCoroutinesApi::class)
 @Composable
 fun DashboardTab(nav: NavHostController, mvm: MainViewModel) {
     val context = LocalContext.current
     val auth = Auth(context)
     val user = auth.getUser()!!
+
+    val api = Portal3Api.getInstance(context)
+
+    GlobalScope.launch {
+        val stores = api.stores.all().body()
+        stores?.items?.forEach { println("Store: ${it.name} (${it.color.color})") }
+    }
 
     LaunchedEffect(Unit) {
         mvm.init(

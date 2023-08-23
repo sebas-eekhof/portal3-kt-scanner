@@ -7,6 +7,7 @@ import java.util.Locale
 
 class Static {
     companion object {
+        val API_BASE_URL = "https://api.portal3.nl"
         val requiredPermissions = listOf(
             Permission(
                 Manifest.permission.ACCESS_BACKGROUND_LOCATION,

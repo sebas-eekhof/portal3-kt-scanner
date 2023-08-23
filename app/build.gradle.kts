@@ -7,7 +7,7 @@ android {
     signingConfigs {
         getByName("debug") {
             storeFile =
-                file("C:\\Users\\sebas\\AndroidStudioProjects\\Portal3Scanner\\keystore.jks")
+                file("C:\\Users\\sebas\\Desktop\\projects\\portal3-kt-scanner\\keystore.jks")
             storePassword = "Qwerty221"
             keyAlias = "key0"
             keyPassword = "Qwerty221"
@@ -74,15 +74,18 @@ dependencies {
 
 //    Custom
 
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.31.0-alpha")
     implementation("com.github.WycliffeAssociates:jdenticon-kotlin:1.1")
     implementation("com.github.bumptech.glide:compose:1.0.0-alpha.1")
     implementation("com.caverock:androidsvg-aar:1.4")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("androidx.navigation:navigation-compose:2.7.0")
     implementation("androidx.compose.runtime:runtime-livedata:1.5.0")
     implementation("androidx.work:work-runtime-ktx:2.8.1")
     implementation("com.google.android.gms:play-services-location:21.0.1")
     implementation("com.karumi:dexter:6.2.3")
-//    implementation("com.symbol:emdk:9.1.1")
 }
