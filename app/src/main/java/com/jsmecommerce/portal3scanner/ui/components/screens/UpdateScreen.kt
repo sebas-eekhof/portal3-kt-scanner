@@ -31,8 +31,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jsmecommerce.portal3scanner.R
-import com.jsmecommerce.portal3scanner.models.general.DownloadProgress
-import com.jsmecommerce.portal3scanner.models.general.UpdateVersion
+import com.jsmecommerce.portal3scanner.models.DownloadProgress
+import com.jsmecommerce.portal3scanner.models.UpdateVersion
 import com.jsmecommerce.portal3scanner.ui.components.general.Description
 import com.jsmecommerce.portal3scanner.ui.components.general.SimpleTextBold
 import com.jsmecommerce.portal3scanner.ui.components.general.Title

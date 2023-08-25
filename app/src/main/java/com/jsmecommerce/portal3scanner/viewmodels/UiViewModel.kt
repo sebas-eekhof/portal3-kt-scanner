@@ -40,6 +40,7 @@ class UiViewModel : ViewModel() {
     }
 
     fun init(title: String, disableBack: Boolean = false) {
+        println("UI INIT")
         _title.value = title
         _backEnabled.value = !disableBack
         _loading.value = false
@@ -51,6 +52,7 @@ class UiViewModel : ViewModel() {
     }
 
     fun setLoading(loading: Boolean = true) {
+        println("UI SET LOADING")
         _loading.value = loading
     }
 
@@ -99,6 +101,7 @@ class UiViewModel : ViewModel() {
     }
 
     fun setActions(actions: (@Composable () -> Unit)? = null) {
+        println("UI SET ACTIONS")
         _actions.value = actions
     }
 

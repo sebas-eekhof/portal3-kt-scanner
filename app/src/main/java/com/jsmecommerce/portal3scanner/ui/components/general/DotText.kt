@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.jsmecommerce.portal3scanner.enums.ColorEnum
+import com.jsmecommerce.portal3scanner.datasource.portal3api.models.enums.ColorEnum
 
 @Composable
 fun DotText(text: String, color: ColorEnum) {

@@ -11,9 +11,8 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.navigation.NavHostController
+import com.jsmecommerce.portal3scanner.datasource.portal3api.Portal3Api
 import com.jsmecommerce.portal3scanner.models.Scan
-import com.jsmecommerce.portal3scanner.models.orders.ShipmentLabelLookup
-import com.jsmecommerce.portal3scanner.utils.Api
 import com.jsmecommerce.portal3scanner.utils.Device
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -69,6 +68,7 @@ class ScannerReceiver(val callback: (scan: Scan) -> Unit) : BroadcastReceiver() 
 @Composable
 fun ScannerHost(nav: NavHostController, onScan: ((scan: Scan) -> Unit)? = null) {
     val context = LocalContext.current
+    val api = Portal3Api.getInstance(context)
 
     DisposableEffect(LocalLifecycleOwner.current) {
         val receiver = ScannerReceiver { scan ->
@@ -79,17 +79,13 @@ fun ScannerHost(nav: NavHostController, onScan: ((scan: Scan) -> Unit)? = null) 
             else {
                 if(scan.barcodeType == Scan.BarcodeType.SHIPMENT) {
                     CoroutineScope(Dispatchers.IO).launch {
-                        val res = Api.Request(context, "/shipments/by_barcode")
-                            .setQuery("barcode", scan.getShipmentBarcode())
-                            .exec()
-                        if(!res.hasError) {
-                            val shipmentObject = res.getJsonObject()
-                            if(shipmentObject != null) {
-                                val label = ShipmentLabelLookup.fromJSON(shipmentObject)
+                        val res = api.shipments.byBarcode(scan.getShipmentBarcode())
+                        if(res.isSuccessful) {
+                            val label = res.body()
+                            if(label != null)
                                 withContext(Dispatchers.Main) {
-                                    nav.navigate("orders/view/${label.order.id}?title=${label.order.ordernumber_full}")
+                                    nav.navigate("orders/view/${label.order.id}?title=${label.order.orderNumberFull}")
                                 }
-                            }
                         } else
                             withContext(Dispatchers.Main) {
                                 Toast.makeText(context, "Unknown shipment label", Toast.LENGTH_LONG).show()

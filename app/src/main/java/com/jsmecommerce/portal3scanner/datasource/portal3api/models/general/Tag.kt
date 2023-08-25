@@ -1,9 +1,9 @@
-package com.jsmecommerce.portal3scanner.datasource.portal3api.models.stores
+package com.jsmecommerce.portal3scanner.datasource.portal3api.models.general
 
 import com.jsmecommerce.portal3scanner.datasource.portal3api.models.enums.ColorEnum
 
-data class Store(
+data class Tag(
     val id: Int,
-    val name: String,
+    val title: String,
     val color: ColorEnum
 )

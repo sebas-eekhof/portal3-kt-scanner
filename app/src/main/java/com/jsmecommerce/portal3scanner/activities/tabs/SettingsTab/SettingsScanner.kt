@@ -23,8 +23,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.jsmecommerce.portal3scanner.R
+import com.jsmecommerce.portal3scanner.datasource.portal3api.Portal3Api
+import com.jsmecommerce.portal3scanner.datasource.portal3api.models.products.ScanProduct
 import com.jsmecommerce.portal3scanner.models.Scan
-import com.jsmecommerce.portal3scanner.models.products.ScanProduct
 import com.jsmecommerce.portal3scanner.ui.components.general.Description
 import com.jsmecommerce.portal3scanner.ui.components.general.ScannerHost
 import com.jsmecommerce.portal3scanner.ui.components.general.SimpleText
@@ -43,6 +44,7 @@ fun SettingsScanner(nav: NavHostController, coreViewModel: CoreViewModel, uiView
     var portalProduct by remember { mutableStateOf<ScanProduct?>(null) }
     var scan by remember { mutableStateOf<Scan?>(null) }
     val context = LocalContext.current
+    val api = Portal3Api.getInstance(context)
 
     LaunchedEffect(Unit) {
         uiViewModel.init(
@@ -56,7 +58,8 @@ fun SettingsScanner(nav: NavHostController, coreViewModel: CoreViewModel, uiView
         if(it.barcodeType == Scan.BarcodeType.EAN)
             CoroutineScope(Dispatchers.IO).launch {
                 portalProductLoading = true
-                portalProduct = ScanProduct.findByBarcode(context, it.barcode)
+                val res = api.products.byBarcode(barcode = it.barcode)
+                portalProduct = res.body()
                 portalProductLoading = false
             }
     }

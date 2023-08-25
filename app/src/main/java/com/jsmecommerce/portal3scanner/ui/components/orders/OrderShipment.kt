@@ -21,7 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.jsmecommerce.portal3scanner.models.orders.OrderShipment
+import com.jsmecommerce.portal3scanner.datasource.portal3api.models.shipments.OrderShipment
 import com.jsmecommerce.portal3scanner.ui.components.general.AppIcon
 import com.jsmecommerce.portal3scanner.ui.components.general.Description
 import com.jsmecommerce.portal3scanner.ui.components.general.SimpleText

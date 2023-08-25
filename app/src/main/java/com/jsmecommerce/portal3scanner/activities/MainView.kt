@@ -1,12 +1,5 @@
 package com.jsmecommerce.portal3scanner.activities
 
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.core.EaseIn
-import androidx.compose.animation.core.EaseOut
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -59,7 +52,7 @@ import com.jsmecommerce.portal3scanner.activities.tabs.SettingsTab.SettingsOverv
 import com.jsmecommerce.portal3scanner.activities.tabs.SettingsTab.SettingsScanner
 import com.jsmecommerce.portal3scanner.models.Popup
 import com.jsmecommerce.portal3scanner.models.Tab
-import com.jsmecommerce.portal3scanner.models.general.UpdateVersion
+import com.jsmecommerce.portal3scanner.models.UpdateVersion
 import com.jsmecommerce.portal3scanner.ui.components.general.Spinner
 import com.jsmecommerce.portal3scanner.ui.components.general.Title
 import com.jsmecommerce.portal3scanner.ui.components.general.TopBar
@@ -67,6 +60,7 @@ import com.jsmecommerce.portal3scanner.ui.components.screens.UpdateScreen
 import com.jsmecommerce.portal3scanner.ui.theme.Color
 import com.jsmecommerce.portal3scanner.utils.Api
 import com.jsmecommerce.portal3scanner.viewmodels.CoreViewModel
+import com.jsmecommerce.portal3scanner.viewmodels.OrdersOverviewViewModel
 import com.jsmecommerce.portal3scanner.viewmodels.UiViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -207,31 +201,18 @@ fun MainView(
                 ) {
                     NavHost(
                         navController = navController,
-                        startDestination = "dashboard",
-                        enterTransition = {
-                            fadeIn(
-                                animationSpec = tween(
-                                    300, easing = LinearEasing
-                                )
-                            ) + slideIntoContainer(
-                                animationSpec = tween(300, easing = EaseIn),
-                                towards = AnimatedContentTransitionScope.SlideDirection.Start
-                            )
-                        },
-                        exitTransition = {
-                            fadeOut(
-                                animationSpec = tween(
-                                    300, easing = LinearEasing
-                                )
-                            ) + slideOutOfContainer(
-                                animationSpec = tween(300, easing = EaseOut),
-                                towards = AnimatedContentTransitionScope.SlideDirection.End
-                            )
-                        }
+                        startDestination = "dashboard"
                     ) {
                         composable("dashboard") { DashboardTab(navController, coreViewModel, uiViewModel) }
                         navigation(startDestination = "orders/overview", route = "orders") {
-                            composable("orders/overview") { OrdersOverview(navController, coreViewModel, uiViewModel) }
+                            composable("orders/overview") {
+                                OrdersOverview(
+                                    navController,
+                                    coreViewModel,
+                                    uiViewModel,
+                                    OrdersOverviewViewModel(LocalContext.current)
+                                )
+                            }
                             composable(
                                 "orders/view/{orderId}?title={title}",
                                 deepLinks = Portal3DeepLinks("/orders/{orderId}"),
@@ -259,15 +240,17 @@ fun MainView(
                 }
             }
         }
-        if(popup != null) {
-            if(popup!!.raw)
-                popup!!.content()
-            else
-                popup!!.Render {
-                    uiViewModel.setPopup(null)
-                }
+        Box(modifier = Modifier.fillMaxSize()) {
+            if(popup != null) {
+                if(popup!!.raw)
+                    popup!!.content()
+                else
+                    popup!!.Render {
+                        uiViewModel.setPopup(null)
+                    }
+            }
+            if(updateVersion != null)
+                UpdateScreen(version = updateVersion!!)
         }
-        if(updateVersion != null)
-            UpdateScreen(version = updateVersion!!)
     }
 }

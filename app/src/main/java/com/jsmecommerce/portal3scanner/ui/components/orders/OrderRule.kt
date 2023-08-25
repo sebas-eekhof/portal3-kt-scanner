@@ -15,7 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
-import com.jsmecommerce.portal3scanner.models.orders.OrderRule
+import com.jsmecommerce.portal3scanner.datasource.portal3api.models.orders.OrderRule
 import com.jsmecommerce.portal3scanner.ui.components.general.Badge
 import com.jsmecommerce.portal3scanner.ui.components.general.CdnImage
 import com.jsmecommerce.portal3scanner.ui.components.general.Description
@@ -26,8 +26,6 @@ import com.jsmecommerce.portal3scanner.ui.theme.Color
 
 @Composable
 fun OrderRule(rule: OrderRule, rules: List<OrderRule>) {
-    val childs = rules.filter { it.parent_id == rule.id }
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -59,9 +57,9 @@ fun OrderRule(rule: OrderRule, rules: List<OrderRule>) {
             modifier = Modifier
                 .padding(8.dp)
         ) {
-            Badge(color = if (rule.stock < (rule.quantity - rule.scans_amount)) Color.Danger.Regular else Color.Success.Regular, text = "${rule.stock} in voorraad")
+            Badge(color = if (rule.stock < (rule.quantity - rule.scansAmount)) Color.Danger.Regular else Color.Success.Regular, text = "${rule.stock} in voorraad")
             Spacer(modifier = Modifier.width(8.dp))
-            ScanBadge(scanned = rule.scans_amount, total = rule.quantity)
+            ScanBadge(scanned = rule.scansAmount, total = rule.quantity)
         }
     }
 }

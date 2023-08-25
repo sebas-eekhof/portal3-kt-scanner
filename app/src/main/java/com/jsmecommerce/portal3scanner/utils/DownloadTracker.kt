@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.app.DownloadManager
 import android.content.Context
 import androidx.lifecycle.LiveData
-import com.jsmecommerce.portal3scanner.models.general.DownloadProgress
+import com.jsmecommerce.portal3scanner.models.DownloadProgress
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

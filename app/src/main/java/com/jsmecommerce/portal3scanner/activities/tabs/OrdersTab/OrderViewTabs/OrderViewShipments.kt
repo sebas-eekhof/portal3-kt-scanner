@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.jsmecommerce.portal3scanner.models.orders.Order
+import com.jsmecommerce.portal3scanner.datasource.portal3api.models.orders.Order
 import com.jsmecommerce.portal3scanner.ui.components.orders.OrderShipment
 import com.jsmecommerce.portal3scanner.ui.components.screens.EmptyScreen
 
