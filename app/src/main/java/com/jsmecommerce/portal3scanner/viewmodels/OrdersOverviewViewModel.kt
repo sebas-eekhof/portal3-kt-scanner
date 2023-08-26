@@ -1,6 +1,7 @@
 package com.jsmecommerce.portal3scanner.viewmodels
 
 import android.content.Context
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,7 +11,7 @@ import com.jsmecommerce.portal3scanner.datasource.portal3api.models.general.Pagi
 import com.jsmecommerce.portal3scanner.datasource.portal3api.models.orders.OrderStatus
 import com.jsmecommerce.portal3scanner.datasource.portal3api.models.orders.OverviewOrder
 import com.jsmecommerce.portal3scanner.datasource.portal3api.models.stores.Store
-import com.jsmecommerce.portal3scanner.models.QueryFilters
+import com.jsmecommerce.portal3scanner.utils.put
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,19 +23,23 @@ class OrdersOverviewViewModel(
 ): ViewModel() {
     private val api = Portal3Api.getInstance(context)
 
-    val filters = QueryFilters()
-
     private var _orders = MutableLiveData<Paginated<OverviewOrder>?>(null)
     private var _stores = MutableLiveData<List<Store>?>(null)
     private var _statuses = MutableLiveData<List<OrderStatus>?>(null)
+    private val _filters = mutableStateMapOf<String, String>()
 
+    val filterStatusId: String? get() = _filters["status_id"]
+    val filterStoreId: String? get() = _filters["store_id"]
     val orders: LiveData<Paginated<OverviewOrder>?> get() = _orders
     val stores: LiveData<List<Store>?> get() = _stores
     val statuses: LiveData<List<OrderStatus>?> get() = _statuses
 
     suspend fun refreshOrders() {
         withContext(Dispatchers.Main) { uiViewModel.setLoading(true) }
-        val res = api.orders.all()
+        val res = api.orders.all(
+            statusId = filterStatusId?.toInt(),
+            storeId = filterStoreId?.toInt()
+        )
         val body = res.body()
         if(res.isSuccessful && body != null)
             withContext(Dispatchers.Main) { _orders.value = body }
@@ -59,8 +64,8 @@ class OrdersOverviewViewModel(
         withContext(Dispatchers.Main) { uiViewModel.setLoading(false) }
     }
 
-    fun setFilterStatusId(statusId: Int?) = filters.put("status_id", statusId)
-    fun setFilterStoreId(storeId: Int?) = filters.put("store_id", storeId)
+    fun setFilterStatusId(statusId: String?) = _filters.put("status_id", statusId)
+    fun setFilterStoreId(storeId: String?) = _filters.put("store_id", storeId)
 
     fun init() {
         CoroutineScope(Dispatchers.IO).launch {

@@ -10,9 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -39,7 +36,6 @@ fun OrdersOverview(nav: NavHostController, coreViewModel: CoreViewModel, uiViewM
     val orders by vm.orders.observeAsState(null)
     val stores by vm.stores.observeAsState(null)
     val statuses by vm.statuses.observeAsState(null)
-    val filters by vm.filters.value.observeAsState(HashMap())
 
     val context = LocalContext.current
 
@@ -48,7 +44,6 @@ fun OrdersOverview(nav: NavHostController, coreViewModel: CoreViewModel, uiViewM
             title = context.getString(R.string.orders_title),
             disableBack = true
         )
-        println("Launch triggered")
         uiViewModel.setActions {
             ActionButton(icon = R.drawable.ic_filter) {
                 uiViewModel.setDrawer(
@@ -64,8 +59,8 @@ fun OrdersOverview(nav: NavHostController, coreViewModel: CoreViewModel, uiViewM
                                     DotText(text = it.name, color = it.color)
                                 }
                             },
-                            value = filters["status_id"],
-                            onChange = { vm.filters.put("status_id", it) }
+                            value = vm.filterStatusId,
+                            onChange = { vm.setFilterStatusId(it) }
                         )
                     Spacer(modifier = Modifier.height(16.dp))
                     if(stores != null)
@@ -77,8 +72,8 @@ fun OrdersOverview(nav: NavHostController, coreViewModel: CoreViewModel, uiViewM
                                     DotText(text = it.name, color = it.color)
                                 }
                             },
-                            value = filters["store_id"],
-                            onChange = { vm.filters.put("store_id", it) }
+                            value = vm.filterStoreId,
+                            onChange = { vm.setFilterStoreId(it) }
                         )
                 }
             }

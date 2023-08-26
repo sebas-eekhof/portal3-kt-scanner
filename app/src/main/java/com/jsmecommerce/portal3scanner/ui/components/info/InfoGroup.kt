@@ -10,6 +10,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.jsmecommerce.portal3scanner.ui.components.general.Card
 import com.jsmecommerce.portal3scanner.ui.components.general.Description
 import com.jsmecommerce.portal3scanner.ui.theme.Color
 
@@ -21,14 +22,8 @@ fun InfoGroup(name: String, first: Boolean = false, content: @Composable () -> U
     ) {
         Description(name)
         Spacer(Modifier.height(16.dp))
-        Surface(
-            color = Color.Element,
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(4)
-        ) {
-            Column() {
-                content()
-            }
+        Card {
+            content()
         }
     }
 }

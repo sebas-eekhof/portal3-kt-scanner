@@ -20,23 +20,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.jsmecommerce.portal3scanner.ui.components.general.Card
 import com.jsmecommerce.portal3scanner.ui.components.general.Description
 import com.jsmecommerce.portal3scanner.ui.components.general.SmallTitle
 import com.jsmecommerce.portal3scanner.ui.theme.Color
 
 @Composable
 fun DashboardWidget(@DrawableRes icon: Int, @StringRes title: Int, value: String? = null, component: (@Composable () -> Unit)? = null) {
-    Box(
+    Card(
         modifier = Modifier
-            .height(64.dp)
             .fillMaxWidth()
-            .background(Color.Element, RoundedCornerShape(4))
+            .height(64.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp)
+            modifier = Modifier.fillMaxSize()
         ) {
             Icon(painter = painterResource(icon), contentDescription = stringResource(title), tint = Color.White)
             Spacer(modifier = Modifier.width(8.dp))

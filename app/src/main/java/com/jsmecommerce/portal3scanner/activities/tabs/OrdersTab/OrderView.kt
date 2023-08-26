@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.jsmecommerce.portal3scanner.R
 import com.jsmecommerce.portal3scanner.activities.tabs.OrdersTab.OrderViewTabs.OrderViewInfo
@@ -24,9 +25,9 @@ fun OrderView(
     coreViewModel: CoreViewModel,
     uiViewModel: UiViewModel,
     orderId: Int,
-    title: String,
-    vm: OrderViewModel = OrderViewModel(LocalContext.current, orderId)
+    title: String
 ) {
+    val vm: OrderViewModel = viewModel(factory = OrderViewModel.Factory(LocalContext.current, uiViewModel, orderId))
     val order by vm.order.observeAsState(null)
 
     LaunchedEffect(Unit) {

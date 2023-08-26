@@ -43,10 +43,6 @@ fun DashboardTab(nav: NavHostController, coreViewModel: CoreViewModel, uiViewMod
 
     val api = Portal3Api.getInstance(context)
 
-    GlobalScope.launch {
-        val stores = api.stores.all()
-    }
-
     LaunchedEffect(Unit) {
         uiViewModel.init(
             title = context.getString(R.string.dashboard_title),
@@ -60,8 +56,6 @@ fun DashboardTab(nav: NavHostController, coreViewModel: CoreViewModel, uiViewMod
         modifier = Modifier.padding(16.dp)
     ) {
         UserBanner(user = user)
-        Spacer(modifier = Modifier.height(8.dp))
-        SimpleText(text = "IMEI: ${Device(context).imei}")
         Spacer(modifier = Modifier.height(8.dp))
         Row(
             modifier = Modifier.fillMaxWidth()

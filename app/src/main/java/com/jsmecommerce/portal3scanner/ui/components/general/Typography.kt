@@ -23,14 +23,6 @@ fun Title(text: String, modifier: Modifier = Modifier) {
     )
 }
 
-@Preview(showBackground = true)
-@Composable
-fun TitlePreview() {
-    Portal3ScannerTheme {
-        Title("Portal3 Scanner")
-    }
-}
-
 @Composable
 fun SmallTitle(text: String, modifier: Modifier = Modifier, textAlign: TextAlign = TextAlign.Left) {
     Text(
@@ -44,12 +36,16 @@ fun SmallTitle(text: String, modifier: Modifier = Modifier, textAlign: TextAlign
     )
 }
 
-@Preview(showBackground = true)
 @Composable
-fun SmallTitlePreview() {
-    Portal3ScannerTheme {
-        SmallTitle("Portal3 Scanner")
-    }
+fun SimpleTextLarge(text: String, modifier: Modifier = Modifier, color: androidx.compose.ui.graphics.Color = Color.TextPrimary) {
+    Text(
+        text = text,
+        fontSize = 13.sp,
+        fontFamily = Font.Roboto,
+        fontWeight = FontWeight.Normal,
+        color = color,
+        modifier = modifier
+    )
 }
 
 @Composable
@@ -64,14 +60,6 @@ fun SimpleText(text: String, modifier: Modifier = Modifier, color: androidx.comp
     )
 }
 
-@Preview(showBackground = true)
-@Composable
-fun SimpleTextPreview() {
-    Portal3ScannerTheme {
-        SimpleText("Portal3 Scanner")
-    }
-}
-
 @Composable
 fun SimpleTextSmall(text: String, modifier: Modifier = Modifier, color: androidx.compose.ui.graphics.Color = Color.TextPrimary) {
     Text(
@@ -82,14 +70,6 @@ fun SimpleTextSmall(text: String, modifier: Modifier = Modifier, color: androidx
         color = color,
         modifier = modifier
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SimpleTextSmallPreview() {
-    Portal3ScannerTheme {
-        SimpleTextSmall("Portal3 Scanner")
-    }
 }
 
 @Composable
@@ -104,14 +84,6 @@ fun SimpleTextBold(text: String, modifier: Modifier = Modifier, color: androidx.
     )
 }
 
-@Preview(showBackground = true)
-@Composable
-fun SimpleTextBoldPreview() {
-    Portal3ScannerTheme {
-        SimpleTextBold("Portal3 Scanner")
-    }
-}
-
 @Composable
 fun SimpleTextBoldSmall(text: String, modifier: Modifier = Modifier, color: androidx.compose.ui.graphics.Color = Color.TextPrimary) {
     Text(
@@ -122,14 +94,6 @@ fun SimpleTextBoldSmall(text: String, modifier: Modifier = Modifier, color: andr
         color = color,
         modifier = modifier
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SimpleTextBoldSmallPreview() {
-    Portal3ScannerTheme {
-        SimpleTextBoldSmall("Portal3 Scanner")
-    }
 }
 
 @Composable
@@ -143,12 +107,4 @@ fun Description(text: String, textAlign: TextAlign ?= null, color: androidx.comp
         textAlign = textAlign,
         modifier = modifier
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DescriptionPreview() {
-    Portal3ScannerTheme {
-        Description("Portal3 Scanner")
-    }
 }

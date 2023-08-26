@@ -30,15 +30,6 @@ class UiViewModel : ViewModel() {
     val date: LiveData<Date> get() = _date
     val actions: LiveData<(@Composable () -> Unit)?> get() = _actions
 
-    val timerHandler = Handler()
-    val clockTimer = fixedRateTimer("clock", false, 0L, 60 * 1000) {
-        timerHandler.post { _date.value = Date() }
-    }
-
-    override fun onCleared() {
-        clockTimer.cancel()
-    }
-
     fun init(title: String, disableBack: Boolean = false) {
         println("UI INIT")
         _title.value = title

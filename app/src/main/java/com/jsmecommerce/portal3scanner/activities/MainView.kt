@@ -55,12 +55,11 @@ import com.jsmecommerce.portal3scanner.models.Tab
 import com.jsmecommerce.portal3scanner.models.UpdateVersion
 import com.jsmecommerce.portal3scanner.ui.components.general.Spinner
 import com.jsmecommerce.portal3scanner.ui.components.general.Title
-import com.jsmecommerce.portal3scanner.ui.components.general.TopBar
+import com.jsmecommerce.portal3scanner.ui.components.general.Toast
 import com.jsmecommerce.portal3scanner.ui.components.screens.UpdateScreen
 import com.jsmecommerce.portal3scanner.ui.theme.Color
 import com.jsmecommerce.portal3scanner.utils.Api
 import com.jsmecommerce.portal3scanner.viewmodels.CoreViewModel
-import com.jsmecommerce.portal3scanner.viewmodels.OrdersOverviewViewModel
 import com.jsmecommerce.portal3scanner.viewmodels.UiViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -91,9 +90,6 @@ fun MainView(
     val context = LocalContext.current;
 
     LaunchedEffect(Unit) {
-//        coreViewModel.scans.onEach {
-//            println("TESTTEST SCAN: ${it.barcode}")
-//        }
         CoroutineScope(Dispatchers.IO).launch {
             val res = Api.Request(context, "/scanner_versions/latest")
                 .exec()
@@ -121,10 +117,6 @@ fun MainView(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            TopBar(
-                uiViewModel = uiViewModel,
-                coreViewModel = coreViewModel
-            )
             Scaffold(
                 modifier = Modifier
                     .fillMaxSize()
@@ -250,6 +242,9 @@ fun MainView(
             }
             if(updateVersion != null)
                 UpdateScreen(version = updateVersion!!)
+            Toast(message = "Dit is een test") {
+                
+            }
         }
     }
 }

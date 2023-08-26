@@ -3,6 +3,7 @@ package com.jsmecommerce.portal3scanner.activities.tabs.SettingsTab
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -20,7 +21,15 @@ import java.util.Locale
 fun SettingsLanguage(nav: NavController, coreViewModel: CoreViewModel, uiViewModel: UiViewModel) {
     val context = LocalContext.current
 
+    LaunchedEffect(Unit) {
+        uiViewModel.init(
+            title = context.resources.getString(R.string.settings_cat_app_language),
+            disableBack = false
+        )
+    }
+
     fun setLocale(locale: Locale) {
+        println("Set locale: ${locale.displayName}")
         Locale.setDefault(locale)
         var config = context.resources.configuration
         config.setLocale(locale)
