@@ -7,7 +7,7 @@ android {
     signingConfigs {
         getByName("debug") {
             storeFile =
-                file("C:\\Users\\sebas\\AndroidStudioProjects\\Portal3Scanner\\keystore.jks")
+                file("C:\\Users\\sebas\\Desktop\\projects\\portal3-kt-scanner\\keystore.jks")
             storePassword = "Qwerty221"
             keyAlias = "key0"
             keyPassword = "Qwerty221"

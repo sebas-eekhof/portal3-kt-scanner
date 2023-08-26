@@ -52,7 +52,6 @@ class UiViewModel : ViewModel() {
     }
 
     fun setLoading(loading: Boolean = true) {
-        println("UI SET LOADING")
         _loading.value = loading
     }
 
@@ -101,7 +100,6 @@ class UiViewModel : ViewModel() {
     }
 
     fun setActions(actions: (@Composable () -> Unit)? = null) {
-        println("UI SET ACTIONS")
         _actions.value = actions
     }
 

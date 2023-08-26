@@ -209,8 +209,7 @@ fun MainView(
                                 OrdersOverview(
                                     navController,
                                     coreViewModel,
-                                    uiViewModel,
-                                    OrdersOverviewViewModel(LocalContext.current)
+                                    uiViewModel
                                 )
                             }
                             composable(

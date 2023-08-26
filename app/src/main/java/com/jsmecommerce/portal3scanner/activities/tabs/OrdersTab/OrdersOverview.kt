@@ -15,8 +15,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.jsmecommerce.portal3scanner.R
 import com.jsmecommerce.portal3scanner.models.SelectItem
@@ -34,13 +34,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun OrdersOverview(nav: NavHostController, coreViewModel: CoreViewModel, uiViewModel: UiViewModel, vm: OrdersOverviewViewModel) {
+fun OrdersOverview(nav: NavHostController, coreViewModel: CoreViewModel, uiViewModel: UiViewModel) {
+    val vm: OrdersOverviewViewModel = viewModel(factory = OrdersOverviewViewModel.Factory(LocalContext.current, uiViewModel))
     val orders by vm.orders.observeAsState(null)
     val stores by vm.stores.observeAsState(null)
     val statuses by vm.statuses.observeAsState(null)
-
-    var filterStatus by remember { mutableStateOf<String?>(null) }
-    var filterStore by remember { mutableStateOf<String?>(null) }
+    val filters by vm.filters.value.observeAsState(HashMap())
 
     val context = LocalContext.current
 
@@ -65,8 +64,8 @@ fun OrdersOverview(nav: NavHostController, coreViewModel: CoreViewModel, uiViewM
                                     DotText(text = it.name, color = it.color)
                                 }
                             },
-                            value = filterStatus,
-                            onChange = { filterStatus = it }
+                            value = filters["status_id"],
+                            onChange = { vm.filters.put("status_id", it) }
                         )
                     Spacer(modifier = Modifier.height(16.dp))
                     if(stores != null)
@@ -78,14 +77,13 @@ fun OrdersOverview(nav: NavHostController, coreViewModel: CoreViewModel, uiViewM
                                     DotText(text = it.name, color = it.color)
                                 }
                             },
-                            value = filterStore,
-                            onChange = { filterStore = it }
+                            value = filters["store_id"],
+                            onChange = { vm.filters.put("store_id", it) }
                         )
                 }
             }
         }
         vm.init()
-        uiViewModel.setLoading()
     }
 
     ScannerHost(nav = nav)
