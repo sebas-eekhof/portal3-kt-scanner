@@ -242,9 +242,9 @@ fun MainView(
             }
             if(updateVersion != null)
                 UpdateScreen(version = updateVersion!!)
-            Toast(message = "Dit is een test") {
-                
-            }
+//            Toast(message = "Dit is een test") {
+//
+//            }
         }
     }
 }

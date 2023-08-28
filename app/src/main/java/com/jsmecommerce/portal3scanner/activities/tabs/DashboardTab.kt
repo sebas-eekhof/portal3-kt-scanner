@@ -23,6 +23,7 @@ import com.jsmecommerce.portal3scanner.ui.components.dashboard.DashboardBatteryH
 import com.jsmecommerce.portal3scanner.ui.components.dashboard.DashboardBatteryTemperatureWidget
 import com.jsmecommerce.portal3scanner.ui.components.dashboard.DashboardBatteryVoltageWidget
 import com.jsmecommerce.portal3scanner.ui.components.general.ScannerHost
+import com.jsmecommerce.portal3scanner.ui.components.general.SearchBar
 import com.jsmecommerce.portal3scanner.ui.components.general.SimpleText
 import com.jsmecommerce.portal3scanner.ui.components.general.UserBanner
 import com.jsmecommerce.portal3scanner.utils.Auth
@@ -55,6 +56,8 @@ fun DashboardTab(nav: NavHostController, coreViewModel: CoreViewModel, uiViewMod
     Column(
         modifier = Modifier.padding(16.dp)
     ) {
+        SearchBar()
+        Spacer(modifier = Modifier.height(8.dp))
         UserBanner(user = user)
         Spacer(modifier = Modifier.height(8.dp))
         Row(

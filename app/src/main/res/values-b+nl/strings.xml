@@ -26,4 +26,5 @@
     <string name="update_downloading_title">Aan het updaten...</string>
     <string name="update_went_wrong">Er ging iets mis tijdens het downloaden van de update, probeer het opnieuw</string>
     <string name="update_downloading_text">Versie %1$s is aan het downloaden, een moment geduld</string>
+    <string name="search">Zoeken</string>
 </resources>

@@ -26,4 +26,5 @@
     <string name="update_downloading_title">Updating...</string>
     <string name="update_went_wrong">Something went wrong while downloading the update, please try again</string>
     <string name="update_downloading_text">Version %1$s is downloading, please wait</string>
+    <string name="search">Search</string>
 </resources>
